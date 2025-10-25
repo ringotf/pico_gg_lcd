@@ -1,2 +1,6 @@
 hw/Pico_GG_LCD-backups
 hw/~*
+hw/fp-info-cache
+
+/hw/fabrication-toolkit-options.json
+/hw/GG_LCD_DIY.kicad_prl
