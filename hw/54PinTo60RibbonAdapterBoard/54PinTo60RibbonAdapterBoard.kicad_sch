@@ -7936,7 +7936,7 @@
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "2f3e7965-f195-4b2c-8539-bd5869d552df")
@@ -7956,7 +7956,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_FFC-FPC:Amphenol_F32R-1A7x1-11060_1x60-1MP_P0.5mm_Horizontal"
+		(property "Footprint" "gg_lcd:1x54 To 1x60 FPC Connector 0.5mm"
 			(at 143.51 69.85 0)
 			(effects
 				(font
@@ -8540,7 +8540,7 @@
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "ca05a7ce-5112-4ca7-9705-9cdd3fe90e57")
