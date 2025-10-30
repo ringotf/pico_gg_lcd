@@ -23,27 +23,47 @@
 #include "libdvi/dvi_serialiser.h"
 #include "libdvi/dvi_timing.h"
 
+#include "tusb.h"
+
 #define DVI_TIMING dvi_timing_640x480p_60hz
 
-#define dw 20
-#define cl2  21
 #define led_pin 25
-#define SMS_pin 15
-#define pixels_in_scanline 300
-#define scanlines_in_active_area 192
 
-#define lcd_D0 7
-#define lcd_D1 8
-#define lcd_D2 9
-#define lcd_D3 10
-#define lcd_den 26
-#define lcd_clk 27
-#define lcd_rst 6
-#define lcd_backlight 14
+#define gg_BTN1_pin 24 //11 	//not used?
+#define gg_BTN2_pin 23 //12 		//not used?
+#define gg_START_pin 22 	//not used?
 
-#define fdbck 28
+#define gg_SMS_pin 21
+#define gg_D1_pin 17
+#define gg_D2_pin 16
+#define gg_D3_pin 15
+#define gg_D4_pin 14
+#define gg_dw_pin 18
+#define gg_cl2_pin 19
+#define gg_clk_pin 20
 
-#define brightness_pot 29
+#define pixels_in_scanline 280 //300
+#define scanlines_in_active_area  160 //144 //192
+
+#define scanlines_in_active_area_min 100
+
+#define FRAME_SIZE (pixels_in_scanline * scanlines_in_active_area * 2)
+#define FRAME_SIZE_HALF (pixels_in_scanline * scanlines_in_active_area)
+
+#define FRAME_SIZE_MIN (pixels_in_scanline * scanlines_in_active_area_min * 2)
+
+#define lcd_D0 12 //7
+#define lcd_D1 11 //8
+#define lcd_D2 10 //9
+#define lcd_D3 9 //10
+#define lcd_den 7 //29 //26 - swapped with fdbck and brightness_pot etc
+#define lcd_clk 8 //28 //27 - swapped with brightness_pot etc
+#define lcd_rst 13 //6
+#define lcd_backlight 6
+
+#define backlight_fdbck 26 //28 - swapped with lcd_den
+
+#define brightness_pot 27 //29 - moved down 2 pins
 
 #define lcd_width 320
 #define lcd_channels 3
@@ -51,27 +71,28 @@
 #define lcd_hblank_len 95 
 #define lcd_blank_lines 3
 
-#define scanlines_to_skip 11
+#define scanlines_to_skip 1 //11
+
+#define pixels_to_skip  (pixels_in_scanline * scanlines_to_skip)
 
 struct dvi_inst dvi0;
 
 static const struct dvi_serialiser_cfg pico_gg_lcd_conf = {
 	.pio = pio1,
-	.sm_tmds = {1, 2, 3},
-	.pins_tmds = {23, 2, 0},
+	.sm_tmds = {28, 2, 0},
+	.pins_tmds = {28, 2, 0},
 	.pins_clk = 4,
 	.invert_diffpairs = false
 };
 
-void core1_main() {
-	dvi_register_irqs_this_core(&dvi0, DMA_IRQ_0);
-	dvi_start(&dvi0);
-	dvi_scanbuf_main_12bpp(&dvi0);
-}
 
 //Use two framebuffers to prevent tearing
 uint16_t * framebuffer = (uint16_t *)(0x20000000 + (1024 * 30));
-uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 30) + (pixels_in_scanline * scanlines_in_active_area));
+//uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 30) + (pixels_in_scanline * scanlines_in_active_area * 2));
+uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 30) + (pixels_in_scanline * scanlines_in_active_area * 2) + (pixels_in_scanline * 8));
+
+uint16_t send_buffer[512];
+
 
 uint32_t pot_history[16];
 uint32_t brightness = 0;
@@ -86,6 +107,8 @@ uint32_t dma_chan2;
 uint32_t dma_chan3;
 uint32_t dma_chan4;
 uint32_t dma_chan5;
+
+uint32_t last_frame_sent;
 
 static inline __attribute__ ((always_inline)) uint32_t unpack(uint32_t rgb_value) {
 	uint32_t temp = rgb_value >> 8;
@@ -309,18 +332,20 @@ void config_pios() {
 	uint8_t get_data = pio_add_program(pio0, &get_data_program);
 	pio_sm_config get_data_config = get_data_program_get_default_config(get_data);
 	sm_config_set_clkdiv(&get_data_config, 1);
-	sm_config_set_in_pins(&get_data_config, 16);
+	sm_config_set_in_pins(&get_data_config, gg_D1_pin);
 	sm_config_set_in_shift(&get_data_config, false, false, 32);
-	sm_config_set_jmp_pin(&get_data_config, 22);
+	sm_config_set_jmp_pin(&get_data_config, gg_clk_pin);
 
 	pio_sm_init(pio0, 0, detect_vblank, &detect_vblank_config);
 	pio_sm_init(pio0, 1, detect_hblank, &detect_hblank_config);
 	pio_sm_init(pio0, 2, get_data, &get_data_config);
 
 	pio_sm_put_blocking(pio0, 1, scanlines_in_active_area + scanlines_to_skip - 1);
+	//pio_sm_put_blocking(pio0, 1, 140);
 	pio_sm_exec(pio0, 1, pio_encode_pull(false, true));
 
 	pio_sm_put_blocking(pio0, 2, pixels_in_scanline - 1); 
+	//pio_sm_put_blocking(pio0, 2, 160); 
 	pio_sm_exec(pio0, 2, pio_encode_pull(false, true));
 
 	pio_enable_sm_mask_in_sync(pio0, 0b111);
@@ -358,7 +383,7 @@ void config_dma() {
 			//The first few active display scanlines are actually blank
 			//We skip them by taking data from the PIO and discarding it into the dummy variable
 			//We than chain to dma_chan0 
-			pixels_in_scanline * scanlines_to_skip,
+			pixels_to_skip,
 			false);
 
 	//Now we can save the scanlines that actually have image data into the framebuffer
@@ -388,6 +413,7 @@ void config_dma() {
 	channel_config_set_transfer_data_size(&e, DMA_SIZE_32);
 	channel_config_set_enable(&e, true);
 	channel_config_set_chain_to(&e, dma_chan3);
+	//channel_config_set_chain_to(&e, dma_chan4);
 	channel_config_set_read_increment(&e, false);
 	channel_config_set_write_increment(&e, false);
 	dma_channel_configure(
@@ -411,7 +437,7 @@ void config_dma() {
 			&g,
 			&dummy,
 			&pio0_hw->rxf[2],
-			pixels_in_scanline * scanlines_to_skip,
+			pixels_to_skip,
 			false);
 
 	//Save active scanlines into second framebuffer
@@ -435,6 +461,7 @@ void config_dma() {
 	channel_config_set_transfer_data_size(&e, DMA_SIZE_32);
 	channel_config_set_enable(&e, true);
 	channel_config_set_chain_to(&e, dma_chan2);
+	//channel_config_set_chain_to(&e, dma_chan0);
 	channel_config_set_read_increment(&e, false);
 	channel_config_set_write_increment(&e, false);
 	dma_channel_configure(
@@ -448,8 +475,8 @@ void config_dma() {
 
 void config_backlight_supply(uint8_t pwm_backlight_slice) {
 	adc_init();
-	adc_select_input(fdbck - 26);
-	adc_gpio_init(fdbck);
+	adc_select_input(backlight_fdbck - ADC_BASE_PIN);
+	adc_gpio_init(backlight_fdbck);
 	adc_run(true);
 	adc_fifo_setup(true, false, 0, 0, 0);
 
@@ -487,7 +514,7 @@ void config_backlight_supply(uint8_t pwm_backlight_slice) {
 
 		gpio_put(led_pin, !gpio_get(led_pin));
 	}*/
-	pwm_hw->slice[pwm_backlight_slice].cc = 3500;
+	pwm_hw->slice[pwm_backlight_slice].cc = 7000; //3500;
 	//pwm_hw->slice[pwm_backlight_slice].cc = 20;
 }
 
@@ -499,7 +526,7 @@ uint8_t config_backlight_pwm() {
 	pwm_config_set_phase_correct(&config, false);
 	pwm_config_set_clkdiv_int(&config, 1);
 	pwm_config_set_clkdiv_mode(&config, PWM_DIV_FREE_RUNNING);
-	pwm_config_set_wrap(&config, (DVI_TIMING.bit_clk_khz * 1000) / 50000);
+	pwm_config_set_wrap(&config, (DVI_TIMING.bit_clk_khz * 1000) / 30000);
 	pwm_init(pwm_backlight_slice, &config, true);
 
 	return pwm_backlight_slice;
@@ -527,29 +554,206 @@ void init_lcd() {
 }
 
 void fill_framebuffer_with_test_pattern() {
+	uint16_t test_divs = pixels_in_scanline/8;
 	for(uint32_t y = 0; y < scanlines_in_active_area; y++) {
 		for(uint32_t x = 0; x < pixels_in_scanline; x++) {
 			uint16_t pixel = 0;
 
-			if(x > 150 && y > 96) pixel |= 15;
+			/*if(x > 150) 
+			{
+				pixel |= 15;
+				pixel |= (15 << 8);
+				pixel |= (15 << 4);
+			}*/
+			//if(y > 96) pixel |= (15 << 4);
+
+
+			if(x < test_divs)
+			{
+				//white
+				pixel |= 15;
+				pixel |= (15 << 8);
+				pixel |= (15 << 4);
+			}
+			else if (x < test_divs * 2)
+			{
+				//yellow
+				pixel |= (15 << 8);
+				pixel |= (15 << 4);
+				
+			}
+			else if (x < test_divs * 3)
+			{
+				//teal
+				pixel |= 15;
+				pixel |= (15 << 4);
+			
+			}
+			else if (x < test_divs * 4)
+			{
+				//green
+				pixel |= (15 << 4);
+			}
+			else if (x < test_divs * 5)
+			{
+				//purple
+				pixel |= 15;
+				pixel |= (15 << 8);
+			}
+			else if (x < test_divs * 6)
+			{
+				//red
+				pixel |= (15 << 8);
+			}
+			else if (x < test_divs * 7)
+			{
+				//blue
+				pixel |= 15;
+			}
+			
+			/*if(x > 150 && y > 96) pixel |= 15;
 			if(x < 150 && y < 96) pixel |= 15;
 
 			if(x < 150 && y > 96) pixel |= (15 << 8);
 			if(x <= 150 && y <= 96) pixel |= (15 << 8);
 
 			if(x > 150 && y < 96) pixel |= (15 << 4);
-			if(x <= 150 && y <= 96) pixel |= (15 << 4);
+			if(x <= 150 && y <= 96) pixel |= (15 << 4);*/
+			
+			
+			/*
+			if(x < 150)
+			{
+				pixel |= 15;
+			}
+			
+			if(y < 96)
+			{
+				pixel |= (15 << 8);
+			}
+*/
+			
 
-			framebuffer[x + y * pixels_in_scanline] = pixel;
-			framebuffer2[x + y * pixels_in_scanline] = ~pixel;
+			//pixel = ((x + y) % 2) ? 0xF800 : 0x07E0; //Red or Green (RGB565)
+			//pixel = ((x) % 2) ? 0xF800 : 0x07E0; //Red or Green (RGB565)
+			//pixel = ((x/8) % 2) ? 0xF800 : 0x07E0; //Red or Green (RGB565)
+
+			//test_frame_buffer[(y * pixels_in_scanline) + x] = pixel;
+
+			//pixel = unpack(pixel);
+
+			framebuffer[x + (y * pixels_in_scanline)]  = pixel;
+			framebuffer2[x + (y * pixels_in_scanline)]  = ~pixel;
+
+			//framebuffer[x + (y * pixels_in_scanline)] = pixel;
+			//framebuffer2[x + (y * pixels_in_scanline)] = ~pixel;
 		}
 	}
 }
 
-int main() {
+
+void send_frame_over_usb() 
+{	
+
+	//if((time_us_32() - last_frame_sent > 500000) )
+	{
+		tud_task(); // Process USB events (non-blocking??)
+		
+		if(tud_cdc_connected() && tud_cdc_available() )
+		{
+			uint16_t * curr_framebuffer;
+
+			//See which of the two framebuffer is currently being written to and pick the other one to send to the LCD
+			if(!dma_channel_is_busy(dma_chan0)) 
+			{
+				curr_framebuffer = framebuffer2;
+			}
+			else 
+			{
+				curr_framebuffer = framebuffer;
+			
+				
+				uint32_t frame_size_to_use = FRAME_SIZE * 2;//_MIN; //FRAME_SIZE_HALF;
+
+				//frame_size_to_use -= pixels_in_scanline * 16; //51;
+				
+				//memcpy(send_buffer, curr_framebuffer, pixels_in_scanline  * 144); // Copy full buffer
+
+				//char buf[64];
+				//uint32_t count = tud_cdc_read(buf, sizeof(buf));
+				tud_cdc_read_flush();
+				//if(count > 0 && buf[0] == 0x0A) //enter received - send the current frame buffer
+				{		
+
+					uint32_t offset = 0;
+					uint32_t CHUNK_SIZE = CFG_TUD_CDC_TX_BUFSIZE;
+
+					while(offset < frame_size_to_use)
+					{
+						uint32_t chunk = (frame_size_to_use - offset < CHUNK_SIZE) ? frame_size_to_use - offset : CHUNK_SIZE;
+
+
+						//tud_cdc_write(test_frame_buffer, sizeof(test_frame_buffer));
+						//if(tud_cdc_write_available() >= (pixels_in_scanline * scanlines_in_active_area))
+			//			if(tud_cdc_write_available() >= sizeof(framebuffer))
+						if(tud_cdc_write_available() >= chunk)
+						{
+
+							//memcpy(send_buffer, (uint8_t *)curr_framebuffer + offset, chunk);
+							//tud_cdc_write(send_buffer, chunk);
+
+							tud_cdc_write((uint8_t*)curr_framebuffer + offset, chunk);
+
+							offset += chunk;
+							
+							//tud_cdc_write(framebuffer, sizeof(framebuffer));
+							//tud_cdc_write(framebuffer, (pixels_in_scanline * scanlines_in_active_area));
+
+							//if(tud_cdc_write_available() >= sizeof(framebuffer))
+							//if(tud_cdc_write_available() >= (pixels_in_scanline * scanlines_in_active_area) *2)
+							/*{
+								
+								//fill_framebuffer_with_test_pattern();
+
+							}*/
+
+							tud_cdc_write_flush();
+						}
+						tud_task();
+					}
+
+					last_frame_sent = time_us_32();
+				}
+			}
+		}
+
+	}
+}
+
+
+void core1_main() 
+{
+	
+	/*dvi_register_irqs_this_core(&dvi0, DMA_IRQ_0);
+	dvi_start(&dvi0);
+	dvi_scanbuf_main_12bpp(&dvi0);*/
+	
+	
+	while(1)
+	{
+		send_frame_over_usb();
+	}
+
+	//__builtin_unreachable();
+}
+
+int main() 
+{
 	vreg_set_voltage(VREG_VOLTAGE_1_10);
 	set_sys_clock_khz(DVI_TIMING.bit_clk_khz, true);
 	stdio_init_all();
+
+	tusb_init(); //initialise TinyUSB stack
 
 	gpio_init_mask(0b11111111111111111111111111111111);
 	gpio_set_dir_out_masked(1 << led_pin);
@@ -570,6 +774,8 @@ int main() {
 	dvi0.ser_cfg = pico_gg_lcd_conf;
 	dvi_init(&dvi0, next_striped_spin_lock_num(), next_striped_spin_lock_num());
 
+	multicore_reset_core1();
+
 	multicore_launch_core1(core1_main);
 
 	gpio_put(lcd_den, 1);
@@ -577,7 +783,7 @@ int main() {
 	gpio_put(lcd_backlight, 0);
 
 	adc_init();
-	adc_select_input(brightness_pot - 26);
+	adc_select_input(brightness_pot - ADC_BASE_PIN);
 	adc_gpio_init(brightness_pot);
 	adc_run(true);
 	adc_fifo_setup(true, false, 0, 0, 0);
@@ -585,18 +791,22 @@ int main() {
 	fill_framebuffer_with_test_pattern();
 
 	dma_channel_start(dma_chan2);
+	//dma_channel_start(dma_chan0);
 
 	while(1) {
+
 		last_gg = gg_now;
-		gg_now = !gpio_get(SMS_pin);
+		gg_now = !gpio_get(gg_SMS_pin);
 
 		if(last_gg == gg_now) is_gg = gg_now;
 
 		uint32_t start = time_us_32();
+
+/*
 		if(!is_gg) update_lcd_gg();
 		else update_lcd_sms();
 		uint32_t end = time_us_32();
-
+*/
 		uint32_t avg = 0;
 		for (uint32_t c = 15; c > 0; c--)
 		{
@@ -610,7 +820,12 @@ int main() {
 		brightness *= 6;
 
 		//printf("Pot: %i\n", brightness);
-		printf("Rendering time: %i us\n", end - start);
+		//printf("Rendering time: %i us\n", end - start); 
+
+		//send_frame_over_usb();
+
+
+
 	}
 
 	return 0;
