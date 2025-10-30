@@ -1,13 +1,14 @@
 Designator,Val,Package,Mid X,Mid Y,Rotation,Layer
-C1,100n,C_0805_2012Metric,160.9,-101.7,90.0,top
-C2,100u,C_0805_2012Metric,138.3,-98.45,90.0,top
-C3,22u,C_0805_2012Metric,134.0,-98.45,90.0,top
-D1,D_Schottky,D_SOD-123,177.15,-100.1,0.0,top
-D3,D,D_SOD-123,156.6,-99.05,90.0,top
-J14,Conn_01x60,FPC_60_Adapter,147.59,-108.63,180.0,top
-J17,Conn_02x06_Odd_Even,PinSocket_2x06_P2.54mm_Horizontal,116.15,-78.53,0.0,top
-L1,470u,L_Axial_L5.3mm_D2.2mm_P7.62mm_Horizontal_Vishay_IM-1,148.4,-99.0,90.0,top
-Q2,2N2222,TO-92,174.665,-93.77,90.0,top
-R1,100k,R_0805_2012Metric,165.0,-99.5125,90.0,top
-R2,10k,R_0805_2012Metric,170.0,-102.0125,-90.0,top
-U1,ChinaPico,RPi_Pico_SMD_TH,155.035,-78.01,90.0,top
+C1,100uf,C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,122.12,-101.56,0.0,top
+C2,100uf,C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,110.08,-93.01,0.0,top
+C3,22uf,C_0805_2012Metric,110.04,-90.85,0.0,top
+D1,D_Schottky,D_SOD-123,111.75,-86.53,90.0,top
+D2,D_Schottky,D_SOD-123,117.09,-102.57,180.0,top
+D4,D_Schottky,D_SOD-123,134.99,-60.619,0.0,top
+L1,470uh,L_7.3x7.3_H4.5,110.06,-99.15,-90.0,top
+Q1,2N7002,SOT-23,115.72,-99.34,90.0,top
+R1,100k,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,118.49,-99.34,90.0,top
+R2,20k,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,118.49,-95.49,90.0,top
+R5,100ohm,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,121.92,-103.66,180.0,top
+U2,SN74LVC4245APWR,TSSOP-24_4.4x7.8mm_P0.65mm,176.03,-93.58,0.0,top
+U3,SN74LVC4245APWR,TSSOP-24_4.4x7.8mm_P0.65mm,166.8,-93.7,0.0,top

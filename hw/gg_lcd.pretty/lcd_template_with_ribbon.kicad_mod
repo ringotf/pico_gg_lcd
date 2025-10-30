@@ -1,0 +1,145 @@
+(footprint "lcd_template_with_ribbon"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(property "Reference" ""
+		(at 0 0 0)
+		(layer "F.SilkS")
+		(uuid "e0de45e5-45a7-4986-9cea-ec544f2a05fe")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "df046937-0963-4aca-93fd-f7899cdb2036")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "27977c11-7a34-4815-af5a-796e14b1a726")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8face5b3-30d2-4f09-9760-c455676463fc")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(fp_line
+		(start -40 -16.925)
+		(end -40 0)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "User.1")
+		(uuid "29d0ec95-3f9b-4168-85de-2e85903ae43d")
+	)
+	(fp_line
+		(start -40 0)
+		(end 0 0)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "User.1")
+		(uuid "0bf17d36-3b69-41ab-a749-5fefe14dc23a")
+	)
+	(fp_line
+		(start -40 23)
+		(end -40 -32.65)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "User.1")
+		(uuid "eff79605-04a2-4eba-aae4-ab34f4c6e2f1")
+	)
+	(fp_line
+		(start -40 23)
+		(end -12.5 23)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "User.1")
+		(uuid "5c378a16-acd9-49ae-a22a-6c0ab65e8ca2")
+	)
+	(fp_line
+		(start -12.5 -0.05)
+		(end -12.5 23)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "User.1")
+		(uuid "28aeab02-cf78-4c32-b6be-077f577365dc")
+	)
+	(fp_line
+		(start 0 -32.65)
+		(end -40 -32.65)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "User.1")
+		(uuid "3b1ef060-6221-43de-8c9e-e80b8e60b435")
+	)
+	(fp_line
+		(start 0 0)
+		(end 0 -32.625)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "User.1")
+		(uuid "1428c56f-222d-4b88-b3ad-f3bf09aedcb0")
+	)
+	(fp_rect
+		(start -56 -96.5)
+		(end 21 -32.75)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill no)
+		(layer "User.1")
+		(uuid "5fbfcdec-47f1-4c9d-a180-8deefcc760e2")
+	)
+	(fp_rect
+		(start -56 -96.5)
+		(end 21 -32.75)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill no)
+		(layer "User.1")
+		(uuid "70f50e26-a0d3-4d9f-87d1-676860e311d4")
+	)
+	(embedded_fonts no)
+)

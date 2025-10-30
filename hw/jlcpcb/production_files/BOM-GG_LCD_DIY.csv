@@ -1,3 +1,10 @@
-Comment,Designator,Footprint,LCSC
-Conn_02x06_Odd_Even,J17,PinSocket_2x06_P2.54mm_Horizontal,C124371
-D_Schottky,D1,D_SOD-123,C8598
+Comment,Designator,Footprint,LCSC,Quantity
+100k,R1,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,C25271,1
+100ohm,R5,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,C17408,1
+100uf,"C1,C2",C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,C15008,2
+20k,R2,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,C17724,1
+22uf,C3,C_0805_2012Metric,C45783,1
+2N7002,Q1,SOT-23,C8545,1
+470uh,L1,L_7.3x7.3_H4.5,C514816,1
+D_Schottky,"D1,D2,D4",D_SOD-123,C8598,3
+SN74LVC4245APWR,"U2,U3",TSSOP-24_4.4x7.8mm_P0.65mm,C7859,2
