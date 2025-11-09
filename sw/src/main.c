@@ -27,17 +27,20 @@
 
 #define DVI_TIMING dvi_timing_640x480p_60hz
 
-#define led_pin 25
+#define led_pin 25 //not used?
 
 #define gg_BTN1_pin 24 //11 	//not used?
 #define gg_BTN2_pin 23 //12 		//not used?
 #define gg_START_pin 22 	//not used?
 
 #define gg_SMS_pin 21
-#define gg_D1_pin 17
-#define gg_D2_pin 16
-#define gg_D3_pin 15
-#define gg_D4_pin 14
+
+
+#define gg_D1_pin 14 
+#define gg_D2_pin 15
+#define gg_D3_pin 16
+#define gg_D4_pin 17
+
 #define gg_dw_pin 18
 #define gg_cl2_pin 19
 #define gg_clk_pin 20
@@ -52,10 +55,10 @@
 
 #define FRAME_SIZE_MIN (pixels_in_scanline * scanlines_in_active_area_min * 2)
 
-#define lcd_D0 12 //7
-#define lcd_D1 11 //8
-#define lcd_D2 10 //9
-#define lcd_D3 9 //10
+#define lcd_D0 9 //7
+#define lcd_D1 10 //8
+#define lcd_D2 11 //9
+#define lcd_D3 12 //10
 #define lcd_den 7 //29 //26 - swapped with fdbck and brightness_pot etc
 #define lcd_clk 8 //28 //27 - swapped with brightness_pot etc
 #define lcd_rst 13 //6
@@ -97,6 +100,11 @@ uint16_t send_buffer[512];
 uint32_t pot_history[16];
 uint32_t brightness = 0;
 uint8_t pwm_backlight_slice;
+
+#define pwm_wrap_target  		((DVI_TIMING.bit_clk_khz * 1000) / 30000)
+#define pwm_max_duty 			pwm_wrap_target  * 0.9f
+#define pwm_feedback_target 	1.82f
+
 uint32_t is_gg;
 uint32_t gg_now;
 uint32_t last_gg;
@@ -158,7 +166,15 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 
 		for (uint32_t x = 0; x < 320; x ++)
 		{
+
+			/*
+			uint32_t sub_pixel = (x * 133);
+			uint32_t pixIndex = y_base - (sub_pixel >> 8);
+			uint32_t pix_value = unpack(curr_framebuffer[pixIndex] & 4095);
+			*/
+
 			//sub_pixel is a 24.8 bit fixed point coordinate
+			
 			uint32_t sub_pixel = (x * 133);
 
 			//Use integer part to pick a pixel from the framebuffer
@@ -176,7 +192,7 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 			//uint32_t pix_value = new_pix_value; //Uncomment this line to use nearest-neighbor instead of linear interpolation
 
 			old_pix_value = new_pix_value;
-
+			
 			//By the time we get here, the PIO is probably gonna be done sending the last pixel anyways
 			while(!pio_sm_is_tx_fifo_empty(pio1, 0)) ;
 
@@ -475,10 +491,10 @@ void config_dma() {
 
 void config_backlight_supply(uint8_t pwm_backlight_slice) {
 	adc_init();
-	adc_select_input(backlight_fdbck - ADC_BASE_PIN);
 	adc_gpio_init(backlight_fdbck);
-	adc_run(true);
-	adc_fifo_setup(true, false, 0, 0, 0);
+	adc_select_input(backlight_fdbck - ADC_BASE_PIN);
+	//adc_run(true);
+	//adc_fifo_setup(true, false, 0, 0, 0);
 
 	pwm_hw->slice[pwm_backlight_slice].cc = 250;
 	sleep_ms(50);
@@ -514,7 +530,7 @@ void config_backlight_supply(uint8_t pwm_backlight_slice) {
 
 		gpio_put(led_pin, !gpio_get(led_pin));
 	}*/
-	pwm_hw->slice[pwm_backlight_slice].cc = 7000; //3500;
+	pwm_hw->slice[pwm_backlight_slice].cc = 500;
 	//pwm_hw->slice[pwm_backlight_slice].cc = 20;
 }
 
@@ -523,10 +539,14 @@ uint8_t config_backlight_pwm() {
 	pwm_backlight_slice = pwm_gpio_to_slice_num(lcd_backlight);
 
 	pwm_config config = pwm_get_default_config();
-	pwm_config_set_phase_correct(&config, false);
+	pwm_config_set_phase_correct(&config, false);	//default is false anyway
 	pwm_config_set_clkdiv_int(&config, 1);
 	pwm_config_set_clkdiv_mode(&config, PWM_DIV_FREE_RUNNING);
-	pwm_config_set_wrap(&config, (DVI_TIMING.bit_clk_khz * 1000) / 30000);
+	
+	//uint16_t pwm_wrap_target = ((DVI_TIMING.bit_clk_khz * 1000) / 30000);
+	pwm_config_set_wrap(&config, pwm_wrap_target);
+	//pwm_config_set_wrap(&config, (DVI_TIMING.bit_clk_khz * 1000) / 30000);
+
 	pwm_init(pwm_backlight_slice, &config, true);
 
 	return pwm_backlight_slice;
@@ -643,7 +663,8 @@ void fill_framebuffer_with_test_pattern() {
 			//pixel = unpack(pixel);
 
 			framebuffer[x + (y * pixels_in_scanline)]  = pixel;
-			framebuffer2[x + (y * pixels_in_scanline)]  = ~pixel;
+			//framebuffer2[x + (y * pixels_in_scanline)]  = ~pixel;
+			framebuffer2[x + (y * pixels_in_scanline)]  = pixel;
 
 			//framebuffer[x + (y * pixels_in_scanline)] = pixel;
 			//framebuffer2[x + (y * pixels_in_scanline)] = ~pixel;
@@ -742,6 +763,29 @@ void core1_main()
 	while(1)
 	{
 		send_frame_over_usb();
+
+
+ 		adc_select_input(backlight_fdbck - ADC_BASE_PIN);
+
+		uint16_t v_div = adc_read();
+		float v_feedback = v_div * (pwm_feedback_target / 4095.f);
+		float error = (pwm_feedback_target * 0.5f) - v_feedback;
+
+		int32_t adjustment = (int32_t)(error * 0.1f * (float)pwm_wrap_target / (pwm_feedback_target));
+
+		pwm_hw->slice[pwm_backlight_slice].cc += adjustment;
+
+		if(pwm_hw->slice[pwm_backlight_slice].cc < 0)
+			pwm_hw->slice[pwm_backlight_slice].cc = 0;
+		
+		if(pwm_hw->slice[pwm_backlight_slice].cc > pwm_max_duty) 
+			pwm_hw ->slice[pwm_backlight_slice].cc = pwm_max_duty;
+
+
+		printf("VDiv: %.2f, Feedback: %.2fV, Error: %.2f, Adjustment: %i, Duty: %u\n", v_div,  v_feedback, error, adjustment, pwm_hw->slice[pwm_backlight_slice].cc);
+
+
+		sleep_ms(5); 
 	}
 
 	//__builtin_unreachable();
@@ -756,10 +800,12 @@ int main()
 	tusb_init(); //initialise TinyUSB stack
 
 	gpio_init_mask(0b11111111111111111111111111111111);
-	gpio_set_dir_out_masked(1 << led_pin);
+	//gpio_set_dir_out_masked(1 << led_pin);
 	gpio_set_dir_out_masked(1 << lcd_rst);
 	gpio_set_dir_out_masked(1 << lcd_den);
 	gpio_set_dir_out_masked(1 << lcd_backlight);
+
+	
 
 	uint8_t pwm_backlight_slice = config_backlight_pwm();
 	config_backlight_supply(pwm_backlight_slice);
@@ -772,7 +818,7 @@ int main()
 
 	dvi0.timing = &DVI_TIMING;
 	dvi0.ser_cfg = pico_gg_lcd_conf;
-	dvi_init(&dvi0, next_striped_spin_lock_num(), next_striped_spin_lock_num());
+	//dvi_init(&dvi0, next_striped_spin_lock_num(), next_striped_spin_lock_num());
 
 	multicore_reset_core1();
 
@@ -782,16 +828,16 @@ int main()
 	gpio_put(lcd_clk, 0);
 	gpio_put(lcd_backlight, 0);
 
-	adc_init();
-	adc_select_input(brightness_pot - ADC_BASE_PIN);
+	/*adc_init();
 	adc_gpio_init(brightness_pot);
+	adc_select_input(brightness_pot - ADC_BASE_PIN);
 	adc_run(true);
-	adc_fifo_setup(true, false, 0, 0, 0);
+	adc_fifo_setup(true, false, 0, 0, 0);*/
 
 	fill_framebuffer_with_test_pattern();
 
 	dma_channel_start(dma_chan2);
-	//dma_channel_start(dma_chan0);
+	dma_channel_start(dma_chan0);
 
 	while(1) {
 
@@ -802,11 +848,17 @@ int main()
 
 		uint32_t start = time_us_32();
 
-/*
+		update_lcd_gg();
+
+		/*
 		if(!is_gg) update_lcd_gg();
 		else update_lcd_sms();
 		uint32_t end = time_us_32();
-*/
+		*/
+
+		/*
+		adc_select_input(brightness_pot - ADC_BASE_PIN);
+
 		uint32_t avg = 0;
 		for (uint32_t c = 15; c > 0; c--)
 		{
@@ -818,6 +870,7 @@ int main()
 		avg >>= 4;
 		brightness = avg;
 		brightness *= 6;
+		*/
 
 		//printf("Pot: %i\n", brightness);
 		//printf("Rendering time: %i us\n", end - start); 
