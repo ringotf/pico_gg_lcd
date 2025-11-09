@@ -1,6 +1,6 @@
-.define dw 20 ;Vsync
-.define cl2  21; ;Hsync
-.define clk 22 ;Pixel clock
+.define dw 18 ;Vsync
+.define cl2 19; ;Hsync
+.define clk 20 ;Pixel clock
 
 ;///////////////////////////////////////
 ;/////////////// WARNING ///////////////
@@ -33,7 +33,7 @@ wait_cycles:
 		wait 0 gpio clk
 		wait 1 gpio clk
 		jmp y-- wait_cycles
-
+		
 		irq set 1
 		wait 0 gpio cl2
 		jmp x-- loop_scanline
