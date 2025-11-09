@@ -1,4 +1,4 @@
-26771659880140309
+26776947745945632
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -69118,6 +69118,13 @@ THT
 4
 2
 InstallationBoard
+SolderWirePad_1x01_Edge_1x2mm
+Wire Pad, Square, SMD Pad,  1mm x 2mm
+MeasurementPoint Square SMDPad 1mmx2mm 
+0
+1
+1
+InstallationBoard
 SolderWirePad_1x01_SMD_1x2mm
 Wire Pad, Square, SMD Pad,  1mm x 2mm
 MeasurementPoint Square SMDPad 1mmx2mm 
@@ -69133,6 +69140,13 @@ test point SMD pad rectangle square
 1
 InstallationBoard
 TestPoint_THTPad_D2.5mm_Drill1.2mm
+THT pad as test Point, diameter 2.5mm, hole diameter 1.2mm 
+test point THT pad
+0
+1
+1
+InstallationBoard
+TestPoint_THTPad_D2.5mm_Drill1.2mm_Front
 THT pad as test Point, diameter 2.5mm, hole diameter 1.2mm 
 test point THT pad
 0
@@ -106518,6 +106532,13 @@ Flex Connector 0.5mm 01x16Pin
 0
 16
 16
+gg_lcd
+PinHeader_2x27_P2.54mm_Vertical
+Through hole straight pin header, 2x27, 2.54mm pitch, double rows
+Through hole pin header THT 2x27 2.54mm double row
+0
+54
+54
 gg_lcd
 PinSocket_2x06_P2.54mm_Horizontal
 Through hole angled socket strip, 2x06, 2.54mm pitch, 8.51mm socket length, double cols (from Kicad 4.0.7), script generated
