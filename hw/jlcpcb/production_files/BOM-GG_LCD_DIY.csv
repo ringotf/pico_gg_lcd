@@ -1,8 +1,8 @@
 Comment,Designator,Footprint,LCSC,Quantity
-100k,R1,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,C25271,1
+100k,R1,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,C149504,1
 100ohm,R5,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,C17408,1
 100uf,"C1,C2",C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,C15008,2
-20k,R2,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,C17724,1
+10k,R2,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,C17414,1
 22uf,C3,C_0805_2012Metric,C45783,1
 2N7002,Q1,SOT-23,C8545,1
 470uh,L1,L_7.3x7.3_H4.5,C514816,1

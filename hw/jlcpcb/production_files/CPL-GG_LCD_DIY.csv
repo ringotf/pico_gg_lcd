@@ -1,14 +1,17 @@
 Designator,Val,Package,Mid X,Mid Y,Rotation,Layer
-C1,100uf,C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,122.12,-101.56,0.0,top
+C1,100uf,C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,122.62,-101.56,0.0,top
 C2,100uf,C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,110.08,-93.01,0.0,top
 C3,22uf,C_0805_2012Metric,110.04,-90.85,0.0,top
 D1,D_Schottky,D_SOD-123,111.75,-86.53,90.0,top
 D2,D_Schottky,D_SOD-123,117.09,-102.57,180.0,top
 D4,D_Schottky,D_SOD-123,134.99,-60.619,0.0,top
 L1,470uh,L_7.3x7.3_H4.5,110.06,-99.15,-90.0,top
+MHP1,ToolingHole_1.152mm,,106.78,-57.16,0.0,top
+MHP2,ToolingHole_1.152mm,ToolingHole_1.152mm,185.23,-60.51,0.0,top
+MHP3,ToolingHole_1.152mm,ToolingHole_1.152mm,185.23,-111.72,0.0,top
 Q1,2N7002,SOT-23,115.72,-99.34,90.0,top
-R1,100k,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,118.49,-99.34,90.0,top
-R2,20k,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,118.49,-95.49,90.0,top
+R1,100k,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,118.99,-99.34,90.0,top
+R2,10k,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,118.99,-95.49,90.0,top
 R5,100ohm,R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,121.92,-103.66,180.0,top
 U2,SN74LVC4245APWR,TSSOP-24_4.4x7.8mm_P0.65mm,176.03,-93.58,0.0,top
 U3,SN74LVC4245APWR,TSSOP-24_4.4x7.8mm_P0.65mm,166.8,-93.7,0.0,top
