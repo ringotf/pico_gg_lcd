@@ -27,26 +27,26 @@
 
 #define DVI_TIMING dvi_timing_640x480p_60hz
 
-#define led_pin 25 //not used?
+//#define led_pin 25 //not used?
 
-#define gg_BTN1_pin 24 //11 	//not used?
-#define gg_BTN2_pin 23 //12 		//not used?
-#define gg_START_pin 22 	//not used?
+//#define gg_BTN1_pin 24 //11 	//not used?
+//#define gg_BTN2_pin 23 //12 		//not used?
+//#define gg_START_pin 22 	//not used?
 
-#define gg_SMS_pin 21
+#define gg_SMS_pin 25
 
 
-#define gg_D1_pin 14 
-#define gg_D2_pin 15
-#define gg_D3_pin 16
-#define gg_D4_pin 17
+#define gg_D1_pin 18
+#define gg_D2_pin 19
+#define gg_D3_pin 20
+#define gg_D4_pin 21
 
-#define gg_dw_pin 18
-#define gg_cl2_pin 19
-#define gg_clk_pin 20
+#define gg_dw_pin 22
+#define gg_cl2_pin 23
+#define gg_clk_pin 24
 
-#define pixels_in_scanline 280 //300
-#define scanlines_in_active_area  160 //144 //192
+#define pixels_in_scanline 300 //280 //300
+#define scanlines_in_active_area  192 //160 //144 //192
 
 #define scanlines_in_active_area_min 100
 
@@ -55,14 +55,31 @@
 
 #define FRAME_SIZE_MIN (pixels_in_scanline * scanlines_in_active_area_min * 2)
 
-#define lcd_D0 9 //7
-#define lcd_D1 10 //8
-#define lcd_D2 11 //9
-#define lcd_D3 12 //10
-#define lcd_den 7 //29 //26 - swapped with fdbck and brightness_pot etc
-#define lcd_clk 8 //28 //27 - swapped with brightness_pot etc
-#define lcd_rst 13 //6
-#define lcd_backlight 6
+
+
+#define lcd_B0 0
+#define lcd_B1 1
+#define lcd_B2 2
+#define lcd_B3 3
+
+#define lcd_R0 4
+#define lcd_R1 5
+#define lcd_R2 6
+#define lcd_R3 7
+
+#define lcd_G0 8
+#define lcd_G1 9 
+#define lcd_G2 10
+#define lcd_G3 11
+
+//#define lcd_hsync 12
+//#define lcd_vsync 12
+#define lcd_clk 12
+
+#define lcd_den 13
+#define lcd_rst 14 //6
+#define lcd_backlight 16
+
 
 #define backlight_fdbck 26 //28 - swapped with lcd_den
 
@@ -70,9 +87,9 @@
 
 #define lcd_width 320
 #define lcd_channels 3
-#define lcd_active_lines 240
-#define lcd_hblank_len 95 
-#define lcd_blank_lines 3
+#define lcd_active_lines 480 //240
+#define lcd_hblank_len 88 
+#define lcd_blank_lines 2
 
 #define scanlines_to_skip 1 //11
 
@@ -91,8 +108,8 @@ static const struct dvi_serialiser_cfg pico_gg_lcd_conf = {
 
 //Use two framebuffers to prevent tearing
 uint16_t * framebuffer = (uint16_t *)(0x20000000 + (1024 * 30));
-//uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 30) + (pixels_in_scanline * scanlines_in_active_area * 2));
-uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 30) + (pixels_in_scanline * scanlines_in_active_area * 2) + (pixels_in_scanline * 8));
+uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 30) + (pixels_in_scanline * scanlines_in_active_area * 2));
+//uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 30) + (pixels_in_scanline * scanlines_in_active_area * 2) + (pixels_in_scanline * 8));
 
 uint16_t send_buffer[512];
 
@@ -152,65 +169,76 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 
 	for (uint32_t y = 0; y < 240; y ++)
 	{
-		//Where in the framebuffer the current scanline starts
-		uint32_t y_base = base - ((y * 310) >> 9) * pixels_in_scanline + 256;
-
-		//Tell LCD we're starting the active portion of the scanline
-		gpio_put(lcd_den, 0);
-
-		///unpack transforms 0b0000rrrrggggbbbb word into 0bbbb000000gggg000000rrrr word
-		//Channel order is changed to bgr because that's what the LCD expects
-		//Channel bits are spread out so we can do SIMD-within-a-word
-		//The interpolator will do linear interpolation on all three channels at once, using a single 32-bit word
-		uint32_t old_pix_value = unpack(curr_framebuffer[y_base] & 4095);
-
-		for (uint32_t x = 0; x < 320; x ++)
+		for (uint32_t w = 0; w < 2; w ++)
 		{
 
-			/*
-			uint32_t sub_pixel = (x * 133);
-			uint32_t pixIndex = y_base - (sub_pixel >> 8);
-			uint32_t pix_value = unpack(curr_framebuffer[pixIndex] & 4095);
-			*/
+			//Where in the framebuffer the current scanline starts
+			uint32_t y_base = base - ((y * 310) >> 9) * pixels_in_scanline + 256;
 
-			//sub_pixel is a 24.8 bit fixed point coordinate
-			
-			uint32_t sub_pixel = (x * 133);
+			//Tell LCD we're starting the active portion of the scanline
+			gpio_put(lcd_den, 0);
 
-			//Use integer part to pick a pixel from the framebuffer
-			uint32_t pixIndex = y_base - (sub_pixel >> 8);
-			uint32_t new_pix_value = unpack(curr_framebuffer[pixIndex] & 4095);
+			///unpack transforms 0b0000rrrrggggbbbb word into 0bbbb000000gggg000000rrrr word
+			//Channel order is changed to bgr because that's what the LCD expects
+			//Channel bits are spread out so we can do SIMD-within-a-word
+			//The interpolator will do linear interpolation on all three channels at once, using a single 32-bit word
+			uint32_t framebuffer_pix_value = curr_framebuffer[y_base] & 4095;
+			uint32_t old_pix_value = unpack(framebuffer_pix_value);
 
-			//Values to be interpolated
-			interp0->base[0] = old_pix_value;
-			interp0->base[1] = new_pix_value;
+			for (uint32_t x = 0; x < 320; x ++)
+			{
 
-			//Fractional part of sub_pixel tells the interpolator how much of each pixel to use
-			interp0->accum[1] = sub_pixel & 0b11111100;
+				/*
+				uint32_t sub_pixel = (x * 133);
+				uint32_t pixIndex = y_base - (sub_pixel >> 8);
+				uint32_t pix_value = unpack(curr_framebuffer[pixIndex] & 4095);
+				*/
 
-			uint32_t pix_value = interp0->peek[1];
-			//uint32_t pix_value = new_pix_value; //Uncomment this line to use nearest-neighbor instead of linear interpolation
+				//sub_pixel is a 24.8 bit fixed point coordinate
+				
+				uint32_t sub_pixel = (x * 133);
 
-			old_pix_value = new_pix_value;
-			
-			//By the time we get here, the PIO is probably gonna be done sending the last pixel anyways
-			while(!pio_sm_is_tx_fifo_empty(pio1, 0)) ;
+				//Use integer part to pick a pixel from the framebuffer
+				uint32_t pixIndex = y_base - (sub_pixel >> 8);
+				uint32_t new_pix_value = unpack(curr_framebuffer[pixIndex] & 4095);
 
-			//This way, we only have to poll on the FIFO status once and then can just blast the three words at once
-			//Seems to be significantly faster than pio_sm_put_blocking on each word
-			pio_sm_put(pio1, 0, pix_value & 15);
-			pix_value >>= 10;
-			pio_sm_put(pio1, 0, pix_value & 15);
-			pix_value >>= 10;
-			pio_sm_put(pio1, 0, pix_value & 15);
-		}
+				//Values to be interpolated
+				interp0->base[0] = old_pix_value;
+				interp0->base[1] = new_pix_value;
 
-		//Signal end of active scanline portion
-		gpio_put(lcd_den, 1);
+				//Fractional part of sub_pixel tells the interpolator how much of each pixel to use
+				interp0->accum[1] = sub_pixel & 0b11111100;
 
-		//Send empty pixels during Hblank
-		for(uint32_t wait = 0; wait < lcd_hblank_len; wait ++) {
-			pio_sm_put_blocking(pio1, 0, 0);
+				uint32_t pix_value = interp0->peek[1];
+				//uint32_t pix_value = new_pix_value; //Uncomment this line to use nearest-neighbor instead of linear interpolation
+
+				old_pix_value = new_pix_value;
+				
+				//By the time we get here, the PIO is probably gonna be done sending the last pixel anyways
+				while(!pio_sm_is_tx_fifo_empty(pio1, 0)) ;
+
+				//This way, we only have to poll on the FIFO status once and then can just blast the three words at once
+				//Seems to be significantly faster than pio_sm_put_blocking on each word
+				//pio_sm_put(pio1, 0, pix_value & 15);
+				//pix_value >>= 10;
+				//pio_sm_put(pio1, 0, pix_value & 15);
+				//pix_value >>= 10;
+				//pio_sm_put(pio1, 0, pix_value & 15);
+
+				
+				pio_sm_put(pio1, 0, framebuffer_pix_value);
+				
+
+			}
+
+			//Signal end of active scanline portion
+			gpio_put(lcd_den, 1);
+
+			//Send empty pixels during Hblank
+			for(uint32_t wait = 0; wait < lcd_hblank_len; wait ++) {
+				pio_sm_put_blocking(pio1, 0, 0);
+			}
+
 		}
 	}
 
@@ -220,7 +248,8 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 	//Send empty data for the entirety of vblank
 	for(uint32_t wait_line = 0; wait_line < lcd_blank_lines; wait_line ++) {
 		for(uint32_t pixel = 0; pixel < lcd_width; pixel ++) {
-			for(uint32_t channel = 0; channel < lcd_channels; channel ++) {
+			for(uint32_t channel = 0; channel < lcd_channels; channel ++) 
+			{
 				pio_sm_put_blocking(pio1, 0, 0);
 			}
 		}
@@ -312,21 +341,41 @@ void config_pios() {
 	pio_sm_config lcd_send_config = lcd_send_program_get_default_config(lcd_send);
 	sm_config_set_clkdiv(&lcd_send_config, 1);
 	sm_config_set_sideset_pins(&lcd_send_config, lcd_clk);
-	sm_config_set_out_pins(&lcd_send_config, lcd_D0, 4);
+	sm_config_set_out_pins(&lcd_send_config, lcd_B0, 12);
 	sm_config_set_out_shift(&lcd_send_config, true, false, 32);
 	sm_config_set_in_shift(&lcd_send_config, false, false, 32);
 
 	pio_gpio_init(pio1, lcd_clk);
-	pio_gpio_init(pio1, lcd_D0);
-	pio_gpio_init(pio1, lcd_D1);
-	pio_gpio_init(pio1, lcd_D2);
-	pio_gpio_init(pio1, lcd_D3);
+	pio_gpio_init(pio1, lcd_B0);
+	pio_gpio_init(pio1, lcd_B1);
+	pio_gpio_init(pio1, lcd_B2);
+	pio_gpio_init(pio1, lcd_B3);
+	pio_gpio_init(pio1, lcd_G0);
+	pio_gpio_init(pio1, lcd_G1);
+	pio_gpio_init(pio1, lcd_G2);
+	pio_gpio_init(pio1, lcd_G3);
+	pio_gpio_init(pio1, lcd_R0);
+	pio_gpio_init(pio1, lcd_R1);
+	pio_gpio_init(pio1, lcd_R2);
+	pio_gpio_init(pio1, lcd_R3);
 
 	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_clk), (1 << lcd_clk));
-	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_D0), (1 << lcd_D0));
-	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_D1), (1 << lcd_D1));
-	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_D2), (1 << lcd_D2));
-	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_D3), (1 << lcd_D3));
+
+	pio_sm_set_consecutive_pindirs(pio1, 0, lcd_B0, 12, true);
+	/*
+	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_B0), (1 << lcd_B0));
+	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_B1), (1 << lcd_B1));
+	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_B2), (1 << lcd_B2));
+	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_B3), (1 << lcd_B3));
+	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_G0), (1 << lcd_G0));
+	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_G1), (1 << lcd_G1));
+	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_G2), (1 << lcd_G2));
+	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_G3), (1 << lcd_G3));
+	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_R0), (1 << lcd_R0));
+	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_R1), (1 << lcd_R1));
+	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_R2), (1 << lcd_R2));
+	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_R3), (1 << lcd_R3));*/
+
 	pio_sm_init(pio1, 0, lcd_send, &lcd_send_config);
 	pio_sm_set_enabled(pio1, 0, true);
 
@@ -762,7 +811,7 @@ void core1_main()
 	
 	while(1)
 	{
-		send_frame_over_usb();
+		//send_frame_over_usb();
 
 
  		adc_select_input(backlight_fdbck - ADC_BASE_PIN);
@@ -771,7 +820,7 @@ void core1_main()
 		float v_feedback = v_div * (pwm_feedback_target / 4095.f);
 		float error = (pwm_feedback_target * 0.5f) - v_feedback;
 
-		int32_t adjustment = (int32_t)(error * 0.1f * (float)pwm_wrap_target / (pwm_feedback_target));
+		int32_t adjustment = (int32_t)(error * 0.05f * (float)pwm_wrap_target / (pwm_feedback_target));
 
 		pwm_hw->slice[pwm_backlight_slice].cc += adjustment;
 
@@ -785,7 +834,7 @@ void core1_main()
 		printf("VDiv: %.2f, Feedback: %.2fV, Error: %.2f, Adjustment: %i, Duty: %u\n", v_div,  v_feedback, error, adjustment, pwm_hw->slice[pwm_backlight_slice].cc);
 
 
-		sleep_ms(5); 
+		sleep_ms(15); 
 	}
 
 	//__builtin_unreachable();
@@ -816,8 +865,8 @@ int main()
 	config_dma();
 	config_interp();
 
-	dvi0.timing = &DVI_TIMING;
-	dvi0.ser_cfg = pico_gg_lcd_conf;
+	//dvi0.timing = &DVI_TIMING;
+	//dvi0.ser_cfg = pico_gg_lcd_conf;
 	//dvi_init(&dvi0, next_striped_spin_lock_num(), next_striped_spin_lock_num());
 
 	multicore_reset_core1();
