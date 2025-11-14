@@ -45,8 +45,8 @@
 #define gg_cl2_pin 19
 #define gg_clk_pin 20
 
-#define pixels_in_scanline 280 //300
-#define scanlines_in_active_area  160 //144 //192
+#define pixels_in_scanline 300 //280 //300
+#define scanlines_in_active_area  192 //160 //144 //192
 
 #define scanlines_in_active_area_min 100
 
@@ -702,7 +702,7 @@ void send_frame_over_usb()
 
 				//char buf[64];
 				//uint32_t count = tud_cdc_read(buf, sizeof(buf));
-				tud_cdc_read_flush();
+				//tud_cdc_read_flush();
 				//if(count > 0 && buf[0] == 0x0A) //enter received - send the current frame buffer
 				{		
 
@@ -762,7 +762,7 @@ void core1_main()
 	
 	while(1)
 	{
-		send_frame_over_usb();
+		//send_frame_over_usb();
 
 
  		adc_select_input(backlight_fdbck - ADC_BASE_PIN);
@@ -837,7 +837,7 @@ int main()
 	fill_framebuffer_with_test_pattern();
 
 	dma_channel_start(dma_chan2);
-	dma_channel_start(dma_chan0);
+	//dma_channel_start(dma_chan0);
 
 	while(1) {
 

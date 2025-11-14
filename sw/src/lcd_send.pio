@@ -2,23 +2,8 @@
 .program lcd_send
 .side_set 1 opt
 .wrap_target
-	pull side 0
+	pull side 0 [1]
 
-	out pins, 4
-	nop side 1
-
-	set x, 1
-
-wait_cycles:
-
-	jmp x-- wait_cycles
-
-	nop side 0
-
-	set x, 1
-
-wait_cycles2:
-
-	jmp x-- wait_cycles2
+	out pins, 4 side 1 [1]
 
 .wrap

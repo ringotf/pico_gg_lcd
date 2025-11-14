@@ -2,11 +2,11 @@ import serial
 import pygame
 from PIL import Image
 
-ser = serial.Serial('COM7', 115200, timeout=1)
+ser = serial.Serial('COM10', 115200, timeout=1)
 
 
-pixels_in_scanline = 280 #300 #160
-scanlines_in_active_area = 160 #144 #192 #144
+pixels_in_scanline = 300 #280 #300 #160
+scanlines_in_active_area = 192 #144 #192 #144
 scanlines_in_active_area_half = 84
 scanlines_in_active_area_min = 100
 
@@ -14,10 +14,10 @@ scanlines_to_use = scanlines_in_active_area * 2#_min
 
 frame_size = pixels_in_scanline * scanlines_to_use * 2
 
-frame_size_to_use = frame_size# * 2#_min
+frame_size_to_use = frame_size #* 2 #_min
 
 
-lines_to_skip = 0 #16 #51
+lines_to_skip = 1 #16 #51
 
 frame_size_to_use -= pixels_in_scanline * lines_to_skip
 
@@ -39,6 +39,30 @@ def convert_rgb444_to_rgb888(frame):
         r = (pixel >> 8) & 0xF #4 bit red
         g = (pixel >> 4) & 0xF #4 bit green
         b = pixel & 0xF #4 bit blue
+
+
+        t1 = (r & 0x8) >> 3
+        t2 = (r & 0x4) >> 1
+        t3 = (r & 0x2) << 1
+        t4 = (r & 0x1) << 3
+        
+        r = t1 | t2 | t3 | t4
+
+        t1 = (g & 0x8) >> 3
+        t2 = (g & 0x4) >> 1
+        t3 = (g & 0x2) << 1
+        t4 = (g & 0x1) << 3
+        
+        g = t1 | t2 | t3 | t4
+
+        t1 = (b & 0x8) >> 3
+        t2 = (b & 0x4) >> 1
+        t3 = (b & 0x2) << 1
+        t4 = (b & 0x1) << 3
+        
+        b = t1 | t2 | t3 | t4
+
+
         r = r * 255 // 15
         g = g * 255 // 15
         b = b * 255 // 15
