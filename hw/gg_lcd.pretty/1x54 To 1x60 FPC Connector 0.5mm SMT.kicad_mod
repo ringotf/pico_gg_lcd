@@ -1,4 +1,4 @@
-(footprint "1x54 To 1x60 FPC Connector 0.5mm"
+(footprint "1x54 To 1x60 FPC Connector 0.5mm SMT"
 	(version 20241229)
 	(generator "pcbnew")
 	(generator_version "9.0")
@@ -55,6 +55,26 @@
 	)
 	(attr smd exclude_from_pos_files exclude_from_bom)
 	(fp_line
+		(start -18.05 2.78)
+		(end -17.7 2.78)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "288c04c7-13d3-40b6-9e2f-b2bed0d9c2c2")
+	)
+	(fp_line
+		(start -18.05 3.66)
+		(end -18.05 2.785)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "660a546b-c15d-4381-a703-10373ddfea13")
+	)
+	(fp_line
 		(start -17.7 -2.6)
 		(end -16.16 -2.6)
 		(stroke
@@ -65,7 +85,7 @@
 		(uuid "dde52a00-de9d-4f9c-8efd-37a1babc9c85")
 	)
 	(fp_line
-		(start -17.7 3.66)
+		(start -17.7 2.78)
 		(end -17.7 -2.6)
 		(stroke
 			(width 0.15)
@@ -85,8 +105,8 @@
 		(uuid "fd81d4e5-a570-4c7c-8eb8-25a6a59773ed")
 	)
 	(fp_line
-		(start 17.7 -2.6)
-		(end 17.7 3.66)
+		(start 17.631822 -2.612459)
+		(end 17.631822 2.857541)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -95,14 +115,34 @@
 		(uuid "2178830b-074e-4a65-9081-2188f2d04604")
 	)
 	(fp_line
-		(start 17.7 3.66)
-		(end -17.7 3.66)
+		(start 17.631822 2.857541)
+		(end 17.991822 2.857541)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "301c0df3-dba9-4f07-8372-3451b9f59a60")
+	)
+	(fp_line
+		(start 17.99 3.66)
+		(end -18.05 3.66)
 		(stroke
 			(width 0.15)
 			(type solid)
 		)
 		(layer "F.SilkS")
 		(uuid "b23d0bbe-750d-4156-90e3-58a2c1994567")
+	)
+	(fp_line
+		(start 17.991822 2.857541)
+		(end 17.991822 3.652541)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "1ca1b64b-a98e-426d-a582-b68052a15aad")
 	)
 	(fp_rect
 		(start 12.170006 -3.38)
@@ -172,10 +212,10 @@
 	)
 	(fp_poly
 		(pts
-			(xy -15.22 -2.6) (xy -15.55 -2.36) (xy -15.55 -2.84)
+			(xy -15.321729 -2.597833) (xy -15.651729 -2.357833) (xy -15.651729 -2.837833)
 		)
 		(stroke
-			(width 0.15)
+			(width 0.3)
 			(type solid)
 		)
 		(fill yes)

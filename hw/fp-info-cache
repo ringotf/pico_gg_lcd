@@ -1,4 +1,4 @@
-26776947745945632
+26778744631408109
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -106470,7 +106470,14 @@ Varistor VF
 2
 2
 gg_lcd
-1x54 To 1x60 FPC Connector 0.5mm
+1x54 To 1x60 FPC Connector 0.5mm HandSolder
+Amphenol F32R/J FPC connector, 60 bottom-side contacts, 0.5mm pitch, SMT, https://cdn.amphenol-icc.com/media/wysiwyg/files/drawing/f32r-f32j.pdf
+F32J
+0
+56
+55
+gg_lcd
+1x54 To 1x60 FPC Connector 0.5mm SMT
 Amphenol F32R/J FPC connector, 60 bottom-side contacts, 0.5mm pitch, SMT, https://cdn.amphenol-icc.com/media/wysiwyg/files/drawing/f32r-f32j.pdf
 F32J
 0
