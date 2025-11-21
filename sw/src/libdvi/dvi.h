@@ -66,7 +66,18 @@ void dvi_start(struct dvi_inst *inst);
 //Modified function for Pico GG
 //Manually sends each scanline on CPU core 1, instead of just passing buffers
 void dvi_scanbuf_main_12bpp(struct dvi_inst *inst);
+void dvi_scanbuf_main_12bpp_noqueue(struct dvi_inst *inst, uint16_t *scanbuf);
 
+
+// TMDS encode worker function: core enters and doesn't leave, but still
+// responds to IRQs. Repeatedly pop a scanline buffer from q_colour_valid,
+// TMDS encode it, and pass it to the tmds valid queue.
+void dvi_scanbuf_main_8bpp(struct dvi_inst *inst);
+void dvi_scanbuf_main_16bpp(struct dvi_inst *inst);
+
+// Same as above, but each q_colour_valid entry is a framebuffer
+void dvi_framebuf_main_8bpp(struct dvi_inst *inst);
+void dvi_framebuf_main_16bpp(struct dvi_inst *inst);
 
 #ifdef __cplusplus
 }

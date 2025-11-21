@@ -28,6 +28,153 @@ const struct dvi_timing __dvi_const(dvi_timing_640x480p_60hz) = {
 	.bit_clk_khz       = 252000
 };
 
+// 720x480p 60 Hz -- Required by CEA for EDTV/HDTV displays. Convenient for
+// emulating NTSC machines with visible overscan and reasonable clk_sys (270 MHz).
+const struct dvi_timing __dvi_const(dvi_timing_720x480p_60hz) = {
+	.h_sync_polarity   = false,
+	.h_front_porch     = 16,
+	.h_sync_width      = 62,
+	.h_back_porch      = 60,
+	.h_active_pixels   = 720,
+
+	.v_sync_polarity   = false,
+	.v_front_porch     = 9,
+	.v_sync_width      = 6,
+	.v_back_porch      = 30,
+	.v_active_lines    = 480,
+
+	.bit_clk_khz       = 270000
+};
+
+// SVGA -- completely by-the-book but requires 400 MHz clk_sys
+const struct dvi_timing __dvi_const(dvi_timing_800x600p_60hz) = {
+	.h_sync_polarity   = false,
+	.h_front_porch     = 44,
+	.h_sync_width      = 128,
+	.h_back_porch      = 88,
+	.h_active_pixels   = 800,
+
+	.v_sync_polarity   = false,
+	.v_front_porch     = 1,
+	.v_sync_width      = 4,
+	.v_back_porch      = 23,
+	.v_active_lines    = 600,
+
+	.bit_clk_khz       = 400000
+};
+
+// 800x480p 60 Hz (note this doesn't seem to be a CEA mode, I just used the
+// output of `cvt 800 480 60`), 295 MHz bit clock
+const struct dvi_timing __dvi_const(dvi_timing_800x480p_60hz) = {
+	.h_sync_polarity = false,
+	.h_front_porch   = 24,
+	.h_sync_width    = 72,
+	.h_back_porch    = 96,
+	.h_active_pixels = 800,
+
+	.v_sync_polarity = true,
+	.v_front_porch   = 3,
+	.v_sync_width    = 10,
+	.v_back_porch    = 7,
+	.v_active_lines  = 480,
+
+	.bit_clk_khz     = 295200
+};
+
+// SVGA reduced blanking (355 MHz bit clock) -- valid CVT mode, less common
+// than fully-blanked SVGA, but doesn't require such a high system clock
+const struct dvi_timing __dvi_const(dvi_timing_800x600p_reduced_60hz) = {
+	.h_sync_polarity   = true,
+	.h_front_porch     = 48,
+	.h_sync_width      = 32,
+	.h_back_porch      = 80,
+	.h_active_pixels   = 800,
+
+	.v_sync_polarity   = false,
+	.v_front_porch     = 3,
+	.v_sync_width      = 4,
+	.v_back_porch      = 11,
+	.v_active_lines    = 600,
+
+	.bit_clk_khz       = 354000
+};
+
+// Also known as qHD, bit uncommon, but it's a nice modest-resolution 16:9
+// aspect mode. Pixel clock 37.3 MHz
+const struct dvi_timing __dvi_const(dvi_timing_960x540p_60hz) = {
+	.h_sync_polarity   = true,
+	.h_front_porch     = 16,
+	.h_sync_width      = 32,
+	.h_back_porch      = 96,
+	.h_active_pixels   = 960,
+
+	.v_sync_polarity   = true,
+	.v_front_porch     = 2,
+	.v_sync_width      = 6,
+	.v_back_porch      = 15,
+	.v_active_lines    = 540,
+
+	.bit_clk_khz       = 372000
+};
+
+// Note this is NOT the correct 720p30 CEA mode, but rather 720p60 run at half
+// pixel clock. Seems to be commonly accepted (and is a valid CVT mode). The
+// actual CEA mode is the same pixel clock as 720p60 but with >50% blanking,
+// which would require a clk_sys of 742 MHz!
+const struct dvi_timing __dvi_const(dvi_timing_1280x720p_30hz) = {
+	.h_sync_polarity   = true,
+	.h_front_porch     = 110,
+	.h_sync_width      = 40,
+	.h_back_porch      = 220,
+	.h_active_pixels   = 1280,
+
+	.v_sync_polarity   = true,
+	.v_front_porch     = 5,
+	.v_sync_width      = 5,
+	.v_back_porch      = 20,
+	.v_active_lines    = 720,
+
+	.bit_clk_khz       = 372000
+};
+
+// Reduced-blanking (CVT) 720p. You aren't supposed to use reduced blanking
+// modes below 60 Hz, but I won't tell anyone (and it works on the monitors
+// I've tried). This nets a lower system clock than regular 720p30 (319 MHz)
+const struct dvi_timing __dvi_const(dvi_timing_1280x720p_reduced_30hz) = {
+	.h_sync_polarity   = true,
+	.h_front_porch     = 48,
+	.h_sync_width      = 32,
+	.h_back_porch      = 80,
+	.h_active_pixels   = 1280,
+
+	.v_sync_polarity   = false,
+	.v_front_porch     = 3,
+	.v_sync_width      = 5,
+	.v_back_porch      = 13,
+	.v_active_lines    = 720,
+
+	.bit_clk_khz       = 319200
+};
+
+// This requires a spicy 488 MHz system clock and is illegal in most countries
+// (you need to have a very lucky piece of silicon to run this at 1.3 V, or
+// connect an external supply and give it a bit more juice)
+const struct dvi_timing __dvi_const(dvi_timing_1600x900p_reduced_30hz) = {
+	.h_sync_polarity   = true,
+	.h_front_porch     = 48,
+	.h_sync_width      = 32,
+	.h_back_porch      = 80,
+	.h_active_pixels   = 1600,
+
+	.v_sync_polarity   = false,
+	.v_front_porch     = 3,
+	.v_sync_width      = 5,
+	.v_back_porch      = 18,
+	.v_active_lines    = 900,
+
+	.bit_clk_khz       = 488000
+};
+
 // ----------------------------------------------------------------------------
 
 // The DMA scheme is:

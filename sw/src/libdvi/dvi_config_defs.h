@@ -94,6 +94,62 @@
 #define DVI_12BPP_BLUE_LSB 0
 #endif
 
+
+
+
+
+// Default 8bpp layout: RGB332, {r[1:0], g[2:0], b[1:0]}
+
+#ifndef DVI_8BPP_RED_MSB
+#define DVI_8BPP_RED_MSB 7
+#endif
+
+#ifndef DVI_8BPP_RED_LSB
+#define DVI_8BPP_RED_LSB 5
+#endif
+
+#ifndef DVI_8BPP_GREEN_MSB
+#define DVI_8BPP_GREEN_MSB 4
+#endif
+
+#ifndef DVI_8BPP_GREEN_LSB
+#define DVI_8BPP_GREEN_LSB 2
+#endif
+
+#ifndef DVI_8BPP_BLUE_MSB
+#define DVI_8BPP_BLUE_MSB 1
+#endif
+
+#ifndef DVI_8BPP_BLUE_LSB
+#define DVI_8BPP_BLUE_LSB 0
+#endif
+
+// Default 16bpp layout: RGB565, {r[4:0], g[5:0], b[4:0]}
+
+#ifndef DVI_16BPP_RED_MSB
+#define DVI_16BPP_RED_MSB 15
+#endif
+
+#ifndef DVI_16BPP_RED_LSB
+#define DVI_16BPP_RED_LSB 11
+#endif
+
+#ifndef DVI_16BPP_GREEN_MSB
+#define DVI_16BPP_GREEN_MSB 10
+#endif
+
+#ifndef DVI_16BPP_GREEN_LSB
+#define DVI_16BPP_GREEN_LSB 5
+#endif
+
+#ifndef DVI_16BPP_BLUE_MSB
+#define DVI_16BPP_BLUE_MSB 4
+#endif
+
+#ifndef DVI_16BPP_BLUE_LSB
+#define DVI_16BPP_BLUE_LSB 0
+#endif
+
 // Default 1bpp layout: bitwise little-endian, i.e. least significant bit of
 // each word is the first (leftmost) of a block of 32 pixels.
 
