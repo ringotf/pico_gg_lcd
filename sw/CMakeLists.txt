@@ -49,4 +49,8 @@ pico_time hardware_adc hardware_pwm hardware_interp libdvi)
 pico_add_extra_outputs(pico_gg_hd)
 
 pico_enable_stdio_usb(pico_gg_hd 1)
-pico_enable_stdio_uart(pico_gg_hd 0)
+pico_enable_stdio_uart(pico_gg_hd 1)
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_definitions(-DDEBUG)
+endif()

@@ -2,8 +2,8 @@
 .program lcd_send
 .side_set 1 opt
 .wrap_target
-	pull side 0 [1]
+	pull side 0 [4]
 
-	out pins, 4 side 1 [1]
+	out pins, 4 side 1 [4]
 
 .wrap

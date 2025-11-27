@@ -2,15 +2,15 @@ import serial
 import pygame
 from PIL import Image
 
-ser = serial.Serial('COM10', 115200, timeout=1)
+ser = serial.Serial('COM17', 115200, timeout=1)
 
 
-pixels_in_scanline = 300 #280 #300 #160
+pixels_in_scanline = 256 #300 #280 #300 #160
 scanlines_in_active_area = 192 #144 #192 #144
 scanlines_in_active_area_half = 84
 scanlines_in_active_area_min = 100
 
-scanlines_to_use = scanlines_in_active_area * 2#_min
+scanlines_to_use = scanlines_in_active_area #* 2#_min
 
 frame_size = pixels_in_scanline * scanlines_to_use * 2
 

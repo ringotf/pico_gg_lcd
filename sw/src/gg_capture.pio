@@ -21,41 +21,66 @@
 .side_set 1 opt
 .wrap_target
 ;OSR contains the number of scanlines to capture
-		mov x, osr //side 0
-		wait 1 irq 0
+	mov x, osr //side 0
+	wait 1 irq 0
 
 loop_scanline:
-    wait 1 gpio cl2 
+    wait 1 gpio cl2
 		
 	irq set 1
 	wait 0 gpio cl2 [1]
 	jmp x-- loop_scanline
 .wrap
 
+
+.program  front_h_porch
+.wrap_target
+;OSR -> Amount of pixels to skip
+	mov x, osr
+	wait 1 irq 1
+
+skip_start_pixels:
+
+	set y, 2
+
+skip_start_subpixels:
+
+	wait 1 gpio clk 
+
+	wait 0 gpio clk
+
+	jmp y-- skip_start_subpixels 
+
+	jmp x-- skip_start_pixels
+
+	irq set 2
+.wrap
+
+
 .program get_data
 .side_set 1 opt
 .wrap_target
 ;OSR -> Amount of pixels to capture in this scanline
 	mov x, osr
-	wait 1 irq 1
+	wait 1 irq 2
 
 capture_pixels:
+
 	set y, 2 
 inner_loop:
-	wait 1 gpio clk [1]
 
-skip_start:
+	wait 1 gpio clk 
+	
+	wait 0 gpio clk 
 
-	wait 0 gpio clk
+	wait 1 gpio clk 
 
-	wait 1 gpio clk [1]
-
-	in pins, 4
+	in pins, 4 
 	
 	wait 0 gpio clk
 
 	jmp y-- inner_loop
-
+	
 	push
 
 	jmp x-- capture_pixels
