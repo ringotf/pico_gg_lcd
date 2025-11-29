@@ -4,17 +4,21 @@
 .wrap_target
 	pull side 0 
 
-	out pins, 12 side 1 
+	out pins, 12 side 1 [7]
+	nop [5]
 
-	nop  side 0 [1]
+	nop  side 0 [7]
+	nop [3]
 
 	set x, 2
 
 repeat_start:
 
-	nop  side 1 
+	nop  side 1 [7]
+	nop [5]
 
-	nop  side 0 [1]
+	nop  side 0 [7]
+	nop [5]
 
 	jmp x-- repeat_start
 
