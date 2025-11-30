@@ -47,7 +47,7 @@
 #define gg_cl2_pin 23
 #define gg_clk_pin 24
 
-#define pixels_in_scanline 300 //280 //300
+#define pixels_in_scanline 320 //280 //300
 #define scanlines_in_active_area  192 //160 //144 //192
 
 #define scanlines_in_active_area_min 100
@@ -96,25 +96,25 @@
 #define lcd_pio_hscale 2
 #define lcd_hscale_factor 1 / lcd_pio_hscale
 
-#define lcd_target_width 320
+#define lcd_target_width 640
 #define lcd_send_width lcd_target_width * lcd_hscale_factor
 #define lcd_channels 1 //3
 
 //add extra pixels to the h porch
-#define lcd_hblank_sync_len 5 * lcd_hscale_factor
-#define lcd_hblank_front_len 20 * lcd_hscale_factor
-#define lcd_hblank_back_len 38 * lcd_hscale_factor
+#define lcd_hblank_sync_len 2 * lcd_hscale_factor
+#define lcd_hblank_front_len 44 * lcd_hscale_factor
+#define lcd_hblank_back_len 42 * lcd_hscale_factor
 #define lcd_hblank_len lcd_hblank_front_len + lcd_send_width + lcd_hblank_back_len
 
 
 #define lcd_active_lines 240
-#define lcd_vscale_factor 1
+#define lcd_vscale_factor 2
 
 //add 240 extra lines to the v porch
 
-#define lcd_vblank_sync_lines 5 
-#define lcd_vblank_front_lines 4 
-#define lcd_vblank_back_lines 15
+#define lcd_vblank_sync_lines 2 
+#define lcd_vblank_front_lines 16 
+#define lcd_vblank_back_lines 14
 
 #define scanlines_to_skip 1 //11
 
@@ -132,8 +132,8 @@ static const struct dvi_serialiser_cfg pico_gg_lcd_conf = {
 
 
 //Use two framebuffers to prevent tearing
-uint16_t * framebuffer = (uint16_t *)(0x20000000 + (1024 * 30));
-uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 30) + (pixels_in_scanline * scanlines_in_active_area * 2));
+uint16_t * framebuffer = (uint16_t *)(0x20000000 + (1024 * 20));
+uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 20) + (pixels_in_scanline * scanlines_in_active_area * 2));
 //uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 30) + (pixels_in_scanline * scanlines_in_active_area * 2) + (pixels_in_scanline * 8));
 
 uint16_t send_buffer[512];
@@ -195,6 +195,8 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 	uint32_t base = pixels_in_scanline + 48 - 52 + (pixels_in_scanline * scanlines_in_active_area) - pixels_in_scanline * 51;
 
 	
+	gpio_put(lcd_den, 0);
+
 	gpio_put(lcd_vsync, 0);
 
 	for(uint32_t wait_line = 0; wait_line < lcd_vblank_sync_lines; wait_line ++) {
@@ -256,7 +258,7 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 			uint32_t y_base = y * pixels_in_scanline;
 
 			//Tell LCD we're starting the active portion of the scanline
-			gpio_put(lcd_den, 0);
+			gpio_put(lcd_den, 1);
 			
 
 			///unpack transforms 0b0000rrrrggggbbbb word into 0bbbb000000gggg000000rrrr word
@@ -350,7 +352,7 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 			}
 
 			//Signal end of active scanline portion
-			gpio_put(lcd_den, 1);
+			gpio_put(lcd_den, 0);
 			
 			//Send empty pixels during Hblank
 			for(uint32_t wait = 0; wait < lcd_hblank_front_len; wait ++) {
@@ -362,7 +364,7 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 	}
 
 	//Start of vblank
-	gpio_put(lcd_den, 1);
+	gpio_put(lcd_den, 0);
 	
 
 	//Send empty data for the entirety of vblank
@@ -386,6 +388,8 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 	
 	gpio_put(lcd_hsync, 0);
 	gpio_put(lcd_vsync, 0);
+	
+	gpio_put(lcd_den, 0);
 }
 
 //The only thing that changes for SMS mode are the scaling constants
@@ -519,7 +523,7 @@ void config_pios() {
 	pio_gpio_init(pio1, lcd_R2);
 	pio_gpio_init(pio1, lcd_R3);
 
-
+/*
 	gpio_set_slew_rate(lcd_clk, GPIO_SLEW_RATE_SLOW);
 	gpio_set_slew_rate(lcd_B0, GPIO_SLEW_RATE_SLOW);
 	gpio_set_slew_rate(lcd_B1, GPIO_SLEW_RATE_SLOW);
@@ -533,7 +537,7 @@ void config_pios() {
 	gpio_set_slew_rate(lcd_R1, GPIO_SLEW_RATE_SLOW);
 	gpio_set_slew_rate(lcd_R2, GPIO_SLEW_RATE_SLOW);
 	gpio_set_slew_rate(lcd_R3, GPIO_SLEW_RATE_SLOW);
-
+*/
 
 	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_clk), (1 << lcd_clk));
 
@@ -804,11 +808,16 @@ void init_lcd() {
 }
 
 void fill_framebuffer_with_test_pattern() {
-	uint16_t test_divs = pixels_in_scanline/8;
-	uint16_t row_size = scanlines_in_active_area / 15;
+
+	uint16_t test_divs = pixels_in_scanline / 8;
+	uint16_t row_size = scanlines_in_active_area / 4;
+
 	for(uint32_t y = 0; y < scanlines_in_active_area; y++) {
-		//uint16_t row_val = y / row_size;
-		uint16_t row_val = 15;
+
+		uint16_t row_val = 15 - ((15/4) * (y / row_size));
+
+		//uint16_t row_val = 15;
+
 		for(uint32_t x = 0; x < pixels_in_scanline; x++) {
 			uint16_t pixel = 0;
 
