@@ -20,6 +20,7 @@
 #include "../build/lcd_send.pio.h"
 #include "../build/lcd_send_2x.pio.h"
 #include "../build/lcd_send_4x.pio.h"
+#include "../build/lcd_send_spi.pio.h"
 
 #include "libdvi/dvi.h"
 #include "libdvi/dvi_serialiser.h"
@@ -58,32 +59,17 @@
 #define FRAME_SIZE_MIN (pixels_in_scanline * scanlines_in_active_area_min * 2)
 
 
-
-#define lcd_B0 1
-#define lcd_B1 2
-#define lcd_B2 3
-#define lcd_B3 4
-
-#define lcd_G0 5
-#define lcd_G1 6 
-#define lcd_G2 7
-#define lcd_G3 8
-
-#define lcd_R0 9
-#define lcd_R1 10
-#define lcd_R2 11
-#define lcd_R3 12
-
-
-
-#define lcd_hsync 13
-#define lcd_vsync 14
-#define lcd_clk 15
-
-#define lcd_den 16
 #define lcd_rst 0 //17 //6
 
+#define lcd_spi_latch 1 
+#define lcd_spi_clk 2 
+#define lcd_spi_mosi_1 3 
+#define lcd_spi_mosi_2 4 
 
+//#define lcd_hsync 13
+//#define lcd_vsync 14
+#define lcd_clk 15
+#define lcd_den 16
 
 #define lcd_backlight 17
 
@@ -93,7 +79,7 @@
 #define brightness_pot 27 //29 - moved down 2 pins
 
 
-#define lcd_pio_hscale 2
+#define lcd_pio_hscale 4
 #define lcd_hscale_factor 1 / lcd_pio_hscale
 
 #define lcd_target_width 640
@@ -160,6 +146,21 @@ uint32_t dma_chan5;
 
 uint32_t last_frame_sent;
 
+
+
+static inline __attribute__ ((always_inline)) void send_lcd_pixel(uint16_t data, bool hsync, bool vsync)
+{
+	//pio_sm_put(pio1, 0, data);
+
+	pio_sm_put_blocking(pio1, 0, (uint32_t)data << 18 );
+	//pio_sm_put_blocking(pio1, 0, (uint32_t)data << 18 | hsync << 30 | vsync << 31 );
+	//pio_sm_put_blocking(pio1, 0, (uint32_t)data << 18 | 0 << 30 | 0 << 31 );
+	//pio_sm_put_blocking(pio1, 0, data);
+
+	//send_to_shift_dma(data, 2);
+}
+
+
 static inline __attribute__ ((always_inline)) uint32_t unpack(uint32_t rgb_value) {
 	uint32_t temp = rgb_value >> 8;
 	temp |= rgb_value << 20;
@@ -173,9 +174,11 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 	//Scanning a frame out into the LCD is faster than ~16ms
 	//So, we wait until the console starts sending out a new frame before we update the LCD again
 	//If neither of these two DMA channels is busy, then the console must be in vblank
-	while(!dma_channel_is_busy(dma_chan0) && !dma_channel_is_busy(dma_chan4)) ;
+	//while(!dma_channel_is_busy(dma_chan0) && !dma_channel_is_busy(dma_chan4)) ;
 
 	uint16_t * curr_framebuffer;
+
+	//uint16_t spi_buffer[4] = {0x800, 0x800, 0x800, 0x800};  
 
 	//See which of the two framebuffer is currently being written to and pick the other one to send to the LCD
 	//This introduces a single frame of latency
@@ -194,68 +197,90 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 	//base points to the bottom right of the original image
 	uint32_t base = pixels_in_scanline + 48 - 52 + (pixels_in_scanline * scanlines_in_active_area) - pixels_in_scanline * 51;
 
-	
+		
+	static bool hsync = 0;
+	static bool vsync = 0;
+
 	gpio_put(lcd_den, 0);
 
-	gpio_put(lcd_vsync, 0);
+	//start vsync pulse
+	//gpio_put(lcd_vsync, vsync);
 
 	for(uint32_t wait_line = 0; wait_line < lcd_vblank_sync_lines; wait_line ++) {
 		
-		gpio_put(lcd_hsync, 0);
+		hsync = 0;
+		//gpio_put(lcd_hsync, hsync);
 		
 		for(uint32_t pixel = 0; pixel < lcd_hblank_sync_len; pixel ++) {
-			pio_sm_put_blocking(pio1, 0, 0);
+			//pio_sm_put_blocking(pio1, 0, 0);
+			send_lcd_pixel(0, hsync, vsync);
 		}
 
-		gpio_put(lcd_hsync, 1);
+		hsync = 1;
+		//gpio_put(lcd_hsync, hsync);
 		
 		for(uint32_t pixel = 0; pixel < lcd_hblank_len; pixel ++) {
-			pio_sm_put_blocking(pio1, 0, 0);
+			//pio_sm_put_blocking(pio1, 0, 0);
+			send_lcd_pixel(0, hsync, vsync);
 		}
 
 	}
-	
-	gpio_put(lcd_vsync, 1);
+	//end vsync pulse
+
+	//start vsync back porch
+	vsync = 1;
+	//gpio_put(lcd_vsync, vsync);
 
 	
 	for(uint32_t wait_line = 0; wait_line < lcd_vblank_back_lines; wait_line ++) {
 		
-		gpio_put(lcd_hsync, 0);
+		hsync = 0;
+		//gpio_put(lcd_hsync, 0);
 		
 		for(uint32_t pixel = 0; pixel < lcd_hblank_sync_len; pixel ++) {
-			pio_sm_put_blocking(pio1, 0, 0);
+			//pio_sm_put_blocking(pio1, 0, 0);
+			send_lcd_pixel(0, hsync, vsync);
 		}
 
-		gpio_put(lcd_hsync, 1);
+		hsync = 1;
+		//gpio_put(lcd_hsync, 1);
 		
 		for(uint32_t pixel = 0; pixel < lcd_hblank_len; pixel ++) {
-			pio_sm_put_blocking(pio1, 0, 0);
+			//pio_sm_put_blocking(pio1, 0, 0);
+			send_lcd_pixel(0, hsync, vsync);
 		}
 
 	}
+	//end vsync back porch
 
+
+	//start frame data
 
 	for (uint32_t y = 0; y < lcd_active_lines; y++)
 	{
 		for (uint32_t w = 0; w < lcd_vscale_factor; w++)
 		{
-			gpio_put(lcd_hsync, 0);
+			hsync = 0;
+			//gpio_put(lcd_hsync, hsync);
 
 			for(uint32_t wait = 0; wait < lcd_hblank_sync_len; wait ++) {
-				pio_sm_put_blocking(pio1, 0, 0);
+				//pio_sm_put_blocking(pio1, 0, 0);
+				send_lcd_pixel(0, hsync, vsync);
 			}
 
-			gpio_put(lcd_hsync, 1);
+			hsync = 1;
+			//gpio_put(lcd_hsync, hsync);
 
 			for(uint32_t wait = 0; wait < lcd_hblank_back_len; wait ++) {
-				pio_sm_put_blocking(pio1, 0, 0);
+				//pio_sm_put_blocking(pio1, 0, 0);
+				send_lcd_pixel(0, hsync, vsync);
 			}
-
 
 			//Where in the framebuffer the current scanline starts
 			//uint32_t y_base = base - ((y * 310) >> 9) * pixels_in_scanline + 256;
 
 			uint32_t y_base = y * pixels_in_scanline;
+
 
 			//Tell LCD we're starting the active portion of the scanline
 			gpio_put(lcd_den, 1);
@@ -302,7 +327,7 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 				//old_pix_value = new_pix_value;
 				
 				//By the time we get here, the PIO is probably gonna be done sending the last pixel anyways
-				while(!pio_sm_is_tx_fifo_empty(pio1, 0)) ;
+				//while(!pio_sm_is_tx_fifo_empty(pio1, 0)) ;
 
 				//while(pio_sm_is_tx_fifo_full(pio1, 0)) ;
 
@@ -324,14 +349,12 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 				//pio_sm_put(pio1, 0, curr_framebuffer[x] & 4095);
 				//pio_sm_put(pio1, 0, curr_framebuffer[x+1] & 4095);
 
-				//fill the fifo - does not correlate to lcd_pio_hscale
-				pio_sm_put(pio1, 0, curr_framebuffer[x] & 4095);
-				pio_sm_put(pio1, 0, curr_framebuffer[x+1] & 4095);
-				pio_sm_put(pio1, 0, curr_framebuffer[x+2] & 4095);
-				pio_sm_put(pio1, 0, curr_framebuffer[x+3] & 4095);
-				
-				
 				//fill the fifo - does not correlate to lcd_pio_hscale. the fifo is just 4 words max
+				//pio_sm_put(pio1, 0, curr_framebuffer[x] & 4095);
+				//pio_sm_put(pio1, 0, curr_framebuffer[x+1] & 4095);
+				//pio_sm_put(pio1, 0, curr_framebuffer[x+2] & 4095);
+				//pio_sm_put(pio1, 0, curr_framebuffer[x+3] & 4095);
+				
 				/*
 				pio_sm_put_blocking(pio1, 0, curr_framebuffer[x] & 4095);
 				pio_sm_put_blocking(pio1, 0, curr_framebuffer[x+1] & 4095);
@@ -339,55 +362,73 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 				pio_sm_put_blocking(pio1, 0, curr_framebuffer[x+3] & 4095);
 				*/
 
-				//pio_sm_put(pio1, 0, framebuffer_pix_value);
-				//pio_sm_put(pio1, 0, framebuffer_pix_value);
-				//pio_sm_put_blocking(pio1, 0, framebuffer_pix_value);
-				//pio_sm_put_blocking(pio1, 0, framebuffer_pix_value);
-				//pio_sm_put(pio1, 0, 4095);
-				//pio_sm_put(pio1, 0, 0);
-				//pio_sm_put(pio1, 0, 15);
-				//pio_sm_put(pio1, 0, 15 << 4);
-				//pio_sm_put(pio1, 0, 15 << 8);
+				send_lcd_pixel(curr_framebuffer[x], hsync, vsync);
+				send_lcd_pixel(curr_framebuffer[x+1], hsync, vsync);
+				send_lcd_pixel(curr_framebuffer[x+2], hsync, vsync);
+				send_lcd_pixel(curr_framebuffer[x+3], hsync, vsync);
+
+/*
+				send_lcd_pixel(spi_buffer[0], hsync, vsync);
+				send_lcd_pixel(spi_buffer[1], hsync, vsync);
+				send_lcd_pixel(spi_buffer[2], hsync, vsync);
+				send_lcd_pixel(spi_buffer[3], hsync, vsync);
+
+*/
+
 				
 			}
+
 
 			//Signal end of active scanline portion
 			gpio_put(lcd_den, 0);
 			
 			//Send empty pixels during Hblank
 			for(uint32_t wait = 0; wait < lcd_hblank_front_len; wait ++) {
-				pio_sm_put_blocking(pio1, 0, 0);
+				//pio_sm_put_blocking(pio1, 0, 0);
+				send_lcd_pixel(0, hsync, vsync);
 			}
 			
-			gpio_put(lcd_hsync, 0);
+			hsync = 0;
+			//gpio_put(lcd_hsync, hsync);
 		}
 	}
 
-	//Start of vblank
+	//end frame data
+
+	//start vsync front porch
+
+	//Start of vblank 
 	gpio_put(lcd_den, 0);
-	
 
+	hsync = 0;
 	//Send empty data for the entirety of vblank
-	gpio_put(lcd_hsync, 0);
-
+	//gpio_put(lcd_hsync, hsync);
+	 
 	for(uint32_t pixel = 0; pixel < lcd_hblank_sync_len; pixel ++) {
-		pio_sm_put_blocking(pio1, 0, 0);
+		//pio_sm_put_blocking(pio1, 0, 0);
+		send_lcd_pixel(0, hsync, vsync);
 	}
 
-	gpio_put(lcd_hsync, 1);
+	hsync = 1;
+	//gpio_put(lcd_hsync, hsync);
 
 	for(uint32_t wait_line = 0; wait_line < lcd_vblank_front_lines; wait_line ++) {
 		for(uint32_t pixel = 0; pixel < lcd_hblank_len; pixel ++) {
-			pio_sm_put_blocking(pio1, 0, 0);
+			//pio_sm_put_blocking(pio1, 0, 0);
+			send_lcd_pixel(0, hsync, vsync);
 		}
 
 		/*for(uint32_t wait = 0; wait < lcd_hblank_len; wait ++) {
 			pio_sm_put_blocking(pio1, 0, 0);
 		}*/
 	}
+
+	//end vsync front porch
 	
-	gpio_put(lcd_hsync, 0);
-	gpio_put(lcd_vsync, 0);
+	hsync = 0;
+	vsync = 0;
+	//gpio_put(lcd_hsync, hsync);
+	//gpio_put(lcd_vsync, vsync);
 	
 	gpio_put(lcd_den, 0);
 }
@@ -469,6 +510,10 @@ void config_pios() {
 	//PIO1 is used to send data to the LCD without hogging the CPU
 	pio_sm_claim(pio1, 0);
 
+	//pio1 sm1 used for lcd clk
+	pio_sm_claim(pio1, 1);
+
+/*
 	uint8_t lcd_send_1x = pio_add_program(pio1, &lcd_send_program);
 	pio_sm_config lcd_send_1x_config = lcd_send_program_get_default_config(lcd_send_1x);
 
@@ -477,10 +522,19 @@ void config_pios() {
 
 	uint8_t lcd_send_4x = pio_add_program(pio1, &lcd_send_4x_program);
 	pio_sm_config lcd_send_4x_config = lcd_send_4x_program_get_default_config(lcd_send_4x);
+*/
 
-	uint8_t lcd_send = 0;
-	pio_sm_config lcd_send_config;
+	uint8_t lcd_send_spi = pio_add_program(pio1, &lcd_send_spi_program);
+	pio_sm_config lcd_send_spi_config = lcd_send_spi_program_get_default_config(lcd_send_spi);
 
+	uint8_t lcd_send_clk = pio_add_program(pio1, &lcd_send_clk_program);
+	pio_sm_config lcd_send_clk_config = lcd_send_clk_program_get_default_config(lcd_send_clk);
+
+
+	uint8_t lcd_send = lcd_send_spi;
+	pio_sm_config lcd_send_config = lcd_send_spi_config;
+
+	/*
 	switch(lcd_pio_hscale)
 	{
 		case 2:
@@ -498,67 +552,46 @@ void config_pios() {
 			lcd_send_config = lcd_send_1x_config;
 			break;
 	}
-	
+	*/
+
 	//uint8_t lcd_send = lcd_send_2x;
 	//pio_sm_config lcd_send_config = lcd_send_2x_config;
 
 	sm_config_set_clkdiv(&lcd_send_config, 1);
-	sm_config_set_sideset_pins(&lcd_send_config, lcd_clk);
-	sm_config_set_out_pins(&lcd_send_config, lcd_B0, 12);
-	sm_config_set_out_shift(&lcd_send_config, true, false, 32);
-	sm_config_set_in_shift(&lcd_send_config, false, false, 32);
+	sm_config_set_out_pins(&lcd_send_config, lcd_spi_mosi_1, 2);
+	sm_config_set_sideset_pins(&lcd_send_config, lcd_spi_clk);
+	sm_config_set_set_pins(&lcd_send_config, lcd_spi_latch, 1);
+	sm_config_set_out_shift(&lcd_send_config, false, true, 14);
+
+	sm_config_set_clkdiv(&lcd_send_clk_config, 1);
+	sm_config_set_set_pins(&lcd_send_clk_config, lcd_clk, 1);
 
 
-	pio_gpio_init(pio1, lcd_clk);
-	pio_gpio_init(pio1, lcd_B0);
-	pio_gpio_init(pio1, lcd_B1);
-	pio_gpio_init(pio1, lcd_B2);
-	pio_gpio_init(pio1, lcd_B3);
-	pio_gpio_init(pio1, lcd_G0);
-	pio_gpio_init(pio1, lcd_G1);
-	pio_gpio_init(pio1, lcd_G2);
-	pio_gpio_init(pio1, lcd_G3);
-	pio_gpio_init(pio1, lcd_R0);
-	pio_gpio_init(pio1, lcd_R1);
-	pio_gpio_init(pio1, lcd_R2);
-	pio_gpio_init(pio1, lcd_R3);
-
-/*
-	gpio_set_slew_rate(lcd_clk, GPIO_SLEW_RATE_SLOW);
-	gpio_set_slew_rate(lcd_B0, GPIO_SLEW_RATE_SLOW);
-	gpio_set_slew_rate(lcd_B1, GPIO_SLEW_RATE_SLOW);
-	gpio_set_slew_rate(lcd_B2, GPIO_SLEW_RATE_SLOW);
-	gpio_set_slew_rate(lcd_B3, GPIO_SLEW_RATE_SLOW);
-	gpio_set_slew_rate(lcd_G0, GPIO_SLEW_RATE_SLOW);
-	gpio_set_slew_rate(lcd_G1, GPIO_SLEW_RATE_SLOW);
-	gpio_set_slew_rate(lcd_G2, GPIO_SLEW_RATE_SLOW);
-	gpio_set_slew_rate(lcd_G3, GPIO_SLEW_RATE_SLOW);
-	gpio_set_slew_rate(lcd_R0, GPIO_SLEW_RATE_SLOW);
-	gpio_set_slew_rate(lcd_R1, GPIO_SLEW_RATE_SLOW);
-	gpio_set_slew_rate(lcd_R2, GPIO_SLEW_RATE_SLOW);
-	gpio_set_slew_rate(lcd_R3, GPIO_SLEW_RATE_SLOW);
-*/
-
-	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_clk), (1 << lcd_clk));
-
-	//pio_sm_set_consecutive_pindirs(pio1, 0, lcd_B0, 12, true);
+	pio_gpio_init(pio1, lcd_spi_latch);
+	pio_gpio_init(pio1, lcd_spi_clk);
+	pio_gpio_init(pio1, lcd_spi_mosi_1);
+	pio_gpio_init(pio1, lcd_spi_mosi_2);
 	
+	pio_gpio_init(pio1, lcd_clk);
 
-	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_B0), (1 << lcd_B0));
-	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_B1), (1 << lcd_B1));
-	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_B2), (1 << lcd_B2));
-	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_B3), (1 << lcd_B3));
-	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_G0), (1 << lcd_G0));
-	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_G1), (1 << lcd_G1));
-	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_G2), (1 << lcd_G2));
-	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_G3), (1 << lcd_G3));
-	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_R0), (1 << lcd_R0));
-	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_R1), (1 << lcd_R1));
-	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_R2), (1 << lcd_R2));
-	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_R3), (1 << lcd_R3));
+	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_spi_latch), (1 << lcd_spi_latch) );
+	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_spi_mosi_1), (1 << lcd_spi_mosi_1) );
+	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_spi_mosi_2), (1 << lcd_spi_mosi_2) );
+	pio_sm_set_pindirs_with_mask(pio1, 0, (1 << lcd_spi_clk), (1 << lcd_spi_clk) );
+
+	pio_sm_set_pindirs_with_mask(pio1, 1, (1 << lcd_clk), (1 << lcd_clk) );
+
+
+
 
 	pio_sm_init(pio1, 0, lcd_send, &lcd_send_config);
 	pio_sm_set_enabled(pio1, 0, true);
+
+	pio_sm_init(pio1, 1, lcd_send_clk, &lcd_send_clk_config);
+	pio_sm_set_enabled(pio1, 1, true);
+
+
+
 
 	pio_clear_instruction_memory(pio0);
 
@@ -602,7 +635,7 @@ uint32_t dummy;
 void config_dma() {
 	for(uint32_t c = 0; c < 12; c++) {
 		dma_channel_cleanup(c);
-    dma_channel_unclaim(c);
+    	dma_channel_unclaim(c);
 	}
 
 	//DVI code uses claim_unused_channel, so we must as well, instead of explicitly picking DMA channels
@@ -809,12 +842,15 @@ void init_lcd() {
 
 void fill_framebuffer_with_test_pattern() {
 
-	uint16_t test_divs = pixels_in_scanline / 8;
-	uint16_t row_size = scanlines_in_active_area / 4;
+	uint16_t test_divs = pixels_in_scanline / 8;	
+	uint16_t row_size = scanlines_in_active_area / 5;
+	uint16_t row_diff = 3;
 
 	for(uint32_t y = 0; y < scanlines_in_active_area; y++) {
 
-		uint16_t row_val = 15 - ((15/4) * (y / row_size));
+		uint16_t row_val = (y / row_size);
+		row_val = row_diff * row_val;
+		row_val = 15 - row_val;
 
 		//uint16_t row_val = 15;
 
@@ -1033,6 +1069,8 @@ void core1_main()
 	//__builtin_unreachable();
 }
 
+
+
 int main() 
 {
 	vreg_set_voltage(VREG_VOLTAGE_1_10);
@@ -1042,15 +1080,13 @@ int main()
 	tusb_init(); //initialise TinyUSB stack
 
 	gpio_init_mask(0b11111111111111111111111111111111);
-	gpio_set_dir_out_masked(1 << led_pin);
+	//gpio_set_dir_out_masked(1 << led_pin);
 	gpio_set_dir_out_masked(1 << lcd_rst);
 	gpio_set_dir_out_masked(1 << lcd_den);
-	gpio_set_dir_out_masked(1 << lcd_hsync);
-	gpio_set_dir_out_masked(1 << lcd_vsync);
+	//gpio_set_dir_out_masked(1 << lcd_hsync);
+	//gpio_set_dir_out_masked(1 << lcd_vsync);
 	gpio_set_dir_out_masked(1 << lcd_backlight);
-
 	
-
 	uint8_t pwm_backlight_slice = config_backlight_pwm();
 	config_backlight_supply(pwm_backlight_slice);
 
@@ -1058,7 +1094,8 @@ int main()
 	init_lcd();
 	config_pios();
 	config_dma();
-	config_interp();
+	//config_interp();
+
 
 	//dvi0.timing = &DVI_TIMING;
 	//dvi0.ser_cfg = pico_gg_lcd_conf;
@@ -1069,9 +1106,9 @@ int main()
 	multicore_launch_core1(core1_main);
 
 	gpio_put(lcd_den, 0);
-	gpio_put(lcd_hsync, 0);
-	gpio_put(lcd_vsync, 0);
-	gpio_put(led_pin, 1);
+	//gpio_put(lcd_hsync, 0);
+	//gpio_put(lcd_vsync, 0);
+	//gpio_put(led_pin, 1);
 	
 	gpio_put(lcd_clk, 0);
 	gpio_put(lcd_backlight, 0);
@@ -1090,12 +1127,12 @@ int main()
 	uint32_t last_frame_time = 0;
 
 	while(1) {
-
+/*
 		last_gg = gg_now;
 		gg_now = !gpio_get(gg_SMS_pin);
 
 		if(last_gg == gg_now) is_gg = gg_now;
-
+*/
 		uint32_t start = time_us_32();
 		//update lcd after 15ms for just over 60fps
 		if(start - last_frame_time > 15000)

@@ -43,6 +43,7 @@ pico_generate_pio_header(pico_gg_hd ${CMAKE_CURRENT_LIST_DIR}/src/gg_capture.pio
 pico_generate_pio_header(pico_gg_hd ${CMAKE_CURRENT_LIST_DIR}/src/lcd_send.pio)
 pico_generate_pio_header(pico_gg_hd ${CMAKE_CURRENT_LIST_DIR}/src/lcd_send_2x.pio)
 pico_generate_pio_header(pico_gg_hd ${CMAKE_CURRENT_LIST_DIR}/src/lcd_send_4x.pio)
+pico_generate_pio_header(pico_gg_hd ${CMAKE_CURRENT_LIST_DIR}/src/lcd_send_spi.pio)
 
 target_link_libraries(pico_gg_hd pico_stdlib pico_time 
 hardware_pio hardware_sync hardware_dma hardware_clocks pico_multicore 

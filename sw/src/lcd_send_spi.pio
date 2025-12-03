@@ -1,0 +1,50 @@
+;out pin is spi mosi
+;set pins are shift buffer latch 
+;sideset is spi clk
+.program lcd_send_spi
+.side_set 1 opt 
+.wrap_target
+
+;clear the latch
+
+;loop 7 times for 14 bits total
+set y, 6
+
+set pins 0 side 0
+
+;pull ;autopull is enabled so this isnt needed
+
+;send the bits to the shift buffer
+buffer_target: 
+ 
+out  pins 2 side 0 [2]   ;put the bit on the mosi pin  
+ 
+jmp y--  buffer_target side 1 [1]  ;clock the clk on the side pin
+
+;latch the bits
+set pins 1 [2]
+
+;trigger lcd_send_clk
+irq set 0 
+
+.wrap
+
+
+;set pin is lcd clk
+.program lcd_send_clk
+.wrap_target
+
+set y, 3
+wait 1 irq 0
+
+;clock the lcd
+
+lcd_target:
+set pins 0 [2]
+set pins 1 [2]
+
+jmp y-- lcd_target
+	
+set pins 0
+
+.wrap
