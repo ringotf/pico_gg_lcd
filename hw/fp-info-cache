@@ -1,4 +1,4 @@
-26776947745945632
+26780514045755922
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -106470,7 +106470,14 @@ Varistor VF
 2
 2
 gg_lcd
-1x54 To 1x60 FPC Connector 0.5mm
+1x54 To 1x60 FPC Connector 0.5mm HandSolder
+Amphenol F32R/J FPC connector, 60 bottom-side contacts, 0.5mm pitch, SMT, https://cdn.amphenol-icc.com/media/wysiwyg/files/drawing/f32r-f32j.pdf
+F32J
+0
+56
+55
+gg_lcd
+1x54 To 1x60 FPC Connector 0.5mm SMT
 Amphenol F32R/J FPC connector, 60 bottom-side contacts, 0.5mm pitch, SMT, https://cdn.amphenol-icc.com/media/wysiwyg/files/drawing/f32r-f32j.pdf
 F32J
 0
@@ -106541,6 +106548,13 @@ Through hole pin header THT 2x27 2.54mm double row
 54
 gg_lcd
 PinSocket_2x06_P2.54mm_Horizontal
+Through hole angled socket strip, 2x06, 2.54mm pitch, 8.51mm socket length, double cols (from Kicad 4.0.7), script generated
+Through hole angled socket strip THT 2x06 2.54mm double row
+0
+12
+12
+gg_lcd
+PinSocket_2x06_P2.54mm_Horizontal With Header
 Through hole angled socket strip, 2x06, 2.54mm pitch, 8.51mm socket length, double cols (from Kicad 4.0.7), script generated
 Through hole angled socket strip THT 2x06 2.54mm double row
 0

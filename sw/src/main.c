@@ -16,6 +16,7 @@
 #include "hardware/pwm.h"
 #include "hardware/interp.h"
 
+#include "main.h"
 #include "../build/gg_capture.pio.h"
 #include "../build/lcd_send.pio.h"
 #include "../build/lcd_send_2x.pio.h"
@@ -48,12 +49,15 @@
 #define gg_cl2_pin 23
 #define gg_clk_pin 24
 
-#define pixels_in_scanline 320 //280 //300
-#define scanlines_in_active_area 192 //144 //192
+//need to move hdmi pins to free up adc... or use separate adc module
+#define gg_audio_l_pin 26 
+//#define gg_audio_r_pin 27
+
+//#define pixels_in_scanline 256 //280 //300
+//#define scanlines_in_active_area  192 //160 //144 //192
 
 #define gg_pixel_width 160
 #define gg_pixel_height 144
-
 
 #define scanlines_in_active_area_min 100
 
@@ -61,7 +65,6 @@
 #define FRAME_SIZE_HALF (pixels_in_scanline * scanlines_in_active_area)
 
 #define FRAME_SIZE_MIN (pixels_in_scanline * scanlines_in_active_area_min * 2)
-
 
 #define lcd_rst 0 //17 //6
 
@@ -78,8 +81,16 @@
 
 #define lcd_backlight 17
 
+#define lcd_send_pio pio1
+#define lcd_send_sm 3
+//static int lcd_send_sm = 3;
 
 #define backlight_fdbck 26 //28 - swapped with lcd_den
+#define gg_capture_pio pio0
+#define gg_capture_vblank_sm 0
+#define gg_capture_hblank_sm 1
+#define gg_capture_getdata_sm 2
+#define gg_capture_front_h_porch_sm 3
 
 #define brightness_pot 27 //29 - moved down 2 pins
 
@@ -106,19 +117,27 @@
 #define lcd_vblank_sync_lines 2 
 #define lcd_vblank_front_lines 16 
 #define lcd_vblank_back_lines 14
+#define dvi_pio pio1
+#define dvi_tmds_sm_0 0
+#define dvi_tmds_sm_1 1
+#define dvi_tmds_sm_2 2
 
 #define scanlines_to_skip 1 //11
 
 #define pixels_to_skip  (pixels_in_scanline * scanlines_to_skip)
+// DVDD 1.2V (1.1V seems ok too)
+#define FRAME_WIDTH 320
+#define FRAME_HEIGHT 240
+#define VREG_VSEL VREG_VOLTAGE_1_20
 
 struct dvi_inst dvi0;
 
-static const struct dvi_serialiser_cfg pico_gg_lcd_conf = {
-	.pio = pio1,
-	.sm_tmds = {28, 2, 0},
+static struct dvi_serialiser_cfg pico_gg_lcd_conf = {
+	.pio = dvi_pio,
+	.sm_tmds = {dvi_tmds_sm_0, dvi_tmds_sm_1, dvi_tmds_sm_2},
 	.pins_tmds = {28, 2, 0},
 	.pins_clk = 4,
-	.invert_diffpairs = false
+	.invert_diffpairs = true
 };
 
 
@@ -127,7 +146,18 @@ uint16_t * framebuffer = (uint16_t *)(0x20000000 + (1024 * 20));
 uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 20) + (pixels_in_scanline * scanlines_in_active_area * 2));
 //uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 30) + (pixels_in_scanline * scanlines_in_active_area * 2) + (pixels_in_scanline * 8));
 
-uint16_t send_buffer[512];
+//uint16_t send_buffer[512];
+
+#define ADC_SAMPLE_MULTIPLIER 1
+#define AUDIO_SAMPLE_RATE 44100
+#define AUDIO_BUFFER_SIZE 2048
+
+volatile int16_t audio_l_buffer[AUDIO_BUFFER_SIZE];
+//volatile int16_t audio_r_buffer[AUDIO_BUFFER_SIZE];
+
+#define DVI_AUDIO_CTS 28000
+#define DVI_AUDIO_BUFFER_SIZE 256
+audio_sample_t dvi_audio_buffer[DVI_AUDIO_BUFFER_SIZE];
 
 
 uint32_t pot_history[16];
@@ -136,6 +166,7 @@ uint8_t pwm_backlight_slice;
 
 #define pwm_wrap_target  		((DVI_TIMING.bit_clk_khz * 1000) / 30000)
 #define pwm_max_duty 			pwm_wrap_target  * 0.9f
+#define pwm_min_duty 			pwm_wrap_target  * 0.1f
 #define pwm_feedback_target 	1.82f
 
 uint32_t is_gg;
@@ -150,8 +181,6 @@ uint32_t dma_chan4;
 uint32_t dma_chan5;
 
 uint32_t last_frame_sent;
-
-
 
 static inline __attribute__ ((always_inline)) void send_lcd_pixel(uint16_t data, bool hsync, bool vsync)
 {
@@ -204,7 +233,6 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 	//while(!dma_channel_is_busy(dma_chan0) && !dma_channel_is_busy(dma_chan4)) ;
 
 	uint16_t * curr_framebuffer;
-
 	uint16_t spi_buffer[4] = {0xFFF, 0xFFF, 0xFFF, 0xFFF};  
 
 	//See which of the two framebuffer is currently being written to and pick the other one to send to the LCD
@@ -214,8 +242,8 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 
 	curr_framebuffer = framebuffer;
 
-	pio_sm_put_blocking(pio0, 1, scanlines_in_active_area + 1 - 1);
-	pio_sm_exec(pio0, 1, pio_encode_pull(false, true));
+	pio_sm_put_blocking(gg_capture_pio, gg_capture_hblank_sm, scanlines_in_active_area + 1 - 1);
+	pio_sm_exec(gg_capture_pio, gg_capture_hblank_sm, pio_encode_pull(false, true));
 
 	dma_hw->ch[2].transfer_count = pixels_in_scanline * 1;
 	dma_hw->ch[3].transfer_count = pixels_in_scanline * 1;
@@ -510,9 +538,6 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 
 	}
 
-
-
-
 /*
 	//frame footer
 //do some blank footer lines....
@@ -567,11 +592,12 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 			}
 			
 			hsync = 0;
-
 		}
 	}
 */
 
+	//Start of vblank
+	gpio_put(lcd_den, 1);
 
 	//end frame data
 
@@ -604,7 +630,6 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 			pio_sm_put_blocking(pio1, 0, 0);
 		}*/
 	}
-
 	//end vsync front porch
 	
 	hsync = 0;
@@ -625,8 +650,8 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_sms() {
 	if(dma_channel_is_busy(dma_chan0)) curr_framebuffer = framebuffer2;
 	else curr_framebuffer = framebuffer;
 
-	pio_sm_put_blocking(pio0, 1, scanlines_in_active_area + scanlines_to_skip - 1);
-	pio_sm_exec(pio0, 1, pio_encode_pull(false, true));
+	pio_sm_put_blocking(gg_capture_pio, gg_capture_hblank_sm, scanlines_in_active_area + scanlines_to_skip - 1);
+	pio_sm_exec(gg_capture_pio, gg_capture_hblank_sm, pio_encode_pull(false, true));
 
 	dma_hw->ch[2].transfer_count = pixels_in_scanline * scanlines_to_skip;
 	dma_hw->ch[3].transfer_count = pixels_in_scanline * scanlines_to_skip;
@@ -655,19 +680,19 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_sms() {
 			uint32_t pix_value = interp0->peek[1];
 			old_pix_value = new_pix_value;
 
-			while(!pio_sm_is_tx_fifo_empty(pio1, 0)) ;
+			while(!pio_sm_is_tx_fifo_empty(lcd_send_pio, lcd_send_sm)) ;
 
-			pio_sm_put(pio1, 0, pix_value & 15);
+			pio_sm_put(lcd_send_pio, lcd_send_sm, pix_value & 15);
 			pix_value >>= 10;
-			pio_sm_put(pio1, 0, pix_value & 15);
+			pio_sm_put(lcd_send_pio, lcd_send_sm, pix_value & 15);
 			pix_value >>= 10;
-			pio_sm_put(pio1, 0, pix_value & 15);
+			pio_sm_put(lcd_send_pio, lcd_send_sm, pix_value & 15);
 		}
 
 		gpio_put(lcd_den, 1);
 
 		for(uint32_t wait = 0; wait < lcd_hblank_len; wait ++) {
-			pio_sm_put_blocking(pio1, 0, 0);
+			pio_sm_put_blocking(lcd_send_pio, lcd_send_sm, 0);
 		}
 	}
 
@@ -676,21 +701,23 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_sms() {
 	for(uint32_t wait_line = 0; wait_line < lcd_vblank_back_lines; wait_line ++) {
 		for(uint32_t pixel = 0; pixel < lcd_send_width; pixel ++) {
 			for(uint32_t channel = 0; channel < lcd_channels; channel ++) {
-				pio_sm_put_blocking(pio1, 0, 0);
+				pio_sm_put_blocking(lcd_send_pio, lcd_send_sm, 0);
 			}
 		}
 
 		for(uint32_t wait = 0; wait < lcd_hblank_len; wait ++) {
-			pio_sm_put_blocking(pio1, 0, 0);
+			pio_sm_put_blocking(lcd_send_pio, lcd_send_sm, 0);
 		}
 	}
 }
+*/
 
 void config_pios() {
-	pio_clear_instruction_memory(pio1);
+	pio_clear_instruction_memory(lcd_send_pio);
 
 	//PIO1 is used to send data to the LCD without hogging the CPU
-	pio_sm_claim(pio1, 0);
+	pio_sm_claim(lcd_send_pio, lcd_send_sm);
+	//lcd_send_sm = pio_claim_unused_sm(lcd_send_pio, true);
 
 	//pio1 sm1 used for lcd clk
 	pio_sm_claim(pio1, 1);
@@ -738,7 +765,6 @@ void config_pios() {
 
 	//uint8_t lcd_send = lcd_send_2x;
 	//pio_sm_config lcd_send_config = lcd_send_2x_config;
-
 	sm_config_set_clkdiv(&lcd_send_config, 1);
 	sm_config_set_out_pins(&lcd_send_config, lcd_spi_mosi_1, 3);
 	//sm_config_set_sideset_pins(&lcd_send_config, lcd_spi_latch);
@@ -783,38 +809,52 @@ void config_pios() {
 	pio_clear_instruction_memory(pio0);
 
 	//PIO0 captures data from the GG's video bus
-	pio_sm_claim(pio0, 0);
-	pio_sm_claim(pio0, 1);
-	pio_sm_claim(pio0, 2);
+	pio_sm_claim(gg_capture_pio, gg_capture_vblank_sm);
+	pio_sm_claim(gg_capture_pio, gg_capture_hblank_sm);
+	pio_sm_claim(gg_capture_pio, gg_capture_getdata_sm);
+	pio_sm_claim(gg_capture_pio, gg_capture_front_h_porch_sm);
+	
 
-	uint8_t detect_vblank = pio_add_program(pio0, &detect_vblank_program);
+	uint8_t detect_vblank = pio_add_program(gg_capture_pio, &detect_vblank_program);
 	pio_sm_config detect_vblank_config = detect_vblank_program_get_default_config(detect_vblank);
 	sm_config_set_clkdiv(&detect_vblank_config, 1);
 
-	uint8_t detect_hblank = pio_add_program(pio0, &detect_hblank_program);
+	uint8_t detect_hblank = pio_add_program(gg_capture_pio, &detect_hblank_program);
 	pio_sm_config detect_hblank_config = detect_hblank_program_get_default_config(detect_hblank);
 	sm_config_set_clkdiv(&detect_hblank_config, 1);
 
-	uint8_t get_data = pio_add_program(pio0, &get_data_program);
+	uint8_t front_h_porch = pio_add_program(gg_capture_pio, &front_h_porch_program);
+	pio_sm_config front_h_porch_config = front_h_porch_program_get_default_config(front_h_porch);
+	sm_config_set_clkdiv(&front_h_porch_config, 1);
+
+
+	uint8_t get_data = pio_add_program(gg_capture_pio, &get_data_program);
 	pio_sm_config get_data_config = get_data_program_get_default_config(get_data);
 	sm_config_set_clkdiv(&get_data_config, 1);
 	sm_config_set_in_pins(&get_data_config, gg_D1_pin);
 	sm_config_set_in_shift(&get_data_config, false, false, 32);
 	//sm_config_set_jmp_pin(&get_data_config, gg_clk_pin);
 
-	pio_sm_init(pio0, 0, detect_vblank, &detect_vblank_config);
-	pio_sm_init(pio0, 1, detect_hblank, &detect_hblank_config);
-	pio_sm_init(pio0, 2, get_data, &get_data_config);
 
-	pio_sm_put_blocking(pio0, 1, scanlines_in_active_area + scanlines_to_skip - 1);
-	//pio_sm_put_blocking(pio0, 1, 140);
-	pio_sm_exec(pio0, 1, pio_encode_pull(false, true));
 
-	pio_sm_put_blocking(pio0, 2, pixels_in_scanline - 1); 
-	//pio_sm_put_blocking(pio0, 2, 160); 
-	pio_sm_exec(pio0, 2, pio_encode_pull(false, true));
 
-	pio_enable_sm_mask_in_sync(pio0, 0b111);
+	pio_sm_init(gg_capture_pio, gg_capture_vblank_sm, detect_vblank, &detect_vblank_config);
+	pio_sm_init(gg_capture_pio, gg_capture_hblank_sm, detect_hblank, &detect_hblank_config);
+	pio_sm_init(gg_capture_pio, gg_capture_front_h_porch_sm, front_h_porch, &front_h_porch_config);
+	pio_sm_init(gg_capture_pio, gg_capture_getdata_sm, get_data, &get_data_config);
+
+	pio_sm_put_blocking(gg_capture_pio, gg_capture_hblank_sm, scanlines_in_active_area + scanlines_to_skip - 1);
+	//pio_sm_put_blocking(gg_capture_pio, gg_capture_hblank_sm, 140);
+	pio_sm_exec(gg_capture_pio, gg_capture_hblank_sm, pio_encode_pull(false, true));
+
+	pio_sm_put_blocking(gg_capture_pio, gg_capture_front_h_porch_sm, h_pixels_to_skip - 1);
+	pio_sm_exec(gg_capture_pio, gg_capture_front_h_porch_sm, pio_encode_pull(false, true));
+
+	pio_sm_put_blocking(gg_capture_pio, gg_capture_getdata_sm, pixels_in_scanline - 1); 
+	//pio_sm_put_blocking(gg_capture_pio, gg_capture_getdata_sm, 160); 
+	pio_sm_exec(gg_capture_pio, gg_capture_getdata_sm, pio_encode_pull(false, true));
+
+	pio_enable_sm_mask_in_sync(gg_capture_pio, 0b1111);
 }
 
 uint32_t dummy;
@@ -822,14 +862,14 @@ uint32_t dummy;
 void config_dma() {
 	for(uint32_t c = 0; c < 12; c++) {
 		dma_channel_cleanup(c);
-    	dma_channel_unclaim(c);
+    dma_channel_unclaim(c);
 	}
 
 	//DVI code uses claim_unused_channel, so we must as well, instead of explicitly picking DMA channels
 	dma_chan0 = dma_claim_unused_channel(true);
 	dma_chan1 = dma_claim_unused_channel(true);
-	//dma_chan2 = dma_claim_unused_channel(true);
-	//dma_chan3 = dma_claim_unused_channel(true);
+	dma_chan2 = dma_claim_unused_channel(true);
+	dma_chan3 = dma_claim_unused_channel(true);
 	dma_chan4 = dma_claim_unused_channel(true);
 	dma_chan5 = dma_claim_unused_channel(true);
 
@@ -841,12 +881,12 @@ void config_dma() {
 	channel_config_set_chain_to(&g, dma_chan0);
 	channel_config_set_read_increment(&g, false);
 	channel_config_set_write_increment(&g, false);
-	channel_config_set_dreq(&g, pio_get_dreq(pio0, 2, false));
+	channel_config_set_dreq(&g, pio_get_dreq(gg_capture_pio, gg_capture_getdata_sm, false));
 	dma_channel_configure(
 			dma_chan2,
 			&g,
 			&dummy,
-			&pio0_hw->rxf[2],
+			&gg_capture_pio->rxf[gg_capture_getdata_sm],
 			//The first few active display scanlines are actually blank
 			//We skip them by taking data from the PIO and discarding it into the dummy variable
 			//We than chain to dma_chan0 
@@ -861,14 +901,14 @@ void config_dma() {
 	channel_config_set_chain_to(&f, dma_chan1);
 	channel_config_set_read_increment(&f, false);
 	channel_config_set_write_increment(&f, true);
-	channel_config_set_dreq(&f, pio_get_dreq(pio0, 2, false));
+	channel_config_set_dreq(&f, pio_get_dreq(gg_capture_pio, gg_capture_getdata_sm, false));
 	dma_channel_configure(
 			dma_chan0,
 			&f,
 			//Note that we're filling the first framebuffer here
 			//There's two of them, for double buffering, so we don't get screen tearing
 			&framebuffer[0],
-			&pio0_hw->rxf[2],
+			&gg_capture_pio->rxf[gg_capture_getdata_sm],
 			//Again, the active area has border scanlines that don't actually contain game graphics
 			//We only save the *real* scanlines into the framebuffer
 			//Then chain to dma_chan1
@@ -900,12 +940,12 @@ void config_dma() {
 	channel_config_set_chain_to(&g, dma_chan4);
 	channel_config_set_read_increment(&g, false);
 	channel_config_set_write_increment(&g, false);
-	channel_config_set_dreq(&g, pio_get_dreq(pio0, 2, false));
+	channel_config_set_dreq(&g, pio_get_dreq(gg_capture_pio, gg_capture_getdata_sm, false));
 	dma_channel_configure(
 			dma_chan3,
 			&g,
 			&dummy,
-			&pio0_hw->rxf[2],
+			&gg_capture_pio->rxf[gg_capture_getdata_sm],
 			pixels_to_skip,
 			false);
 */
@@ -917,12 +957,12 @@ void config_dma() {
 	channel_config_set_chain_to(&f, dma_chan5);
 	channel_config_set_read_increment(&f, false);
 	channel_config_set_write_increment(&f, true);
-	channel_config_set_dreq(&f, pio_get_dreq(pio0, 2, false));
+	channel_config_set_dreq(&f, pio_get_dreq(gg_capture_pio, gg_capture_getdata_sm, false));
 	dma_channel_configure(
 			dma_chan4,
 			&f,
 			&framebuffer2[0],
-			&pio0_hw->rxf[2],
+			&gg_capture_pio->rxf[gg_capture_getdata_sm],
 			pixels_in_scanline * scanlines_in_active_area,
 			false);
 
@@ -941,10 +981,199 @@ void config_dma() {
 			&framebuffer2,
 			1,
 			false);
+	
+}
+
+
+struct repeating_timer adc_timer;
+struct repeating_timer dvi_audio_timer;
+volatile uint16_t audio_write_pos = 0;
+volatile uint16_t audio_read_pos = 0;
+
+volatile int64_t accum_l = 0;
+//volatile uint16_t decimate = 0;
+
+//static int16_t prev = 0;
+bool __not_in_flash_func(adc_timer_callback)(struct repeating_timer *t)
+{
+	static uint channel = 0; //0 = left, 1 = right
+
+	
+	#define AVG 1
+	uint32_t sum = 0;
+	//for (int i = 0; i < AVG; i++) {
+		
+		adc_select_input(gg_audio_l_pin - ADC_BASE_PIN);
+		sum += adc_read();
+
+//#ifdef DEBUG			
+		//printf("ADC Timer Sample: %.2f\n", sum);
+//#endif
+		//adc_select_input(gg_audio_r_pin - ADC_BASE_PIN);
+		//sum -= adc_read();
+	//}
+	uint16_t raw = sum / AVG;
+
+//	int16_t sample = (int16_t)(adc_read() - 2048);
+	int16_t sample = (int16_t)(raw - 2048);
+
+	accum_l += sample;
+
+
+	//if(++decimate >= ADC_SAMPLE_MULTIPLIER)
+	//{
+		//decimate = 0;
+
+		//accum_l = (accum_l * 15);// >> 2;
+		//int16_t current = prev + 0.1 * (accum_l - prev);
+
+		//audio_l_buffer[audio_write_pos] = (current * 15);// >> 4;
+
+		audio_l_buffer[audio_write_pos] = (accum_l * 4);
+		//audio_l_buffer[audio_write_pos] = (accum_l * 4);// >> 4;
+		//audio_l_buffer[audio_write_pos] = prev + (((accum_l * 90) - prev) >> 4);
+		//prev = current;
+		//prev = accum_l;
+		accum_l = 0;
+		
+		//audio_l_buffer[audio_write_pos] = (sample * 15);
+		//audio_l_buffer[audio_write_pos] = sine[audio_write_pos % SINE_SIZE] / 2;
+
+		audio_write_pos = (audio_write_pos + 1) % AUDIO_BUFFER_SIZE;
+		//channel = (channel + 1) % 2; //switch channel for next sample
+	//}
+
+#ifdef DEBUG
+		//printf("ADC Timer Sample: %.2f\n", sample);
+#endif
+
+	return true;
+}
+
+
+const int16_t sine[128] = {
+    0x3fff, 0x4322, 0x4644, 0x4962, 0x4c7b, 0x4f8b, 0x5292, 0x558e,
+    0x587c, 0x5b5b, 0x5e29, 0x60e5, 0x638c, 0x661e, 0x6898, 0x6af9,
+    0x6d3f, 0x6f6a, 0x7177, 0x7365, 0x7534, 0x76e3, 0x786f, 0x79d9,
+    0x7b1e, 0x7c40, 0x7d3c, 0x7e13, 0x7ec3, 0x7f4c, 0x7faf, 0x7fea,
+    0x7ffe, 0x7fea, 0x7faf, 0x7f4c, 0x7ec3, 0x7e13, 0x7d3c, 0x7c40,
+    0x7b1e, 0x79d9, 0x786f, 0x76e3, 0x7534, 0x7365, 0x7177, 0x6f6a,
+    0x6d3f, 0x6af9, 0x6898, 0x661e, 0x638c, 0x60e5, 0x5e29, 0x5b5b,
+    0x587c, 0x558e, 0x5292, 0x4f8b, 0x4c7b, 0x4962, 0x4644, 0x4322,
+    0x3fff, 0x3cdb, 0x39b9, 0x369b, 0x3382, 0x3072, 0x2d6b, 0x2a6f,
+    0x2781, 0x24a2, 0x21d4, 0x1f18, 0x1c71, 0x19df, 0x1765, 0x1504,
+    0x12be, 0x1093, 0x0e86, 0x0c98, 0x0ac9, 0x091a, 0x078e, 0x0624,
+    0x04df, 0x03bd, 0x02c1, 0x01ea, 0x013a, 0x00b1, 0x004e, 0x0013,
+    0x0000, 0x0013, 0x004e, 0x00b1, 0x013a, 0x01ea, 0x02c1, 0x03bd,
+    0x04df, 0x0624, 0x078e, 0x091a, 0x0ac9, 0x0c98, 0x0e86, 0x1093,
+    0x12be, 0x1504, 0x1765, 0x19df, 0x1c71, 0x1f18, 0x21d4, 0x24a2,
+    0x2781, 0x2a6f, 0x2d6b, 0x3072, 0x3382, 0x369b, 0x39b9, 0x3cdb,
+};
+
+#define SINE_SIZE (sizeof(sine) / sizeof(sine[0]))
+
+static uint16_t sample_count = 0;
+
+bool __not_in_flash_func(dvi_audio_timer_callback)(struct repeating_timer *t)
+{
+	//while(true)
+	{
+		//get how many audio samples for the dvi buffer
+		int size = get_write_size(&dvi0.audio_ring, true);
+		if(size == 0) return true;
+		if(size >= AUDIO_BUFFER_SIZE)
+		{
+			size = AUDIO_BUFFER_SIZE;
+		}
+
+		//get where we need to write the audio sample to
+		audio_sample_t *audio_ptr = get_write_pointer(&dvi0.audio_ring);
+		audio_sample_t *audio_buffer = get_buffer_top(&dvi0.audio_ring);
+		uint32_t audio_offset = get_write_offset(&dvi0.audio_ring);
+		audio_sample_t sample;
+
+		for(int cnt = 0; cnt < size; cnt++)
+		{
+/*
+			audio_buffer[audio_offset].channels[0] = sine[sample_count % SINE_SIZE];
+			audio_buffer[audio_offset].channels[1] = 0;
+			//audio_buffer[audio_offset].channels[0] = audio_l_buffer[audio_read_pos];
+			//audio_buffer[audio_offset].channels[1] = sample.channels[0];
+			audio_read_pos = ((audio_read_pos + 1) % AUDIO_BUFFER_SIZE );
+			audio_offset = (audio_offset + 1) % (DVI_AUDIO_BUFFER_SIZE - 1);
+
+			sample_count = (sample_count +1) % SINE_SIZE;
+*/
+
+			//while(audio_write_pos == audio_read_pos) {};
+			if(audio_write_pos == audio_read_pos)
+			{
+				//break;
+				 sample.channels[0] = 0; //silence on underrun?
+				 sample.channels[1] = 0;
+			}
+			else 
+			{
+				//audio_buffer[audio_offset].channels[0] = sine[sample_count % SINE_SIZE];
+				//audio_buffer[audio_offset].channels[1] = sine[sample_count % SINE_SIZE];
+				//sample.channels[0] = sine[sample_count % SINE_SIZE];
+
+				sample.channels[0] = audio_l_buffer[audio_read_pos];
+				sample.channels[1] = 0; //audio_l_buffer[audio_read_pos];
+				//sample.channels[1] = 0;
+
+				//sample.channels[1] = audio_r_buffer[audio_read_pos];				
+				audio_read_pos = ((audio_read_pos + 1) % AUDIO_BUFFER_SIZE);
+
+				//audio_buffer[audio_offset] = sample;
+				audio_offset = (audio_offset + 1) % (DVI_AUDIO_BUFFER_SIZE - 1);
+			}
+
+			*audio_ptr++ = sample;
+			increase_write_pointer(&dvi0.audio_ring, 1);
+			audio_ptr = get_write_pointer(&dvi0.audio_ring);
+			//sample_count = (sample_count +1) % SINE_SIZE;
+			sample_count++;
+			
+		}
+
+		//set_write_offset(&dvi0.audio_ring, audio_offset);
+		//increase_write_pointer(&dvi0.audio_ring, sample_count);
+		//increase_write_pointer(&dvi0.audio_ring, size);
+
+	}
+	
+    return true;
+}
+
+void config_audio()
+{
+
+	/*gpio_init(gg_audio_l_pin);
+	gpio_disable_pulls(gg_audio_l_pin);
+	adc_gpio_init(gg_audio_l_pin);*/
+	
+	adc_init();
+	adc_gpio_init(gg_audio_l_pin);
+	//adc_gpio_init(gg_audio_r_pin);
+	//adc_select_input(gg_audio_r_pin - ADC_BASE_PIN);
+	adc_select_input(gg_audio_l_pin - ADC_BASE_PIN);
+	adc_set_temp_sensor_enabled(false);
+
+	for(uint32_t i = 0; i < AUDIO_BUFFER_SIZE; i++)
+	{
+		audio_l_buffer[i] = 0;
+	}
+
+	//timer for adc sampling
+	add_repeating_timer_us(1000000 / (AUDIO_SAMPLE_RATE * ADC_SAMPLE_MULTIPLIER), adc_timer_callback, NULL, &adc_timer);
+
+	//timer for sending dvi audio
+	add_repeating_timer_ms(2, dvi_audio_timer_callback, NULL, &dvi_audio_timer);
 }
 
 void config_backlight_supply(uint8_t pwm_backlight_slice) {
-	adc_init();
+	//adc_init();
 	adc_gpio_init(backlight_fdbck);
 	adc_select_input(backlight_fdbck - ADC_BASE_PIN);
 	//adc_run(true);
@@ -1027,18 +1256,14 @@ void init_lcd() {
 	gpio_put(lcd_rst, 0);
 	sleep_ms(10);
 	gpio_put(lcd_rst, 1);
-
 	sleep_ms(100);
 }
 
 void fill_framebuffer_with_test_pattern() {
-
 	uint16_t test_divs = pixels_in_scanline / 8;	
 	uint16_t row_size = scanlines_in_active_area / 5;
 	uint16_t row_diff = 3;
-
 	for(uint32_t y = 0; y < scanlines_in_active_area; y++) {
-
 		uint16_t row_val = (y / row_size);
 		row_val = row_diff * row_val;
 		row_val = 15 - row_val;
@@ -1163,7 +1388,7 @@ void send_frame_over_usb()
 				curr_framebuffer = framebuffer;
 			
 				
-				uint32_t frame_size_to_use = FRAME_SIZE * 2;//_MIN; //FRAME_SIZE_HALF;
+				uint32_t frame_size_to_use = FRAME_SIZE;// * 2;//_MIN; //FRAME_SIZE_HALF;
 
 				//frame_size_to_use -= pixels_in_scanline * 16; //51;
 				
@@ -1175,12 +1400,13 @@ void send_frame_over_usb()
 				//if(count > 0 && buf[0] == 0x0A) //enter received - send the current frame buffer
 				{		
 
-					uint32_t offset = 0;
-					uint32_t CHUNK_SIZE = CFG_TUD_CDC_TX_BUFSIZE;
+					static uint32_t offset = 0;
+					//uint32_t CHUNK_SIZE = CFG_TUD_CDC_TX_BUFSIZE;
+					static uint32_t chunk = 0;
 
 					while(offset < frame_size_to_use)
 					{
-						uint32_t chunk = (frame_size_to_use - offset < CHUNK_SIZE) ? frame_size_to_use - offset : CHUNK_SIZE;
+						chunk = (frame_size_to_use - offset < CFG_TUD_CDC_TX_BUFSIZE) ? frame_size_to_use - offset : CFG_TUD_CDC_TX_BUFSIZE;
 
 
 						//tud_cdc_write(test_frame_buffer, sizeof(test_frame_buffer));
@@ -1221,82 +1447,26 @@ void send_frame_over_usb()
 }
 
 
-void core1_main() 
+void __not_in_flash_func(core1_main)() 
 {
-	
-	/*dvi_register_irqs_this_core(&dvi0, DMA_IRQ_0);
+	//config_audio();
+
+	dvi_register_irqs_this_core(&dvi0, DMA_IRQ_0);
+
 	dvi_start(&dvi0);
-	dvi_scanbuf_main_12bpp(&dvi0);*/
-	
-	
-	while(1)
-	{
-		//send_frame_over_usb();
+	dvi_scanbuf_main_12bpp_noqueue(&dvi0, framebuffer);
 
-
- 		adc_select_input(backlight_fdbck - ADC_BASE_PIN);
-
-		uint16_t v_div = adc_read();
-		float v_feedback = v_div * (pwm_feedback_target / 4095.f);
-		float error = (pwm_feedback_target * 0.5f) - v_feedback;
-
-		int32_t adjustment = (int32_t)(error * 0.05f * (float)pwm_wrap_target / (pwm_feedback_target));
-
-		pwm_hw->slice[pwm_backlight_slice].cc += adjustment;
-
-		if(pwm_hw->slice[pwm_backlight_slice].cc < 0)
-			pwm_hw->slice[pwm_backlight_slice].cc = 0;
-		
-		if(pwm_hw->slice[pwm_backlight_slice].cc > pwm_max_duty) 
-			pwm_hw ->slice[pwm_backlight_slice].cc = pwm_max_duty;
-
-
-		//printf("VDiv: %.2f, Feedback: %.2fV, Error: %.2f, Adjustment: %i, Duty: %u\n", v_div,  v_feedback, error, adjustment, pwm_hw->slice[pwm_backlight_slice].cc);
-
-
-		sleep_ms(15); 
-	}
-
-	//__builtin_unreachable();
+	__builtin_unreachable();
 }
 
 
 
-int main() 
+uint32_t last_frame_time = 0;
+uint32_t last_pwm_feedback_time = 0;
+void core0_main() 
 {
-	vreg_set_voltage(VREG_VOLTAGE_1_10);
-	set_sys_clock_khz(DVI_TIMING.bit_clk_khz, true);
-	stdio_init_all();
 
-	tusb_init(); //initialise TinyUSB stack
-
-	gpio_init_mask(0b11111111111111111111111111111111);
-	gpio_set_dir_out_masked(1 << led_pin);
-	gpio_set_dir_out_masked(1 << lcd_rst);
-	gpio_set_dir_out_masked(1 << lcd_den);
-	//gpio_set_dir_out_masked(1 << lcd_hsync);
-	gpio_set_dir_out_masked(1 << lcd_vsync);
-	gpio_set_dir_out_masked(1 << lcd_backlight);
-	
-	uint8_t pwm_backlight_slice = config_backlight_pwm();
-	config_backlight_supply(pwm_backlight_slice);
-
-	//These functions MUST be called before dvi_init, since they unclaim all DMA channels and clear PIO memory
-	init_lcd();
-	config_pios();
-	config_dma();
-	//config_interp();
-
-
-	//dvi0.timing = &DVI_TIMING;
-	//dvi0.ser_cfg = pico_gg_lcd_conf;
-	//dvi_init(&dvi0, next_striped_spin_lock_num(), next_striped_spin_lock_num());
-
-	multicore_reset_core1();
-
-	multicore_launch_core1(core1_main);
-
-	gpio_put(lcd_den, 0);
+	gpio_put(lcd_den, 1);
 	//gpio_put(lcd_hsync, 0);
 	gpio_put(lcd_vsync, 0);
 	gpio_put(led_pin, 1);
@@ -1315,21 +1485,28 @@ int main()
 	//dma_channel_start(dma_chan2);
 	dma_channel_start(dma_chan0);
 
-	uint32_t last_frame_time = 0;
-
 	while(1) {
+
 /*
 		last_gg = gg_now;
 		gg_now = !gpio_get(gg_SMS_pin);
 
 		if(last_gg == gg_now) is_gg = gg_now;
+
 */
 		uint32_t start = time_us_32();
+
 		//update lcd after 15ms for just over 60fps
 		if(start - last_frame_time > 15000)
 		{
 			update_lcd_gg();
 			last_frame_time = start;
+#ifdef DEBUG
+			uint32_t end = time_us_32();
+			
+			printf("Rendering time: %i us, time since last: %i us\n", end - start, start - last_frame_time); 
+#endif
+
 		}
 
 		/*
@@ -1360,8 +1537,96 @@ int main()
 		//send_frame_over_usb();
 
 
+		start = time_us_32();
+		if(start - last_pwm_feedback_time > 5000)
+		{
+
+			adc_select_input(backlight_fdbck - ADC_BASE_PIN);
+
+			uint16_t v_div = adc_read();
+			float v_feedback = v_div * (pwm_feedback_target / 4095.f);
+			float error = (pwm_feedback_target * 0.5f) - v_feedback;
+
+			int32_t adjustment = (int32_t)(error * 0.01f * (float)pwm_wrap_target / (pwm_feedback_target));
+
+			pwm_hw->slice[pwm_backlight_slice].cc += adjustment;
+
+			if(pwm_hw->slice[pwm_backlight_slice].cc < pwm_min_duty)
+				pwm_hw->slice[pwm_backlight_slice].cc = pwm_min_duty;
+			
+			if(pwm_hw->slice[pwm_backlight_slice].cc > pwm_max_duty) 
+				pwm_hw ->slice[pwm_backlight_slice].cc = pwm_max_duty;
+
+
+#ifdef DEBUG
+			printf("VDiv: %.2f, Feedback: %.2fV, Error: %.2f, Adjustment: %i, Duty: %u\n", v_div,  v_feedback, error, adjustment, pwm_hw->slice[pwm_backlight_slice].cc);
+#endif
+			last_pwm_feedback_time = time_us_32();
+			//sleep_ms(5); 
+		}
 
 	}
+	__builtin_unreachable();
+}
+
+int __not_in_flash_func(main)() 
+{
+	
+	vreg_set_voltage(VREG_VSEL);
+	sleep_ms(10);
+	//vreg_set_voltage(VREG_VOLTAGE_1_10);
+	set_sys_clock_khz(DVI_TIMING.bit_clk_khz, true);
+	stdio_init_all();
+
+	tusb_init(); //initialise TinyUSB stack
+
+	gpio_init_mask(0b11111111111111111111111111111111);
+	gpio_set_dir_out_masked(1 << led_pin);
+	gpio_set_dir_out_masked(1 << lcd_rst);
+	gpio_set_dir_out_masked(1 << lcd_den);
+	//gpio_set_dir_out_masked(1 << lcd_hsync);
+	gpio_set_dir_out_masked(1 << lcd_vsync);
+	gpio_set_dir_out_masked(1 << lcd_backlight);
+	
+	adc_init();
+	
+	uint8_t pwm_backlight_slice = config_backlight_pwm();
+	config_backlight_supply(pwm_backlight_slice);
+
+
+	//These functions MUST be called before dvi_init, since they unclaim all DMA channels and clear PIO memory
+	init_lcd();
+	config_pios();
+	config_dma();
+	//config_interp();
+
+
+
+	dvi0.timing = &DVI_TIMING;
+	dvi0.ser_cfg = pico_gg_lcd_conf;
+	dvi_init(&dvi0, next_striped_spin_lock_num(), next_striped_spin_lock_num());
+
+	//HDMI AUDIO
+	
+	//config_audio();
+/*
+	for(uint32_t i = 0; i < DVI_AUDIO_BUFFER_SIZE; i++)
+	{
+		dvi_audio_buffer[i].channels[0] = 0;
+		dvi_audio_buffer[i].channels[1] = 0;
+	}		
+
+	dvi_get_blank_settings(&dvi0)->top = 4 * 0;
+	dvi_get_blank_settings(&dvi0)->bottom = 4 * 0;
+	dvi_audio_sample_buffer_set(&dvi0, dvi_audio_buffer, DVI_AUDIO_BUFFER_SIZE);
+	dvi_set_audio_freq(&dvi0, AUDIO_SAMPLE_RATE, DVI_AUDIO_CTS, 6272);
+*/
+	multicore_reset_core1();
+
+	multicore_launch_core1(core1_main);
+	
+
+	core0_main();
 
 	return 0;
 }

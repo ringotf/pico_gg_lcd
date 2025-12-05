@@ -55,13 +55,13 @@
 	(attr through_hole exclude_from_pos_files exclude_from_bom)
 	(fp_line
 		(start -37 -21)
-		(end 37 -21)
+		(end -35 -21)
 		(stroke
 			(width 0.151)
 			(type default)
 		)
 		(layer "F.SilkS")
-		(uuid "d25ae3e7-18a2-4502-ba69-c84a799066f7")
+		(uuid "1ef58bdf-332e-4bab-8b14-66c5f3f3a49f")
 	)
 	(fp_line
 		(start -37 3)
@@ -74,7 +74,27 @@
 		(uuid "f1aafeec-f4a0-4479-bf1b-f0066e1fc3ab")
 	)
 	(fp_line
-		(start 37 -12.64)
+		(start -21.97 -21)
+		(end -11.97 -21)
+		(stroke
+			(width 0.151)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "d25ae3e7-18a2-4502-ba69-c84a799066f7")
+	)
+	(fp_line
+		(start 12.03 -21)
+		(end 36.99 -21)
+		(stroke
+			(width 0.151)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "0d6f5b1b-c878-4b75-b725-0f53126cf5e4")
+	)
+	(fp_line
+		(start 37 -10.6)
 		(end 37 3)
 		(stroke
 			(width 0.151)

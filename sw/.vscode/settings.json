@@ -17,6 +17,8 @@
     "cmake.configureOnOpen": false,
     "cmake.generator": "Ninja",
     "cmake.cmakePath": "${userHome}/.pico-sdk/cmake/v3.31.5/bin/cmake",
+    
+    "cmake.configureSettings": { "PICO_COPY_TO_RAM": "1" },
     "C_Cpp.debugShortcut": false,
     "terminal.integrated.env.windows": {
         "PICO_SDK_PATH": "${env:USERPROFILE}/.pico-sdk/sdk/2.1.1",
@@ -40,5 +42,21 @@
     "files.associations": {
         "cstdint": "c",
         "lcd_send.pio.h": "c"
+        "compare": "c",
+        "dvi_timing.h": "c",
+        "random": "c",
+        "array": "c",
+        "deque": "c",
+        "string": "c",
+        "unordered_map": "c",
+        "vector": "c",
+        "string_view": "c",
+        "format": "c",
+        "initializer_list": "c",
+        "span": "c",
+        "text_encoding": "c",
+        "algorithm": "c",
+        "dvi.h": "c",
+        "stdint.h": "c"
     }
 }

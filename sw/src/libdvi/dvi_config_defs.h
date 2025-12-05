@@ -51,16 +51,8 @@
 #define DVI_SYMBOLS_PER_WORD 2
 #endif
 
-// Implement TMDS encode with hardware encoders in SIO, instead of
-// interpolators + LUTs. The processor still has to crank the encoder, but
-// it's much faster. This still works with PIO serialisers, which can appear
-// on any GPIO, unlike the HSTX which is limited to specific GPIOs.
-#ifndef DVI_USE_SIO_TMDS_ENCODER
-#if PICO_RP2040
-#define DVI_USE_SIO_TMDS_ENCODER 0
-#else
-#define DVI_USE_SIO_TMDS_ENCODER 1
-#endif
+#if DVI_SYMBOLS_PER_WORD != 1 && DVI_SYMBOLS_PER_WORD !=2
+#error "Unsupported value for DVI_SYMBOLS_PER_WORD"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -71,27 +63,82 @@
 // 12bpp layout for GG screen
 
 #ifndef DVI_12BPP_RED_MSB
-#define DVI_12BPP_RED_MSB 11
+#define DVI_12BPP_RED_MSB 11 //15
 #endif
 
 #ifndef DVI_12BPP_RED_LSB
-#define DVI_12BPP_RED_LSB 8
+#define DVI_12BPP_RED_LSB 8 //12
 #endif
 
 #ifndef DVI_12BPP_GREEN_MSB
-#define DVI_12BPP_GREEN_MSB 7
+#define DVI_12BPP_GREEN_MSB 7 //11
 #endif
 
 #ifndef DVI_12BPP_GREEN_LSB
-#define DVI_12BPP_GREEN_LSB 4
+#define DVI_12BPP_GREEN_LSB 4 //8
 #endif
 
 #ifndef DVI_12BPP_BLUE_MSB
-#define DVI_12BPP_BLUE_MSB 3
+#define DVI_12BPP_BLUE_MSB 3 //7
 #endif
 
 #ifndef DVI_12BPP_BLUE_LSB
-#define DVI_12BPP_BLUE_LSB 0
+#define DVI_12BPP_BLUE_LSB 0 //4
+#endif
+
+
+
+
+// Default 8bpp layout: RGB332, {r[2:0], g[2:0], b[1:0]}
+
+#ifndef DVI_8BPP_RED_MSB
+#define DVI_8BPP_RED_MSB 7
+#endif
+
+#ifndef DVI_8BPP_RED_LSB
+#define DVI_8BPP_RED_LSB 5
+#endif
+
+#ifndef DVI_8BPP_GREEN_MSB
+#define DVI_8BPP_GREEN_MSB 4
+#endif
+
+#ifndef DVI_8BPP_GREEN_LSB
+#define DVI_8BPP_GREEN_LSB 2
+#endif
+
+#ifndef DVI_8BPP_BLUE_MSB
+#define DVI_8BPP_BLUE_MSB 1
+#endif
+
+#ifndef DVI_8BPP_BLUE_LSB
+#define DVI_8BPP_BLUE_LSB 0
+#endif
+
+// Default 16bpp layout: RGB565, {r[4:0], g[5:0], b[4:0]}
+
+#ifndef DVI_16BPP_RED_MSB
+#define DVI_16BPP_RED_MSB 15
+#endif
+
+#ifndef DVI_16BPP_RED_LSB
+#define DVI_16BPP_RED_LSB 11
+#endif
+
+#ifndef DVI_16BPP_GREEN_MSB
+#define DVI_16BPP_GREEN_MSB 10
+#endif
+
+#ifndef DVI_16BPP_GREEN_LSB
+#define DVI_16BPP_GREEN_LSB 5
+#endif
+
+#ifndef DVI_16BPP_BLUE_MSB
+#define DVI_16BPP_BLUE_MSB 4
+#endif
+
+#ifndef DVI_16BPP_BLUE_LSB
+#define DVI_16BPP_BLUE_LSB 0
 #endif
 
 // Default 1bpp layout: bitwise little-endian, i.e. least significant bit of

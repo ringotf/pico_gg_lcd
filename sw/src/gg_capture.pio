@@ -1,6 +1,6 @@
-.define dw 22 ;Vsync
-.define cl2 23; ;Hsync
-.define clk 24 ;Pixel clock
+.define dw 18 ;Vsync
+.define cl2 19; ;Hsync
+.define clk 20 ;Pixel clock
 
 ;///////////////////////////////////////
 ;/////////////// WARNING ///////////////
@@ -21,29 +21,40 @@
 .side_set 1 opt
 .wrap_target
 ;OSR contains the number of scanlines to capture
-		mov x, osr side 0
-		wait 1 irq 0
+	mov x, osr //side 0
+	wait 1 irq 0
 
 loop_scanline:
-    wait 1 gpio cl2 side 1
-
-		set y, 4 ;28
-
-wait_cycles:
-		wait 0 gpio clk
-		wait 1 gpio clk
-		jmp y-- wait_cycles
+    wait 1 gpio cl2
 		
-;		set y, 28
-;
-;wait_cycles_2:
-;		wait 0 gpio clk
-;		wait 1 gpio clk
-;		jmp y-- wait_cycles_2
+	irq set 1
+	wait 0 gpio cl2 [1]
+	jmp x-- loop_scanline
+.wrap
 
-		irq set 1
-		wait 0 gpio cl2
-		jmp x-- loop_scanline
+		set y, 4
+
+.program  front_h_porch
+.wrap_target
+;OSR -> Amount of pixels to skip
+	mov x, osr
+	wait 1 irq 1
+
+skip_start_pixels:
+
+	set y, 2
+
+skip_start_subpixels:
+
+	wait 1 gpio clk 
+
+	wait 0 gpio clk
+
+	jmp y-- skip_start_subpixels 
+
+	jmp x-- skip_start_pixels
+
+	irq set 2
 .wrap
 
 .program get_data
@@ -51,18 +62,23 @@ wait_cycles:
 .wrap_target
 ;OSR -> Amount of pixels to capture in this scanline
 	mov x, osr
-	wait 1 irq 1
+	wait 1 irq 2
 
 capture_pixels:
-	set y, 2 side 0
+	set y, 2 
 inner_loop:
 	wait 1 gpio clk
-
 skip_start:
 	wait 0 gpio clk
 
-	wait 1 gpio clk
-	in pins, 4
+	wait 1 gpio clk 
+	
+	wait 0 gpio clk 
+
+	wait 1 gpio clk 
+
+	in pins, 4 
+	
 	wait 0 gpio clk
 
 	jmp y-- inner_loop
@@ -70,8 +86,4 @@ skip_start:
 	push
 
 	jmp x-- capture_pixels
-	;nop side 1
-
-
-
 .wrap
