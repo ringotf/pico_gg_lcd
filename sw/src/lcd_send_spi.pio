@@ -7,35 +7,41 @@
 
 ;clear the latch
 
-;loop 7 times for 14 bits total
-set y, 6
+;loop 6 times for 12 bits total
+set y, 3
 
-set pins 0 side 0
+set pins 0 side 0 
 
 ;pull ;autopull is enabled so this isnt needed
 
 ;send the bits to the shift buffer
 buffer_target: 
  
-out  pins 2 side 0 [2]   ;put the bit on the mosi pin  
+out pins 3 side 0 [2]   ;put the bits on the "serial" out pin  
  
-jmp y--  buffer_target side 1 [1]  ;clock the clk on the side pin
+jmp y--  buffer_target side 1 [3]  ;clock the clk on the side pin
+
+;wait 1 irq 1    ;check ready for next pixel so we dont latch the bits before the lcd has finished with the last ones
 
 ;latch the bits
-set pins 1 [2]
+set pins 1 
 
 ;trigger lcd_send_clk
-irq set 0 
+
+irq set 0       ;flag next pixel ready
 
 .wrap
 
 
+;this can also be done in the main lcd_send to save a statemachine, using 2 sideset pins for the spi clk and latch
 ;set pin is lcd clk
 .program lcd_send_clk
 .wrap_target
 
 set y, 3
-wait 1 irq 0
+
+;irq set 1     ;ready for next pixel
+wait 1 irq 0   ;waiting for next pixel
 
 ;clock the lcd
 
@@ -43,7 +49,7 @@ lcd_target:
 set pins 0 [2]
 set pins 1 [2]
 
-jmp y-- lcd_target
+jmp y-- lcd_target 
 	
 set pins 0
 

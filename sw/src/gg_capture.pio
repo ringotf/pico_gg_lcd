@@ -70,5 +70,8 @@ skip_start:
 	push
 
 	jmp x-- capture_pixels
-	nop side 1
+	;nop side 1
+
+
+
 .wrap
