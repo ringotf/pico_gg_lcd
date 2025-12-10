@@ -1,6 +1,6 @@
-.define dw 22 ;Vsync
-.define cl2 23; ;Hsync
-.define clk 24 ;Pixel clock
+.define dw 15 ;Vsync
+.define cl2 16; ;Hsync
+.define clk 17 ;Pixel clock
 
 ;///////////////////////////////////////
 ;/////////////// WARNING ///////////////

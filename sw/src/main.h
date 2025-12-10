@@ -1,5 +1,5 @@
 
-#define pixels_in_scanline 280 //256 //280 //300
+#define pixels_in_scanline 280 //300
 #define scanlines_in_active_area  180 //144 //192
 
 

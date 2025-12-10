@@ -327,8 +327,9 @@ void __dvi_func(dvi_scanbuf_main_12bpp_noqueue)(struct dvi_inst *inst, uint16_t 
 				//}
 				if(c < pixels_in_scanline){
 
-                    //empty_scanline[c] = curr_framebuffer[scanbuf_pointer];
+                    empty_scanline[c] = curr_framebuffer[scanbuf_pointer];
 
+/*
                     buf = curr_framebuffer[scanbuf_pointer];
 
                     //temporary code to switch reverse bits as the PCB was wrong way around!
@@ -342,7 +343,7 @@ void __dvi_func(dvi_scanbuf_main_12bpp_noqueue)(struct dvi_inst *inst, uint16_t 
                     //empty_scanline[c] = t1 | t2 | t3;// << 4;
                     //buf = t1 | t2 | t3;
                     empty_scanline[c] = reverse_colors_lookup[buf & 0xF] | reverse_colors_lookup[t2 >> 4] << 4 | reverse_colors_lookup[t3 >> 8] << 8;
-
+*/
 					scanbuf_pointer++;
 				}
 				else empty_scanline[c] = 0;

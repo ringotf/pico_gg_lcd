@@ -37,20 +37,20 @@
 //#define gg_BTN2_pin 23 //12 		//not used?
 //#define gg_START_pin 22 	//not used?
 
-#define gg_SMS_pin 25
+#define gg_SMS_pin 10
 
-#define gg_D1_pin 18
-#define gg_D2_pin 19
-#define gg_D3_pin 20
-#define gg_D4_pin 21
+#define gg_D1_pin 11 //18
+#define gg_D2_pin 12 //19
+#define gg_D3_pin 13 //20
+#define gg_D4_pin 14 //21
 
-#define gg_dw_pin 22
-#define gg_cl2_pin 23
-#define gg_clk_pin 24
+#define gg_dw_pin 15 //22
+#define gg_cl2_pin 16 // 23
+#define gg_clk_pin 17 //24
 
 //need to move hdmi pins to free up adc... or use separate adc module
-#define gg_audio_l_pin 26 
-//#define gg_audio_r_pin 27
+#define gg_audio_l_pin 26
+#define gg_audio_r_pin 27
 
 //#define pixels_in_scanline 256 //280 //300
 //#define scanlines_in_active_area  192 //160 //144 //192
@@ -74,23 +74,23 @@
 #define lcd_spi_mosi_3 5 
 
 //#define lcd_hsync 13
-#define lcd_vsync 14
-#define lcd_clk 15
-#define lcd_den 16
+#define lcd_vsync 8 //14
+#define lcd_clk 6 //15
+#define lcd_den 7 //16
 
 #define lcd_backlight 17
 
 #define lcd_send_pio pio1
-#define lcd_send_sm 0 //3
-#define lcd_send_clk_sm 1
+#define lcd_send_sm 3
+//#define lcd_send_clk_sm 1
 
-#define backlight_fdbck 26 //28 - swapped with lcd_den
+#define backlight_fdbck 28 //- swapped with lcd_den
 
 #define gg_capture_pio pio0
 #define gg_capture_vblank_sm 0
 #define gg_capture_hblank_sm 1
 #define gg_capture_getdata_sm 2
-#define gg_capture_front_h_porch_sm 3
+//#define gg_capture_front_h_porch_sm 3
 
 #define brightness_pot 27 //29 - moved down 2 pins
 
@@ -126,25 +126,27 @@
 #define scanlines_to_skip 1 //11
 
 #define pixels_to_skip  (pixels_in_scanline * scanlines_to_skip)
+
 // DVDD 1.2V (1.1V seems ok too)
 #define FRAME_WIDTH 320
 #define FRAME_HEIGHT 240
 #define VREG_VSEL VREG_VOLTAGE_1_20
 
 struct dvi_inst dvi0;
-/*
+
 static struct dvi_serialiser_cfg pico_gg_lcd_conf = {
 	.pio = dvi_pio,
 	.sm_tmds = {dvi_tmds_sm_0, dvi_tmds_sm_1, dvi_tmds_sm_2},
-	.pins_tmds = {28, 2, 0},
-	.pins_clk = 4,
+	//.pins_tmds = {28, 2, 0},
+	.pins_tmds = {20, 22, 24},
+	.pins_clk = 18,
 	.invert_diffpairs = true
 };
-*/
+
 
 //Use two framebuffers to prevent tearing
-uint16_t * framebuffer = (uint16_t *)(0x20000000 + (1024 * 20));
-uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 20) + (pixels_in_scanline * scanlines_in_active_area * 2));
+uint16_t * framebuffer = (uint16_t *)(0x20000000 + (1024 * 40));
+uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 40) + (pixels_in_scanline * scanlines_in_active_area * 1));
 //uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 30) + (pixels_in_scanline * scanlines_in_active_area * 2) + (pixels_in_scanline * 8));
 
 //uint16_t send_buffer[512];
@@ -153,12 +155,12 @@ uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 20) + (pixels_in_sca
 #define AUDIO_SAMPLE_RATE 44100
 #define AUDIO_BUFFER_SIZE 2048
 
-//volatile int16_t audio_l_buffer[AUDIO_BUFFER_SIZE];
+volatile int16_t audio_l_buffer[AUDIO_BUFFER_SIZE];
 //volatile int16_t audio_r_buffer[AUDIO_BUFFER_SIZE];
 
 #define DVI_AUDIO_CTS 28000
 #define DVI_AUDIO_BUFFER_SIZE 256
-//audio_sample_t dvi_audio_buffer[DVI_AUDIO_BUFFER_SIZE];
+audio_sample_t dvi_audio_buffer[DVI_AUDIO_BUFFER_SIZE];
 
 
 uint32_t pot_history[16];
@@ -176,8 +178,8 @@ uint32_t last_gg;
 
 uint32_t dma_chan0;
 uint32_t dma_chan1;
-uint32_t dma_chan2;
-uint32_t dma_chan3;
+//uint32_t dma_chan2;
+//uint32_t dma_chan3;
 uint32_t dma_chan4;
 uint32_t dma_chan5;
 
@@ -723,12 +725,12 @@ void config_pios() {
 	//lcd_send_sm = pio_claim_unused_sm(lcd_send_pio, true);
 
 	//pio1 sm1 used for lcd clk
-	pio_sm_claim(lcd_send_pio, lcd_send_clk_sm);
+	//pio_sm_claim(lcd_send_pio, lcd_send_clk_sm);
 
+
+	//uint8_t lcd_send_1x = pio_add_program(lcd_send_pio, &lcd_send_program);
+	//pio_sm_config lcd_send_1x_config = lcd_send_program_get_default_config(lcd_send_1x);
 /*
-	uint8_t lcd_send_1x = pio_add_program(lcd_send_pio, &lcd_send_program);
-	pio_sm_config lcd_send_1x_config = lcd_send_program_get_default_config(lcd_send_1x);
-
 	uint8_t lcd_send_2x = pio_add_program(lcd_send_pio, &lcd_send_2x_program);
 	pio_sm_config lcd_send_2x_config = lcd_send_2x_program_get_default_config(lcd_send_2x);	
 
@@ -739,9 +741,8 @@ void config_pios() {
 	uint8_t lcd_send_spi = pio_add_program(lcd_send_pio, &lcd_send_spi_program);
 	pio_sm_config lcd_send_spi_config = lcd_send_spi_program_get_default_config(lcd_send_spi);
 
-	uint8_t lcd_send_clk = pio_add_program(lcd_send_pio, &lcd_send_clk_program);
-	pio_sm_config lcd_send_clk_config = lcd_send_clk_program_get_default_config(lcd_send_clk);
-
+	//uint8_t lcd_send_clk = pio_add_program(lcd_send_pio, &lcd_send_clk_program);
+	//pio_sm_config lcd_send_clk_config = lcd_send_clk_program_get_default_config(lcd_send_clk);
 
 	uint8_t lcd_send = lcd_send_spi;
 	pio_sm_config lcd_send_config = lcd_send_spi_config;
@@ -770,15 +771,15 @@ void config_pios() {
 	//pio_sm_config lcd_send_config = lcd_send_2x_config;
 	sm_config_set_clkdiv(&lcd_send_config, 1);
 	sm_config_set_out_pins(&lcd_send_config, lcd_spi_mosi_1, 3);
-	//sm_config_set_sideset_pins(&lcd_send_config, lcd_spi_latch);
-	sm_config_set_sideset_pins(&lcd_send_config, lcd_spi_clk);
-	sm_config_set_set_pins(&lcd_send_config, lcd_spi_latch, 1);
-	//sm_config_set_set_pins(&lcd_send_config, lcd_clk, 1);
+	sm_config_set_sideset_pins(&lcd_send_config, lcd_spi_latch);
+	//sm_config_set_sideset_pins(&lcd_send_config, lcd_spi_clk);
+	//sm_config_set_set_pins(&lcd_send_config, lcd_spi_latch, 1);
+	sm_config_set_set_pins(&lcd_send_config, lcd_clk, 1);
 
 	sm_config_set_out_shift(&lcd_send_config, false, true, 12);
 
-	sm_config_set_clkdiv(&lcd_send_clk_config, 1);
-	sm_config_set_set_pins(&lcd_send_clk_config, lcd_clk, 1);
+	//sm_config_set_clkdiv(&lcd_send_clk_config, 1);
+	//sm_config_set_set_pins(&lcd_send_clk_config, lcd_clk, 1);
 
 
 	pio_gpio_init(lcd_send_pio, lcd_spi_latch);
@@ -794,15 +795,16 @@ void config_pios() {
 	pio_sm_set_pindirs_with_mask(lcd_send_pio, lcd_send_sm, (1 << lcd_spi_mosi_2), (1 << lcd_spi_mosi_2) );
 	pio_sm_set_pindirs_with_mask(lcd_send_pio, lcd_send_sm, (1 << lcd_spi_mosi_3), (1 << lcd_spi_mosi_3) );
 	pio_sm_set_pindirs_with_mask(lcd_send_pio, lcd_send_sm, (1 << lcd_spi_clk), (1 << lcd_spi_clk) );
+	pio_sm_set_pindirs_with_mask(lcd_send_pio, lcd_send_sm, (1 << lcd_clk), (1 << lcd_clk) );
 
-	pio_sm_set_pindirs_with_mask(lcd_send_pio, lcd_send_clk_sm, (1 << lcd_clk), (1 << lcd_clk) );
+	//pio_sm_set_pindirs_with_mask(lcd_send_pio, lcd_send_clk_sm, (1 << lcd_clk), (1 << lcd_clk) );
 
 
 	pio_sm_init(lcd_send_pio, lcd_send_sm, lcd_send, &lcd_send_config);
 	pio_sm_set_enabled(lcd_send_pio, lcd_send_sm, true);
 
-	pio_sm_init(lcd_send_pio, lcd_send_clk_sm, lcd_send_clk, &lcd_send_clk_config);
-	pio_sm_set_enabled(lcd_send_pio, lcd_send_clk_sm, true);
+	//pio_sm_init(lcd_send_pio, lcd_send_clk_sm, lcd_send_clk, &lcd_send_clk_config);
+	//pio_sm_set_enabled(lcd_send_pio, lcd_send_clk_sm, true);
 
 
 
@@ -996,49 +998,66 @@ volatile uint16_t audio_write_pos = 0;
 volatile uint16_t audio_read_pos = 0;
 
 volatile int64_t accum_l = 0;
-//volatile uint16_t decimate = 0;
+volatile uint16_t decimate = 0;
+static int16_t prev_l = 0;
 
-/*
-//static int16_t prev = 0;
 bool __not_in_flash_func(adc_timer_callback)(struct repeating_timer *t)
 {
 	static uint channel = 0; //0 = left, 1 = right
 
+	//accum_l = 0;
 	
 	#define AVG 1
-	uint32_t sum = 0;
-	//for (int i = 0; i < AVG; i++) {
+	int32_t sum = 0;
+	for (int i = 0; i < AVG; i++) {
 		
 		adc_select_input(gg_audio_l_pin - ADC_BASE_PIN);
-		sum += adc_read();
+		//sum += ((adc_read() >> 3) - 512);
+		sum += (adc_read() - 2048) / AVG;
+
+		//adc_select_input(gg_audio_r_pin - ADC_BASE_PIN);
+		//sum -= adc_read();
 
 //#ifdef DEBUG			
 		//printf("ADC Timer Sample: %.2f\n", sum);
+		//printf("ADC Timer Sample: %i\n", sum);
 //#endif
 		//adc_select_input(gg_audio_r_pin - ADC_BASE_PIN);
 		//sum -= adc_read();
-	//}
-	uint16_t raw = sum / AVG;
+	}
+	
+	//int16_t sample = (int16_t)(sum - 2048);
+	//uint16_t raw = sum / AVG;
 
 //	int16_t sample = (int16_t)(adc_read() - 2048);
-	int16_t sample = (int16_t)(raw - 2048);
-
+	//int16_t sample = (int16_t)(raw - 2048);
+	int16_t sample = (int16_t)sum;
 	accum_l += sample;
 
+	if(++decimate >= ADC_SAMPLE_MULTIPLIER)
+	{
+		decimate = 0;
 
-	//if(++decimate >= ADC_SAMPLE_MULTIPLIER)
-	//{
-		//decimate = 0;
+		//accum_l = accum_l >> 0;
+		accum_l = accum_l / ADC_SAMPLE_MULTIPLIER;
 
-		//accum_l = (accum_l * 15);// >> 2;
-		//int16_t current = prev + 0.1 * (accum_l - prev);
+		//int16_t current_l = prev_l + ((accum_l - prev_l) >> 4);
 
-		//audio_l_buffer[audio_write_pos] = (current * 15);// >> 4;
+		//audio_l_buffer[audio_write_pos] = (current_l);// >> 4;
+		//audio_l_buffer[audio_write_pos] = (current_l * 4);// >> 4;
 
-		audio_l_buffer[audio_write_pos] = (accum_l * 4);
+
+		//audio_l_buffer[audio_write_pos] = (accum_l >> 3);
+		audio_l_buffer[audio_write_pos] = (int16_t)accum_l * 8;
+
+		//printf("ADC Timer Sample: %i %i\n", (int16_t)accum_l, audio_l_buffer[audio_write_pos]);
+
+		//printf("ADC Timer Sample: %i\n", audio_l_buffer[audio_write_pos]);
+
+		//audio_l_buffer[audio_write_pos] = (accum_l);
 		//audio_l_buffer[audio_write_pos] = (accum_l * 4);// >> 4;
 		//audio_l_buffer[audio_write_pos] = prev + (((accum_l * 90) - prev) >> 4);
-		//prev = current;
+		//prev_l = current_l;
 		//prev = accum_l;
 		accum_l = 0;
 		
@@ -1047,7 +1066,7 @@ bool __not_in_flash_func(adc_timer_callback)(struct repeating_timer *t)
 
 		audio_write_pos = (audio_write_pos + 1) % AUDIO_BUFFER_SIZE;
 		//channel = (channel + 1) % 2; //switch channel for next sample
-	//}
+	}
 
 #ifdef DEBUG
 		//printf("ADC Timer Sample: %.2f\n", sample);
@@ -1055,7 +1074,7 @@ bool __not_in_flash_func(adc_timer_callback)(struct repeating_timer *t)
 
 	return true;
 }
-*/
+
 
 const int16_t sine[128] = {
     0x3fff, 0x4322, 0x4644, 0x4962, 0x4c7b, 0x4f8b, 0x5292, 0x558e,
@@ -1080,7 +1099,7 @@ const int16_t sine[128] = {
 
 static uint16_t sample_count = 0;
 
-/*
+
 
 bool __not_in_flash_func(dvi_audio_timer_callback)(struct repeating_timer *t)
 {
@@ -1154,10 +1173,10 @@ bool __not_in_flash_func(dvi_audio_timer_callback)(struct repeating_timer *t)
     return true;
 }
 
-*/
 
 
-/*
+
+
 
 void config_audio()
 {
@@ -1168,9 +1187,9 @@ void config_audio()
 	
 	adc_init();
 	adc_gpio_init(gg_audio_l_pin);
-	//adc_gpio_init(gg_audio_r_pin);
+	adc_gpio_init(gg_audio_r_pin);
 	//adc_select_input(gg_audio_r_pin - ADC_BASE_PIN);
-	adc_select_input(gg_audio_l_pin - ADC_BASE_PIN);
+	//adc_select_input(gg_audio_l_pin - ADC_BASE_PIN);
 	adc_set_temp_sensor_enabled(false);
 
 	for(uint32_t i = 0; i < AUDIO_BUFFER_SIZE; i++)
@@ -1185,7 +1204,7 @@ void config_audio()
 	add_repeating_timer_ms(2, dvi_audio_timer_callback, NULL, &dvi_audio_timer);
 }
 
-*/
+
 
 void config_backlight_supply(uint8_t pwm_backlight_slice) {
 	//adc_init();
@@ -1465,13 +1484,13 @@ void send_frame_over_usb()
 
 void __not_in_flash_func(core1_main)() 
 {
-	//config_audio();
-/*
+	config_audio();
+
 	dvi_register_irqs_this_core(&dvi0, DMA_IRQ_0);
 
 	dvi_start(&dvi0);
 	dvi_scanbuf_main_12bpp_noqueue(&dvi0, framebuffer);
-*/
+
 	__builtin_unreachable();
 }
 
@@ -1620,28 +1639,28 @@ int __not_in_flash_func(main)()
 
 
 
-	//dvi0.timing = &DVI_TIMING;
-	//dvi0.ser_cfg = pico_gg_lcd_conf;
-	//dvi_init(&dvi0, next_striped_spin_lock_num(), next_striped_spin_lock_num());
+	dvi0.timing = &DVI_TIMING;
+	dvi0.ser_cfg = pico_gg_lcd_conf;
+	dvi_init(&dvi0, next_striped_spin_lock_num(), next_striped_spin_lock_num());
 
 	//HDMI AUDIO
 	
 	//config_audio();
-/*
+
 	for(uint32_t i = 0; i < DVI_AUDIO_BUFFER_SIZE; i++)
 	{
 		dvi_audio_buffer[i].channels[0] = 0;
 		dvi_audio_buffer[i].channels[1] = 0;
 	}		
 
-	dvi_get_blank_settings(&dvi0)->top = 4 * 0;
-	dvi_get_blank_settings(&dvi0)->bottom = 4 * 0;
+	dvi_get_blank_settings(&dvi0)->top = 0;
+	dvi_get_blank_settings(&dvi0)->bottom = 0;
 	dvi_audio_sample_buffer_set(&dvi0, dvi_audio_buffer, DVI_AUDIO_BUFFER_SIZE);
 	dvi_set_audio_freq(&dvi0, AUDIO_SAMPLE_RATE, DVI_AUDIO_CTS, 6272);
-*/
-	//multicore_reset_core1();
 
-	//multicore_launch_core1(core1_main);
+	multicore_reset_core1();
+
+	multicore_launch_core1(core1_main);
 	
 
 	core0_main();
