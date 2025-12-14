@@ -47,7 +47,7 @@ pico_generate_pio_header(pico_gg_hd ${CMAKE_CURRENT_LIST_DIR}/src/lcd_send_spi.p
 
 target_link_libraries(pico_gg_hd pico_stdlib pico_time 
 hardware_pio hardware_sync hardware_dma hardware_clocks pico_multicore 
-pico_time hardware_adc hardware_pwm hardware_interp libdvi)
+pico_time hardware_adc hardware_pwm hardware_interp libdvi hardware_spi)
 
 pico_add_extra_outputs(pico_gg_hd)
 

@@ -1,5 +1,5 @@
-.define dw 15 ;Vsync
-.define cl2 16; ;Hsync
+.define dw 16 ;Vsync
+.define cl2 15; ;Hsync
 .define clk 17 ;Pixel clock
 
 ;///////////////////////////////////////

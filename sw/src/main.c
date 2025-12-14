@@ -15,6 +15,7 @@
 #include "hardware/structs/pwm.h"
 #include "hardware/pwm.h"
 #include "hardware/interp.h"
+#include "hardware/spi.h"
 
 #include "main.h"
 #include "../build/gg_capture.pio.h"
@@ -44,13 +45,14 @@
 #define gg_D3_pin 13 //20
 #define gg_D4_pin 14 //21
 
-#define gg_dw_pin 15 //22
-#define gg_cl2_pin 16 // 23
+#define gg_dw_pin 16 //22
+#define gg_cl2_pin 15 // 23
 #define gg_clk_pin 17 //24
 
 //need to move hdmi pins to free up adc... or use separate adc module
 #define gg_audio_l_pin 26
-#define gg_audio_r_pin 27
+#define gg_audio_r_pin 28
+#define gg_audio_pwr_pin 27
 
 //#define pixels_in_scanline 256 //280 //300
 //#define scanlines_in_active_area  192 //160 //144 //192
@@ -65,18 +67,23 @@
 
 #define FRAME_SIZE_MIN (pixels_in_scanline * scanlines_in_active_area_min * 2)
 
-#define lcd_rst 0 //17 //6
+#define lcd_rst 2 //17 //6
 
-#define lcd_spi_latch 1 
-#define lcd_spi_clk 2 
-#define lcd_spi_mosi_1 3 
-#define lcd_spi_mosi_2 4 
-#define lcd_spi_mosi_3 5 
+#define lcd_spi_latch 3 
+#define lcd_spi_clk 4 
+#define lcd_spi_mosi_1 5 
+#define lcd_spi_mosi_2 6
+#define lcd_spi_mosi_3 7 
+
+#define in_sr_spi spi1
+#define in_sr_miso 8
+#define in_sr_load 9
+#define in_sr_clk 10
 
 //#define lcd_hsync 13
 #define lcd_vsync 8 //14
-#define lcd_clk 6 //15
-#define lcd_den 7 //16
+#define lcd_clk 1 //15
+#define lcd_den 0 //16
 
 #define lcd_backlight 17
 
@@ -146,7 +153,7 @@ static struct dvi_serialiser_cfg pico_gg_lcd_conf = {
 
 //Use two framebuffers to prevent tearing
 uint16_t * framebuffer = (uint16_t *)(0x20000000 + (1024 * 40));
-uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 40) + (pixels_in_scanline * scanlines_in_active_area * 1));
+uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 40) + (pixels_in_scanline * scanlines_in_active_area * 2));
 //uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 30) + (pixels_in_scanline * scanlines_in_active_area * 2) + (pixels_in_scanline * 8));
 
 //uint16_t send_buffer[512];
@@ -175,6 +182,10 @@ uint8_t pwm_backlight_slice;
 uint32_t is_gg;
 uint32_t gg_now;
 uint32_t last_gg;
+
+uint32_t gg_start_now;
+uint32_t gg_btn1_now;
+uint32_t gg_btn2_now;
 
 uint32_t dma_chan0;
 uint32_t dma_chan1;
@@ -243,7 +254,8 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 	//if(dma_channel_is_busy(dma_chan0)) curr_framebuffer = framebuffer2;
 	//else curr_framebuffer = framebuffer;
 
-	curr_framebuffer = framebuffer2;
+	curr_framebuffer = framebuffer;
+	
 
 	//pio_sm_put_blocking(gg_capture_pio, gg_capture_hblank_sm, scanlines_in_active_area + 1 - 1);
 	//pio_sm_exec(gg_capture_pio, gg_capture_hblank_sm, pio_encode_pull(false, true));
@@ -1030,8 +1042,9 @@ bool __not_in_flash_func(adc_timer_callback)(struct repeating_timer *t)
 	//uint16_t raw = sum / AVG;
 
 //	int16_t sample = (int16_t)(adc_read() - 2048);
-	//int16_t sample = (int16_t)(raw - 2048);
+	//int16_t sample = (int16_t)(raw - 2048);	
 	int16_t sample = (int16_t)sum;
+	sample = sample < -1024 ? 0 : sample; //prevent noisey whine when no input, for testing at least...
 	accum_l += sample;
 
 	if(++decimate >= ADC_SAMPLE_MULTIPLIER)
@@ -1048,7 +1061,7 @@ bool __not_in_flash_func(adc_timer_callback)(struct repeating_timer *t)
 
 
 		//audio_l_buffer[audio_write_pos] = (accum_l >> 3);
-		audio_l_buffer[audio_write_pos] = (int16_t)accum_l * 8;
+		audio_l_buffer[audio_write_pos] = (int16_t)accum_l * 4;
 
 		//printf("ADC Timer Sample: %i %i\n", (int16_t)accum_l, audio_l_buffer[audio_write_pos]);
 
@@ -1185,9 +1198,16 @@ void config_audio()
 //	gpio_disable_pulls(gg_audio_l_pin);
 //	adc_gpio_init(gg_audio_l_pin);
 	
+
+	gpio_init(gg_audio_pwr_pin);
+	gpio_set_dir(gg_audio_pwr_pin, GPIO_OUT);
+	gpio_put(gg_audio_pwr_pin, 1);
+
 	adc_init();
 	adc_gpio_init(gg_audio_l_pin);
 	adc_gpio_init(gg_audio_r_pin);
+
+	
 	//adc_select_input(gg_audio_r_pin - ADC_BASE_PIN);
 	//adc_select_input(gg_audio_l_pin - ADC_BASE_PIN);
 	adc_set_temp_sensor_enabled(false);
@@ -1496,6 +1516,81 @@ void __not_in_flash_func(core1_main)()
 
 
 
+void read_in_spi()
+{
+	
+	gpio_put(in_sr_clk, 0);
+
+	gpio_put(in_sr_load, 0);
+	//__asm("nop"); __asm("nop");
+	sleep_ms(1);
+
+	gpio_put(in_sr_load, 1);
+	//__asm("nop"); __asm("nop");
+
+	sleep_ms(1);
+	
+	gpio_put(in_sr_clk, 1);
+	
+	sleep_ms(1);
+
+	gpio_put(in_sr_clk, 0);
+
+	sleep_ms(1);
+
+	uint8_t data;
+	//spi_read_blocking(in_sr_spi, 0xFF , &data, 1);
+	spi_read_blocking(in_sr_spi, 0 , &data, 1);
+
+	printf("SPI IN DATA %i\n", data);
+
+	gg_now = !(data & 0x1);
+	gg_start_now = !(data & 0x8);
+	gg_btn1_now = !(data & 0x4);
+	gg_btn2_now = !(data & 0x2);
+
+
+}
+
+void draw_overlay()
+{
+	//just draw some lines for testing...
+	uint16_t pixel = 0x88F;
+
+	if(gg_btn1_now)
+	{
+		pixel = 0xF00;
+	}
+	else if (gg_btn2_now)
+	{
+		pixel = 0x0F0;
+	}
+	else if (gg_start_now)
+	{
+		pixel = 0x00F;
+	}
+
+	for(uint32_t y = lcd_active_lines - 20; y < lcd_active_lines; y++) 
+	{
+
+		//uint16_t row_val = 15;
+	
+
+		for(uint32_t x = 0; x < pixels_in_scanline; x++) {
+		
+
+
+
+			framebuffer[x + (y * pixels_in_scanline)]  = pixel;
+			//framebuffer2[x + (y * pixels_in_scanline)]  = ~pixel;
+			framebuffer2[x + (y * pixels_in_scanline)]  = pixel;
+
+			//framebuffer[x + (y * pixels_in_scanline)] = pixel;
+			//framebuffer2[x + (y * pixels_in_scanline)] = ~pixel;
+		}
+	}	
+}
+
 uint32_t last_frame_time = 0;
 uint32_t last_pwm_feedback_time = 0;
 void core0_main() 
@@ -1522,6 +1617,8 @@ void core0_main()
 
 	while(1) {
 
+		read_in_spi();
+
 /*
 		last_gg = gg_now;
 		gg_now = !gpio_get(gg_SMS_pin);
@@ -1534,6 +1631,9 @@ void core0_main()
 		//update lcd after 15ms for just over 60fps
 		if(start - last_frame_time > 15000)
 		{
+
+			draw_overlay();
+
 			update_lcd_gg();
 			last_frame_time = start;
 #ifdef DEBUG
@@ -1605,6 +1705,21 @@ void core0_main()
 	__builtin_unreachable();
 }
 
+void config_in_spi()
+{
+	gpio_init(in_sr_miso);
+	gpio_init(in_sr_load);
+	gpio_init(in_sr_clk);
+
+	gpio_set_dir(in_sr_load, GPIO_OUT);
+
+	spi_init(in_sr_spi, 10*1000*1000);
+	//spi_init(in_sr_spi, 10);
+	gpio_set_function(in_sr_miso, GPIO_FUNC_SPI);
+	gpio_set_function(in_sr_clk, GPIO_FUNC_SPI);
+
+	spi_set_format(in_sr_spi, 8, SPI_CPOL_0, SPI_CPHA_0, SPI_LSB_FIRST);
+}
 
 int __not_in_flash_func(main)() 
 {
@@ -1636,6 +1751,7 @@ int __not_in_flash_func(main)()
 	config_pios();
 	config_dma();
 	//config_interp();
+	config_in_spi();
 
 
 
