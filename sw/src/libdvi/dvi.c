@@ -319,6 +319,8 @@ void __dvi_func(dvi_scanbuf_main_12bpp_noqueue)(struct dvi_inst *inst, uint16_t 
 
     uint16_t footer_lines_start = header_scanlines + gg_pixel_height;
 
+    while(dma_channel_is_busy(dma_chan_fb1) && dma_channel_is_busy(dma_chan_fb2));
+
     if(dma_channel_is_busy(dma_chan_fb1)) curr_framebuffer = scanbuf2;
     else curr_framebuffer = scanbuf1;
     
@@ -414,6 +416,7 @@ void __dvi_func(dvi_scanbuf_main_12bpp_noqueue)(struct dvi_inst *inst, uint16_t 
             scanbuf_pointer = y_base_offset;
 			frame_tail = false;
             
+            while(dma_channel_is_busy(dma_chan_fb1) && dma_channel_is_busy(dma_chan_fb2));
             if(dma_channel_is_busy(dma_chan_fb1)) curr_framebuffer = scanbuf2;
             else curr_framebuffer = scanbuf1;
 		}

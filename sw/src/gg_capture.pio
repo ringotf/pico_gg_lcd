@@ -9,19 +9,23 @@
 ;The timings involved in capturing data from the GG are quite finicky
 ;Modify these programs with caution, especially get_data
 
-.program detect_vblank
-.wrap_target
-    wait 0 gpio dw
-		wait 1 gpio dw 
-		irq set 0
-.wrap
+;.program detect_vblank
+;.wrap_target
+;    	wait 0 gpio dw
+;		wait 1 gpio dw 
+;		irq set 0
+;.wrap
 
 
 .program detect_hblank
 .wrap_target
 ;OSR contains the number of scanlines to capture
 		mov x, osr 
-		wait 1 irq 0
+
+   		wait 0 gpio dw
+		wait 1 gpio dw 
+
+;		wait 1 irq 0
 
 
 loop_scanline:

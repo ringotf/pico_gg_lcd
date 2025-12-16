@@ -1,50 +1,53 @@
 ;out pin is spi mosi
-;set pins are shift buffer latch 
-;sideset is spi clk
+;set pin is lcd clk
+;sideset is spi latch and clk
 .program lcd_send_spi
 .side_set 2 opt 
 .wrap_target
 
 ;clear the latch
 
-;loop 6 times for 12 bits total
+;loop 4 times for 12 bits total
 set y, 3
 
-;set pins 0 side 0 
+;;set pins 0 side 0 
 nop side 0
 
 ;pull ;autopull is enabled so this isnt needed
 
 ;send the bits to the shift buffer
 buffer_target: 
- 
+
+;;set pins 0  ;unclock the lcd
+
 out pins 3 side 0 [2]   ;put the bits on the "serial" out pin  
- 
+
+;;set pins 1 ;clk the lcd for the previous pixel on the current registered latch
+
 jmp y--  buffer_target side 2 [1]  ;clock the clk on the side pin
 
-;wait 1 irq 1    ;check ready for next pixel so we dont latch the bits before the lcd has finished with the last ones
+;wait 1 irq 3    ;check ready for next pixel so we dont latch the bits before the lcd has finished with the last ones
 
 ;latch the bits
 ;set pins 1  [1]
 nop side 1 
 
 ;trigger lcd_send_clk
-;irq set 0       ;flag next pixel ready
+irq set 2       ;flag next pixel ready
 
-set y, 3
+;irq set 3    ;ready for next pixel
+;wait 1 irq 2   ;waiting for next pixel
 
-;irq set 1     ;ready for next pixel
-;wait 1 irq 0   ;waiting for next pixel
+;set y, 3
+;clock the lcd in this program
 
-;clock the lcd
+;lcd_target:
+;set pins 0 
+;set pins 1 [1]
 
-lcd_target:
-set pins 0 
-set pins 1 [1]
-
-jmp y-- lcd_target 
+;jmp y-- lcd_target 
 	
-set pins 0
+;set pins 0
 
 .wrap
 
@@ -59,17 +62,15 @@ set pins 0
 
 set y, 3
 
-;irq set 1     ;ready for next pixel
-wait 1 irq 0   ;waiting for next pixel
+;irq set 3     ;ready for next pixel
+wait 1 irq 2  ;waiting for next pixel
 
 ;clock the lcd
 
 lcd_target:
-set pins 0 [2]
-set pins 1 [2]
+set pins 1 
+set pins 0 [1]
 
 jmp y-- lcd_target 
 	
-set pins 0
-
 .wrap
