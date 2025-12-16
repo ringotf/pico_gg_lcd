@@ -4,3 +4,11 @@
 
 
 #define h_pixels_to_skip 64
+
+
+#define gg_pixel_width 160
+#define gg_pixel_height 144
+#define gg_pixel_x_offset 22
+#define gg_pixel_x_offset_dvi 28
+
+

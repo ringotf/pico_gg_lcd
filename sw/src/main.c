@@ -23,6 +23,7 @@
 #include "../build/lcd_send_2x.pio.h"
 #include "../build/lcd_send_4x.pio.h"
 #include "../build/lcd_send_spi.pio.h"
+#include "font8x8_basic.h"
 
 #include "libdvi/dvi.h"
 #include "libdvi/dvi_serialiser.h"
@@ -31,6 +32,7 @@
 #include "tusb.h"
 
 #define DVI_TIMING dvi_timing_640x480p_60hz
+//#define DVI_TIMING dvi_timing_720x480p_60hz
 
 #define led_pin 25 //not used?
 
@@ -57,8 +59,6 @@
 //#define pixels_in_scanline 256 //280 //300
 //#define scanlines_in_active_area  192 //160 //144 //192
 
-#define gg_pixel_width 160
-#define gg_pixel_height 144
 
 #define scanlines_in_active_area_min 100
 
@@ -81,7 +81,7 @@
 #define in_sr_clk 10
 
 //#define lcd_hsync 13
-#define lcd_vsync 8 //14
+//#define lcd_vsync 8 //14
 #define lcd_clk 1 //15
 #define lcd_den 0 //16
 
@@ -111,8 +111,8 @@
 
 //add extra pixels to the h porch
 #define lcd_hblank_sync_len 2 * lcd_hscale_factor
-#define lcd_hblank_front_len 44 * lcd_hscale_factor
-#define lcd_hblank_back_len 42 * lcd_hscale_factor
+#define lcd_hblank_front_len 24 * lcd_hscale_factor //44
+#define lcd_hblank_back_len 12 * lcd_hscale_factor //42
 #define lcd_hblank_len lcd_hblank_front_len + lcd_send_width + lcd_hblank_back_len
 
 
@@ -122,8 +122,8 @@
 //add 240 extra lines to the v porch
 
 #define lcd_vblank_sync_lines 2 
-#define lcd_vblank_front_lines 16 
-#define lcd_vblank_back_lines 14
+#define lcd_vblank_front_lines 12 //16
+#define lcd_vblank_back_lines 4 //14
 
 #define dvi_pio pio1
 #define dvi_tmds_sm_0 0
@@ -187,12 +187,12 @@ uint32_t gg_start_now;
 uint32_t gg_btn1_now;
 uint32_t gg_btn2_now;
 
-uint32_t dma_chan0;
-uint32_t dma_chan1;
+uint32_t dma_chan_fb1_write;
+uint32_t dma_chan_fb1_reset;
 //uint32_t dma_chan2;
 //uint32_t dma_chan3;
-uint32_t dma_chan4;
-uint32_t dma_chan5;
+uint32_t dma_chan_fb2_write;
+uint32_t dma_chan_fb2_reset;
 
 uint32_t last_frame_sent;
 
@@ -240,21 +240,22 @@ static inline __attribute__ ((always_inline)) uint32_t unpack(uint32_t rgb_value
 	return temp;
 }
 
-__attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {	
+uint16_t * framebuffer_to_use;
+
+__attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint16_t * curr_framebuffer) {	
 	//Scanning a frame out into the LCD is faster than ~16ms
 	//So, we wait until the console starts sending out a new frame before we update the LCD again
 	//If neither of these two DMA channels is busy, then the console must be in vblank
-	//while(!dma_channel_is_busy(dma_chan0) && !dma_channel_is_busy(dma_chan4)) ;
+	while(!dma_channel_is_busy(dma_chan_fb1_write) && !dma_channel_is_busy(dma_chan_fb2_write)) ;
 
-	uint16_t * curr_framebuffer;
-	uint16_t spi_buffer[4] = {0xFFF, 0xFFF, 0xFFF, 0xFFF};  
+	uint16_t spi_buffer[4] = {0x001, 0x001, 0x000, 0x000};  
 
 	//See which of the two framebuffer is currently being written to and pick the other one to send to the LCD
 	//This introduces a single frame of latency
-	//if(dma_channel_is_busy(dma_chan0)) curr_framebuffer = framebuffer2;
+	//if(dma_channel_is_busy(dma_chan_fb1_write)) curr_framebuffer = framebuffer2;
 	//else curr_framebuffer = framebuffer;
 
-	curr_framebuffer = framebuffer;
+	//curr_framebuffer = framebuffer;
 	
 
 	//pio_sm_put_blocking(gg_capture_pio, gg_capture_hblank_sm, scanlines_in_active_area + 1 - 1);
@@ -275,7 +276,7 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 	gpio_put(lcd_den, 0);
 
 	//start vsync pulse
-	gpio_put(lcd_vsync, vsync);
+	//gpio_put(lcd_vsync, vsync);
 
 	for(uint32_t wait_line = 0; wait_line < lcd_vblank_sync_lines; wait_line ++) {
 		
@@ -302,7 +303,7 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 
 	//start vsync back porch
 	vsync = 1;
-	gpio_put(lcd_vsync, vsync);
+	//gpio_put(lcd_vsync, vsync);
 
 	
 	for(uint32_t wait_line = 0; wait_line < lcd_vblank_back_lines; wait_line ++) {
@@ -337,7 +338,7 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 	uint16_t footer_count = line_diff - header_count;
 
 	uint32_t y_base;
-	uint32_t y_base_offset = (pixels_in_scanline - gg_pixel_width) * 0.5;
+	uint32_t y_base_offset = gg_pixel_x_offset + (pixels_in_scanline - gg_pixel_width) * 0.5;
 	uint32_t y_target;
 
 
@@ -371,18 +372,27 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 			
 			gpio_put(lcd_den, 1);
 			
-			for (uint32_t x = y_base; x < y_target; x +=4) {			
+			//for (uint32_t x = y_base; x < y_target; x +=4) {			
+			for (uint32_t x = y_target; x > y_base; x -=4) {			
 				while(!pio_sm_is_tx_fifo_empty(lcd_send_pio, lcd_send_sm)) ;
 				//pio_sm_put_blocking(lcd_send_pio, lcd_send_sm, 0);
 				//send_lcd_pixel(0, hsync, vsync);
 				//send_lcd_pixel(0, hsync, vsync);
 				//send_lcd_pixel(0, hsync, vsync);
 				//send_lcd_pixel(0, hsync, vsync);
-				
+				/*
 				send_lcd_pixel(curr_framebuffer[x], hsync, vsync);
 				send_lcd_pixel(curr_framebuffer[x+1], hsync, vsync);
 				send_lcd_pixel(curr_framebuffer[x+2], hsync, vsync);
 				send_lcd_pixel(curr_framebuffer[x+3], hsync, vsync);
+				*/
+			/*
+				send_lcd_pixel(curr_framebuffer[x], hsync, vsync);
+				send_lcd_pixel(curr_framebuffer[x-1], hsync, vsync);
+				send_lcd_pixel(curr_framebuffer[x-2], hsync, vsync);
+				send_lcd_pixel(curr_framebuffer[x-3], hsync, vsync);
+*/
+				send_4blank_lcd_pixel();
 			}
 			
 
@@ -406,7 +416,8 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 	//frame body
 	//start frame data
 	//for (uint32_t y = 0; y < lcd_active_lines; y++)
-	for (uint32_t y = 0; y < gg_pixel_height + footer_count; y++)	
+	//for (uint32_t y = 0; y < gg_pixel_height + footer_count; y++)	
+	for (int32_t y = gg_pixel_height + footer_count-1  ; y >= 0 ; y--)	
 	{
 		for (uint32_t w = 0; w < lcd_vscale_factor; w++)
 		{
@@ -452,7 +463,8 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 			//uint32_t framebuffer_pix_value = curr_framebuffer[y_base] & 4095;
 			//uint32_t old_pix_value = unpack(curr_framebuffer[y_base] & 4095);
 			
-			for (uint32_t x = y_base; x < y_base + lcd_send_width; x +=4)
+			//for (uint32_t x = y_base; x < y_base + lcd_send_width; x +=4)
+			for (uint32_t x = y_base + lcd_send_width; x > y_base; x -=4)
 			{
 
 				/*
@@ -520,18 +532,26 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 				pio_sm_put_blocking(lcd_send_pio, lcd_send_sm, curr_framebuffer[x+2] & 4095);
 				pio_sm_put_blocking(lcd_send_pio, lcd_send_sm, curr_framebuffer[x+3] & 4095);
 				*/
-
+			/*
 				send_lcd_pixel(curr_framebuffer[x], hsync, vsync);
 				send_lcd_pixel(curr_framebuffer[x+1], hsync, vsync);
 				send_lcd_pixel(curr_framebuffer[x+2], hsync, vsync);
 				send_lcd_pixel(curr_framebuffer[x+3], hsync, vsync);
+*/
+
+				send_lcd_pixel(curr_framebuffer[x], hsync, vsync);
+				send_lcd_pixel(curr_framebuffer[x-1], hsync, vsync);
+				send_lcd_pixel(curr_framebuffer[x-2], hsync, vsync);
+				send_lcd_pixel(curr_framebuffer[x-3], hsync, vsync);
+
 
 /*
 				send_lcd_pixel(spi_buffer[0], hsync, vsync);
 				send_lcd_pixel(spi_buffer[1], hsync, vsync);
 				send_lcd_pixel(spi_buffer[2], hsync, vsync);
 				send_lcd_pixel(spi_buffer[3], hsync, vsync);
-	*/			
+*/
+				
 			}
 
 
@@ -651,7 +671,7 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 	hsync = 0;
 	vsync = 0;
 	//gpio_put(lcd_hsync, hsync);
-	gpio_put(lcd_vsync, vsync);
+	//gpio_put(lcd_vsync, vsync);
 	
 	gpio_put(lcd_den, 0);
 }
@@ -661,10 +681,10 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg() {
 //However, putting those values in variables considerably slows down this function
 //So, instead, we use magic constants baked into the code
 __attribute__ ((long_call, section (".time_critical"))) void update_lcd_sms() {	
-    while(!dma_channel_is_busy(dma_chan0) && !dma_channel_is_busy(dma_chan4)) ;
+    while(!dma_channel_is_busy(dma_chan_fb1_write) && !dma_channel_is_busy(dma_chan_fb2_write)) ;
 	uint16_t * curr_framebuffer;
 
-	if(dma_channel_is_busy(dma_chan0)) curr_framebuffer = framebuffer2;
+	if(dma_channel_is_busy(dma_chan_fb1_write)) curr_framebuffer = framebuffer2;
 	else curr_framebuffer = framebuffer;
 
 	pio_sm_put_blocking(gg_capture_pio, gg_capture_hblank_sm, scanlines_in_active_area + scanlines_to_skip - 1);
@@ -880,12 +900,12 @@ void config_dma() {
 	}
 
 	//DVI code uses claim_unused_channel, so we must as well, instead of explicitly picking DMA channels
-	dma_chan0 = dma_claim_unused_channel(true);
-	dma_chan1 = dma_claim_unused_channel(true);
+	dma_chan_fb1_write = dma_claim_unused_channel(true);
+	dma_chan_fb1_reset = dma_claim_unused_channel(true);
 	//dma_chan2 = dma_claim_unused_channel(true);
 	//dma_chan3 = dma_claim_unused_channel(true);
-	dma_chan4 = dma_claim_unused_channel(true);
-	dma_chan5 = dma_claim_unused_channel(true);
+	dma_chan_fb2_write = dma_claim_unused_channel(true);
+	dma_chan_fb2_reset = dma_claim_unused_channel(true);
 
 
 	//PIO0 SM2 is the one that actually sends out pixel data
@@ -910,15 +930,15 @@ void config_dma() {
 */
 
 	//Now we can save the scanlines that actually have image data into the framebuffer
-	dma_channel_config f = dma_channel_get_default_config(dma_chan0);
+	dma_channel_config f = dma_channel_get_default_config(dma_chan_fb1_write);
 	channel_config_set_transfer_data_size(&f, DMA_SIZE_16);
 	channel_config_set_enable(&f, true);
-	channel_config_set_chain_to(&f, dma_chan1);
+	channel_config_set_chain_to(&f, dma_chan_fb1_reset);
 	channel_config_set_read_increment(&f, false);
 	channel_config_set_write_increment(&f, true);
 	channel_config_set_dreq(&f, pio_get_dreq(gg_capture_pio, gg_capture_getdata_sm, false));
 	dma_channel_configure(
-			dma_chan0,
+			dma_chan_fb1_write,
 			&f,
 			//Note that we're filling the first framebuffer here
 			//There's two of them, for double buffering, so we don't get screen tearing
@@ -932,18 +952,18 @@ void config_dma() {
 
 	//Reset dma_chan0's write address register to point to the start of framebuffer0
 	//Then chain to dma_chan3
-	dma_channel_config e = dma_channel_get_default_config(dma_chan1);
+	dma_channel_config e = dma_channel_get_default_config(dma_chan_fb1_reset);
 	channel_config_set_transfer_data_size(&e, DMA_SIZE_32);
 	channel_config_set_enable(&e, true);
 	//channel_config_set_chain_to(&e, dma_chan3);
-	channel_config_set_chain_to(&e, dma_chan4);
+	channel_config_set_chain_to(&e, dma_chan_fb2_write);
 	//channel_config_set_chain_to(&e, dma_chan0);
 	channel_config_set_read_increment(&e, false);
 	channel_config_set_write_increment(&e, false);
 	dma_channel_configure(
-			dma_chan1,
+			dma_chan_fb1_reset,
 			&e,
-			&(dma_hw->ch[dma_chan0].write_addr),
+			&(dma_hw->ch[dma_chan_fb1_write].write_addr),
 			&framebuffer,
 			1,
 			false);
@@ -968,15 +988,15 @@ void config_dma() {
 
 
 	//Save active scanlines into second framebuffer
-	f = dma_channel_get_default_config(dma_chan4);
+	f = dma_channel_get_default_config(dma_chan_fb2_write);
 	channel_config_set_transfer_data_size(&f, DMA_SIZE_16);
 	channel_config_set_enable(&f, true);
-	channel_config_set_chain_to(&f, dma_chan5);
+	channel_config_set_chain_to(&f, dma_chan_fb2_reset);
 	channel_config_set_read_increment(&f, false);
 	channel_config_set_write_increment(&f, true);
 	channel_config_set_dreq(&f, pio_get_dreq(gg_capture_pio, gg_capture_getdata_sm, false));
 	dma_channel_configure(
-			dma_chan4,
+			dma_chan_fb2_write,
 			&f,
 			&framebuffer2[0],
 			&gg_capture_pio->rxf[gg_capture_getdata_sm],
@@ -984,17 +1004,17 @@ void config_dma() {
 			false);
 
 	//Reset dma_chan4's write address and chain into dma_chan2 to restart the whole DMA chain
-	e = dma_channel_get_default_config(dma_chan5);
+	e = dma_channel_get_default_config(dma_chan_fb2_reset);
 	channel_config_set_transfer_data_size(&e, DMA_SIZE_32);
 	channel_config_set_enable(&e, true);
 	//channel_config_set_chain_to(&e, dma_chan2);
-	channel_config_set_chain_to(&e, dma_chan0);
+	channel_config_set_chain_to(&e, dma_chan_fb1_write);
 	channel_config_set_read_increment(&e, false);
 	channel_config_set_write_increment(&e, false);
 	dma_channel_configure(
-			dma_chan5,
+			dma_chan_fb2_reset,
 			&e,
-			&(dma_hw->ch[dma_chan4].write_addr),
+			&(dma_hw->ch[dma_chan_fb2_write].write_addr),
 			&framebuffer2,
 			1,
 			false);
@@ -1434,7 +1454,7 @@ void send_frame_over_usb()
 			uint16_t * curr_framebuffer;
 
 			//See which of the two framebuffer is currently being written to and pick the other one to send to the LCD
-			if(!dma_channel_is_busy(dma_chan0)) 
+			if(!dma_channel_is_busy(dma_chan_fb1_write)) 
 			{
 				curr_framebuffer = framebuffer2;
 			}
@@ -1509,11 +1529,10 @@ void __not_in_flash_func(core1_main)()
 	dvi_register_irqs_this_core(&dvi0, DMA_IRQ_0);
 
 	dvi_start(&dvi0);
-	dvi_scanbuf_main_12bpp_noqueue(&dvi0, framebuffer);
+	dvi_scanbuf_main_12bpp_noqueue(&dvi0, framebuffer, framebuffer2, dma_chan_fb1_write, dma_chan_fb2_write);
 
 	__builtin_unreachable();
 }
-
 
 
 void read_in_spi()
@@ -1522,27 +1541,29 @@ void read_in_spi()
 	gpio_put(in_sr_clk, 0);
 
 	gpio_put(in_sr_load, 0);
-	//__asm("nop"); __asm("nop");
-	sleep_ms(1);
+	__asm("nop"); __asm("nop");
+	//sleep_ms(1);
 
 	gpio_put(in_sr_load, 1);
-	//__asm("nop"); __asm("nop");
+	__asm("nop"); __asm("nop");
 
-	sleep_ms(1);
+	//sleep_ms(1);
 	
 	gpio_put(in_sr_clk, 1);
+	__asm("nop"); __asm("nop");
 	
-	sleep_ms(1);
+	//sleep_ms(1);
 
 	gpio_put(in_sr_clk, 0);
+	__asm("nop"); __asm("nop");
 
-	sleep_ms(1);
+	//sleep_ms(1);
 
 	uint8_t data;
 	//spi_read_blocking(in_sr_spi, 0xFF , &data, 1);
 	spi_read_blocking(in_sr_spi, 0 , &data, 1);
 
-	printf("SPI IN DATA %i\n", data);
+	//printf("SPI IN DATA %i\n", data);
 
 	gg_now = !(data & 0x1);
 	gg_start_now = !(data & 0x8);
@@ -1552,11 +1573,52 @@ void read_in_spi()
 
 }
 
-void draw_overlay()
+
+char* title = "PICO GG LCD";
+const uint8_t font_size = 8;
+const uint16_t font_color = 0xDDD;
+const uint16_t overlay_color_base = 0x066F;
+const uint8_t overlay_height = 22;
+const uint16_t overlay_ypos = gg_pixel_height - overlay_height;
+const uint16_t overlay_xpos = gg_pixel_x_offset + (pixels_in_scanline - gg_pixel_width) * 0.5;
+
+void draw_char(uint16_t * current_framebuffer, uint16_t x, uint16_t y, const char c, uint16_t color)
+{
+	if(c < 0x20 || c > 127) return;
+	uint16_t ypos = 0;
+
+	for(uint16_t row = 0; row < font_size; row++)
+	{
+		char line = font8x8_basic[c - 0x20][row];
+		uint16_t y_base = ((y + row) * pixels_in_scanline) + x;
+
+		for(uint16_t col = 0; col < font_size; col++)
+		{
+			if(line & (1 << col))
+			{
+				uint16_t pos = y_base + col;
+				current_framebuffer[pos] = color;
+			}
+		}
+
+	}
+}
+
+void draw_string(uint16_t * current_framebuffer, uint16_t x, uint16_t y, const char *str, uint16_t color)
+{
+	while(*str)
+	{
+		draw_char(current_framebuffer, x, y, *str++, color);
+		x+=font_size;
+	}
+}
+
+void draw_overlay(uint16_t * current_framebuffer, uint32_t fps)
 {
 	//just draw some lines for testing...
-	uint16_t pixel = 0x88F;
+	uint16_t pixel = overlay_color_base;
 
+/*
 	if(gg_btn1_now)
 	{
 		pixel = 0xF00;
@@ -1569,26 +1631,44 @@ void draw_overlay()
 	{
 		pixel = 0x00F;
 	}
+*/
 
-	for(uint32_t y = lcd_active_lines - 20; y < lcd_active_lines; y++) 
+	//draw a background
+	for(uint32_t y = overlay_ypos; y < overlay_ypos + overlay_height; y++) 
 	{
-
 		//uint16_t row_val = 15;
-	
 
 		for(uint32_t x = 0; x < pixels_in_scanline; x++) {
 		
-
-
-
-			framebuffer[x + (y * pixels_in_scanline)]  = pixel;
+			current_framebuffer[x + (y * pixels_in_scanline)]  = pixel;
 			//framebuffer2[x + (y * pixels_in_scanline)]  = ~pixel;
-			framebuffer2[x + (y * pixels_in_scanline)]  = pixel;
+			current_framebuffer[x + (y * pixels_in_scanline)]  = pixel;
 
 			//framebuffer[x + (y * pixels_in_scanline)] = pixel;
 			//framebuffer2[x + (y * pixels_in_scanline)] = ~pixel;
 		}
 	}	
+
+	//draw some text
+	draw_string(current_framebuffer, overlay_xpos + font_size, overlay_ypos + 2, title, font_color);
+	static char fps_str[7];
+	sprintf(fps_str, "%i fps", fps);
+
+	draw_string(current_framebuffer, overlay_xpos + font_size*2 + strlen(title) * 8, overlay_ypos + 2, fps_str, font_color);
+
+	if(gg_btn1_now)
+	{
+		draw_string(current_framebuffer, overlay_xpos + font_size, overlay_ypos + font_size + 4, "BTN1 Pressed!", font_color);
+	}
+	if(gg_btn2_now)
+	{
+		draw_string(current_framebuffer, overlay_xpos + font_size, overlay_ypos + font_size + 4, "BTN2 Pressed!", font_color);
+	}
+	if(gg_start_now)
+	{
+		draw_string(current_framebuffer, overlay_xpos + font_size, overlay_ypos + font_size + 4, "START Pressed!", font_color);
+	}
+
 }
 
 uint32_t last_frame_time = 0;
@@ -1598,11 +1678,11 @@ void core0_main()
 
 	gpio_put(lcd_den, 1);
 	//gpio_put(lcd_hsync, 0);
-	gpio_put(lcd_vsync, 0);
+	//gpio_put(lcd_vsync, 0);
 	gpio_put(led_pin, 1);
 	
 	gpio_put(lcd_clk, 0);
-	gpio_put(lcd_backlight, 0);
+	//gpio_put(lcd_backlight, 0);
 
 	/*adc_init();
 	adc_gpio_init(brightness_pot);
@@ -1613,7 +1693,7 @@ void core0_main()
 	fill_framebuffer_with_test_pattern();
 
 	//dma_channel_start(dma_chan2);
-	dma_channel_start(dma_chan0);
+	dma_channel_start(dma_chan_fb1_write);
 
 	while(1) {
 
@@ -1626,22 +1706,31 @@ void core0_main()
 		if(last_gg == gg_now) is_gg = gg_now;
 
 */
+
 		uint32_t start = time_us_32();
 
 		//update lcd after 15ms for just over 60fps
-		if(start - last_frame_time > 15000)
+		if(start - last_frame_time > 10000)
 		{
+			if(dma_channel_is_busy(dma_chan_fb1_write)) framebuffer_to_use = framebuffer2;
+			else framebuffer_to_use = framebuffer;
 
-			draw_overlay();
+			//framebuffer_to_use = framebuffer2;
 
-			update_lcd_gg();
+			//draw_overlay(framebuffer_to_use, 1000000 / (start - last_frame_time));
+			if(gg_btn1_now || gg_btn2_now || gg_start_now)
+			{
+				draw_overlay(framebuffer, 1000000 / (start - last_frame_time));
+				draw_overlay(framebuffer2, 1000000 / (start - last_frame_time));
+			}
+
+			update_lcd_gg(framebuffer_to_use);
 			last_frame_time = start;
 #ifdef DEBUG
 			uint32_t end = time_us_32();
 			
 			printf("Rendering time: %i us, time since last: %i us\n", end - start, start - last_frame_time); 
 #endif
-
 		}
 
 		/*
@@ -1737,8 +1826,8 @@ int __not_in_flash_func(main)()
 	gpio_set_dir_out_masked(1 << lcd_rst);
 	gpio_set_dir_out_masked(1 << lcd_den);
 	//gpio_set_dir_out_masked(1 << lcd_hsync);
-	gpio_set_dir_out_masked(1 << lcd_vsync);
-	gpio_set_dir_out_masked(1 << lcd_backlight);
+	//gpio_set_dir_out_masked(1 << lcd_vsync);
+	//gpio_set_dir_out_masked(1 << lcd_backlight);
 	
 	//adc_init();
 	

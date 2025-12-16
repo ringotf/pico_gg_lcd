@@ -16,8 +16,8 @@
 #define __dvi_func_x(f) __scratch_x(__STRING(f)) f
 //#define pixels_in_scanline 256
 //#define scanlines_in_active_area 192
-#define header_scanlines ((240 - scanlines_in_active_area) / 2)
-#define pixels_border (320 - pixels_in_scanline) / 2
+//#define header_scanlines ((240 - scanlines_in_active_area) / 2)
+//#define pixels_border (320 - pixels_in_scanline) / 2
 
 // We require exclusive use of a DMA IRQ line. (you wouldn't want to share
 // anyway). It's possible in theory to hook both IRQs and have two DVI outs.
@@ -299,35 +299,66 @@ uint16_t empty_scanline[320];
 
 
 // Ugh copy/paste but it lets us garbage collect the TMDS stuff that is not being used from .scratch_x
-void __dvi_func(dvi_scanbuf_main_12bpp_noqueue)(struct dvi_inst *inst, uint16_t *scanbuf) {
+void __dvi_func(dvi_scanbuf_main_12bpp_noqueue)(struct dvi_inst *inst, uint16_t *scanbuf1, uint16_t *scanbuf2, uint32_t dma_chan_fb1, uint32_t dma_chan_fb2) {
 	uint16_t y = 0;
 	uint16_t * curr_framebuffer;
 
 	bool frame_tail = false;
     uint16_t t1,t2,t3,t4;
     uint16_t buf;
-
-    //if(dma_channel_is_busy(dma_chan0)) curr_framebuffer = framebuffer2;
-    //else curr_framebuffer = framebuffer;
-    curr_framebuffer = scanbuf;
     
+    uint16_t h_pixels = inst->timing->h_active_pixels / DVI_SYMBOLS_PER_WORD; // >> 1;
+
+    //DVI_VERTICAL_REPEAT set to 3 so triple line scaling...
+    uint16_t v_lines = inst->timing->v_active_lines / DVI_VERTICAL_REPEAT; //(inst->timing->v_active_lines >> 1);
+
+    uint16_t output_width = gg_pixel_width * 2;
+
+    uint16_t header_scanlines = ((v_lines - gg_pixel_height) / 2);
+    uint16_t pixels_border = (h_pixels - output_width) / 2;
+
+    uint16_t footer_lines_start = header_scanlines + gg_pixel_height;
+
+    if(dma_channel_is_busy(dma_chan_fb1)) curr_framebuffer = scanbuf2;
+    else curr_framebuffer = scanbuf1;
+    
+    uint16_t y_base_offset = gg_pixel_x_offset_dvi + (pixels_in_scanline - gg_pixel_width) * 0.5;
+
 	while (1) {
 
+        //curr_framebuffer = scanbuf;
 
 		//if(y > header_scanlines && y < scanlines_in_active_area + header_scanlines - 1) {
-		if(y < scanlines_in_active_area) {
+		//if(y < scanlines_in_active_area) {
+        if(y > header_scanlines && y < footer_lines_start) {
 
 			//const uint16_t *scanline = &curr_framebuffer[y * pixels_in_scanline];
 			//_dvi_prepare_scanline_12bpp(inst, (uint32_t *) &scanline);
-			for(uint32_t c = 0; c < 320; c++) 
+            static uint32_t c = 0;
+
+			//for(c = 0; c < 320; c++) 
+            //for(c = 0; c < gg_pixel_width * 2; c+=2) 
+
+
+            for(c = 0; c < pixels_border; c++) 
+            {
+                empty_scanline[c] = 0;
+            }
+
+            //for(c = 0; c < h_pixels; c+=2) 
+            //for(c = 0; c < h_pixels; c++) 
+            //for(c = pixels_border; c < pixels_border + gg_pixel_width; c++) 
+            for(c = pixels_border; c < pixels_border + output_width; c+=2) 
 			{
                 //if(c > pixels_border && c < pixels_in_scanline + pixels_border +1) {
 				//	empty_scanline[c] = curr_framebuffer[scanbuf_pointer];
 				//	scanbuf_pointer++;
 				//}
-				if(c < pixels_in_scanline){
+                
+				//if(c > pixels_border && c < pixels_border + gg_pixel_width){
 
                     empty_scanline[c] = curr_framebuffer[scanbuf_pointer];
+                    empty_scanline[c+1] = curr_framebuffer[scanbuf_pointer];
 
 /*
                     buf = curr_framebuffer[scanbuf_pointer];
@@ -345,19 +376,30 @@ void __dvi_func(dvi_scanbuf_main_12bpp_noqueue)(struct dvi_inst *inst, uint16_t 
                     empty_scanline[c] = reverse_colors_lookup[buf & 0xF] | reverse_colors_lookup[t2 >> 4] << 4 | reverse_colors_lookup[t3 >> 8] << 8;
 */
 					scanbuf_pointer++;
-				}
-				else empty_scanline[c] = 0;
+				//}
+				//else 
+                //{
+                    //empty_scanline[c] = 0;
+                    //empty_scanline[c+1] = 0;
+                //}
 			}
+            for(c = pixels_border + output_width; c < h_pixels; c++)
+            {
+                empty_scanline[c] = 0;
+            }
+            
+	    
+            //scanbuf_pointer = y_base_offset + ((y>>1) * pixels_in_scanline);
+            scanbuf_pointer = y_base_offset + ((y-header_scanlines) * pixels_in_scanline);
+            
+            frame_tail = false;
 		}
 		else {
 			if(!frame_tail)
 			{
-				for(uint32_t c = 0; c < 320; c++) {
+				for(uint32_t c = 0; c < h_pixels; c++) {
 					empty_scanline[c] = 0;
 				}
-				/*for(uint32_t c = 0; c < 320; c++) {
-					empty_scanline[c] = 0;
-				}*/
 				frame_tail = true;
 			}
 		}
@@ -366,11 +408,14 @@ void __dvi_func(dvi_scanbuf_main_12bpp_noqueue)(struct dvi_inst *inst, uint16_t 
 		//_dvi_prepare_scanline_16bpp(inst, (uint32_t *) &empty_scanline[0]);
 
 		++y;
-		if (y == (inst->timing->v_active_lines >> 1)) {
+		if (y == v_lines) {
 			//gpio_put(25, !gpio_get(25));
 			y = 0;
-			scanbuf_pointer = 0;
+            scanbuf_pointer = y_base_offset;
 			frame_tail = false;
+            
+            if(dma_channel_is_busy(dma_chan_fb1)) curr_framebuffer = scanbuf2;
+            else curr_framebuffer = scanbuf1;
 		}
     }
     __builtin_unreachable();

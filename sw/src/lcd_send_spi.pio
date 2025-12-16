@@ -49,6 +49,9 @@ set pins 0
 .wrap
 
 
+
+
+
 ;this can also be done in the main lcd_send to save a statemachine, using 2 sideset pins for the spi clk and latch
 ;set pin is lcd clk
 .program lcd_send_clk
