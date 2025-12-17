@@ -512,7 +512,7 @@
       {
         "name": "08.mm via",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 0,
+        "priority": 1,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "via_diameter": 0.8,
         "via_drill": 0.4
@@ -520,16 +520,73 @@
       {
         "name": "1mm track",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 1,
+        "priority": 2,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 1.0
+      },
+      {
+        "diff_pair_gap": 0.25,
+        "diff_pair_width": 0.2,
+        "name": "HDMI_Diff",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "priority": 0,
+        "schematic_color": "rgba(0, 0, 0, 0.000)"
       }
     ],
     "meta": {
       "version": 4
     },
     "net_colors": null,
-    "netclass_assignments": null,
+    "netclass_assignments": {
+      "HDMI_CLK+": [
+        "HDMI_Diff"
+      ],
+      "HDMI_CLK-": [
+        "HDMI_Diff"
+      ],
+      "HDMI_D0+": [
+        "HDMI_Diff"
+      ],
+      "HDMI_D0-": [
+        "HDMI_Diff"
+      ],
+      "HDMI_D1+": [
+        "HDMI_Diff"
+      ],
+      "HDMI_D1-": [
+        "HDMI_Diff"
+      ],
+      "HDMI_D2+": [
+        "HDMI_Diff"
+      ],
+      "HDMI_D2-": [
+        "HDMI_Diff"
+      ],
+      "PICO_HDMI_CLK+": [
+        "HDMI_Diff"
+      ],
+      "PICO_HDMI_CLK-": [
+        "HDMI_Diff"
+      ],
+      "PICO_HDMI_D0+": [
+        "HDMI_Diff"
+      ],
+      "PICO_HDMI_D0-": [
+        "HDMI_Diff"
+      ],
+      "PICO_HDMI_D1+": [
+        "HDMI_Diff"
+      ],
+      "PICO_HDMI_D1-": [
+        "HDMI_Diff"
+      ],
+      "PICO_HDMI_D2+": [
+        "HDMI_Diff"
+      ],
+      "PICO_HDMI_D2-": [
+        "HDMI_Diff"
+      ]
+    },
     "netclass_patterns": [
       {
         "netclass": "1mm track",
@@ -538,6 +595,10 @@
       {
         "netclass": "1mm track",
         "pattern": "+20v"
+      },
+      {
+        "netclass": "HDMI_Diff",
+        "pattern": "*HDMI_*"
       }
     ]
   },
