@@ -56,6 +56,12 @@
 	(constraint silk_clearance (min 0.15mm))
 )
 
+(rule "Hole to Silkscreen"
+	(layer outer)
+	(condition "A.isPlated() && B.Layer == '?.Silkscreen'")
+	(constraint silk_clearance (min 0.13mm))
+)
+
 (rule "Edge (routed) to track clearance"
 	(condition "A.Type == 'track'")
 	(constraint edge_clearance (min 0.3mm))

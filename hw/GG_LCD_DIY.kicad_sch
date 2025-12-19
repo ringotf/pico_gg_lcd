@@ -24025,7 +24025,7 @@
 		(at 223.52 156.21 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "1f279cea-7580-475b-b6e3-c51cb85e5503")
@@ -24038,7 +24038,7 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "AUDIO_L"
+		(property "Value" "AUDIO L"
 			(at 219.71 155.956 0)
 			(effects
 				(font
@@ -24046,7 +24046,7 @@
 				)
 			)
 		)
-		(property "Footprint" "gg_lcd:TestPoint_Pad_2.0x2.0mm"
+		(property "Footprint" "gg_lcd:TestPoint_Pad_D1.5mm"
 			(at 223.52 156.21 0)
 			(effects
 				(font
@@ -25911,7 +25911,7 @@
 				)
 			)
 		)
-		(property "Footprint" "gg_lcd:TestPoint_Pad_2.0x2.0mm"
+		(property "Footprint" "gg_lcd:TestPoint_Pad_D1.5mm"
 			(at 264.16 54.61 0)
 			(effects
 				(font
@@ -26241,7 +26241,7 @@
 				)
 			)
 		)
-		(property "Footprint" "gg_lcd:TestPoint_Pad_2.0x2.0mm"
+		(property "Footprint" "gg_lcd:TestPoint_Pad_D1.5mm"
 			(at 222.25 128.27 0)
 			(effects
 				(font
@@ -26997,7 +26997,7 @@
 				)
 			)
 		)
-		(property "Footprint" "gg_lcd:TestPoint_Pad_2.0x2.0mm"
+		(property "Footprint" "gg_lcd:TestPoint_Pad_D1.5mm"
 			(at 16.51 25.4 0)
 			(effects
 				(font
@@ -27108,8 +27108,8 @@
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
-		(on_board yes)
-		(dnp no)
+		(on_board no)
+		(dnp yes)
 		(uuid "646f0caa-6fd0-4692-b03c-f3bb1a40937f")
 		(property "Reference" "T4"
 			(at 281.305 124.206 0)
@@ -27128,7 +27128,7 @@
 				)
 			)
 		)
-		(property "Footprint" "gg_lcd:TestPoint_Pad_2.0x2.0mm"
+		(property "Footprint" "gg_lcd:TestPoint_Pad_D1.5mm"
 			(at 280.67 129.54 0)
 			(effects
 				(font
@@ -27316,8 +27316,8 @@
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
-		(on_board yes)
-		(dnp no)
+		(on_board no)
+		(dnp yes)
 		(uuid "6682ad89-c586-4905-88e0-7972c8a67a74")
 		(property "Reference" "T5"
 			(at 281.305 131.572 0)
@@ -27336,7 +27336,7 @@
 				)
 			)
 		)
-		(property "Footprint" "gg_lcd:TestPoint_Pad_2.0x2.0mm"
+		(property "Footprint" "gg_lcd:TestPoint_Pad_D1.5mm"
 			(at 280.67 137.16 0)
 			(effects
 				(font
@@ -28158,7 +28158,7 @@
 				)
 			)
 		)
-		(property "Footprint" "gg_lcd:TestPoint_Pad_2.0x2.0mm"
+		(property "Footprint" "gg_lcd:TestPoint_Pad_D1.5mm"
 			(at 212.09 30.48 0)
 			(effects
 				(font
@@ -28694,7 +28694,7 @@
 				)
 			)
 		)
-		(property "Footprint" "gg_lcd:TestPoint_Pad_2.0x2.0mm"
+		(property "Footprint" "gg_lcd:TestPoint_Pad_D1.5mm"
 			(at 262.89 31.75 0)
 			(effects
 				(font
@@ -29523,7 +29523,7 @@
 				)
 			)
 		)
-		(property "Footprint" "gg_lcd:TestPoint_Pad_2.0x2.0mm"
+		(property "Footprint" "gg_lcd:TestPoint_Pad_D1.5mm"
 			(at 266.7 77.47 0)
 			(effects
 				(font
@@ -29831,7 +29831,7 @@
 				)
 			)
 		)
-		(property "Footprint" "gg_lcd:TestPoint_Pad_2.0x2.0mm"
+		(property "Footprint" "gg_lcd:TestPoint_Pad_D1.5mm"
 			(at 16.51 36.83 0)
 			(effects
 				(font
@@ -29878,8 +29878,8 @@
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
-		(on_board yes)
-		(dnp no)
+		(on_board no)
+		(dnp yes)
 		(uuid "a078cc00-ffc9-4eac-aef5-e757cd3bb057")
 		(property "Reference" "T3"
 			(at 281.305 127.254 0)
@@ -29898,7 +29898,7 @@
 				)
 			)
 		)
-		(property "Footprint" "gg_lcd:TestPoint_Pad_2.0x2.0mm"
+		(property "Footprint" "gg_lcd:TestPoint_Pad_D1.5mm"
 			(at 280.67 121.92 0)
 			(effects
 				(font
@@ -29943,7 +29943,7 @@
 		(at 222.25 185.42 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "a0ba04ce-a307-4808-9baf-8baba1c0a78e")
@@ -29956,7 +29956,7 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "AUDIO_R"
+		(property "Value" "AUDIO R"
 			(at 217.424 185.166 0)
 			(effects
 				(font
@@ -29964,7 +29964,7 @@
 				)
 			)
 		)
-		(property "Footprint" "gg_lcd:TestPoint_Pad_2.0x2.0mm"
+		(property "Footprint" "gg_lcd:TestPoint_Pad_D1.5mm"
 			(at 222.25 185.42 0)
 			(effects
 				(font
@@ -30095,7 +30095,7 @@
 				)
 			)
 		)
-		(property "Footprint" "gg_lcd:TestPoint_Pad_2.0x2.0mm"
+		(property "Footprint" "gg_lcd:TestPoint_Pad_D1.5mm"
 			(at 270.51 97.79 0)
 			(effects
 				(font
@@ -30648,7 +30648,7 @@
 				)
 			)
 		)
-		(property "Footprint" "gg_lcd:TestPoint_Pad_2.0x2.0mm"
+		(property "Footprint" "gg_lcd:TestPoint_Pad_D1.5mm"
 			(at 209.55 54.61 0)
 			(effects
 				(font
@@ -30846,7 +30846,7 @@
 				)
 			)
 		)
-		(property "Footprint" "gg_lcd:TestPoint_Pad_2.0x2.0mm"
+		(property "Footprint" "gg_lcd:TestPoint_Pad_D1.5mm"
 			(at 210.82 104.14 0)
 			(effects
 				(font
@@ -31217,9 +31217,9 @@
 		(at 280.67 144.78 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
+		(in_bom no)
+		(on_board no)
+		(dnp yes)
 		(uuid "b927cd8c-b256-4432-b90a-f3e2a0e43b4b")
 		(property "Reference" "T6"
 			(at 281.305 139.446 0)
@@ -31238,7 +31238,7 @@
 				)
 			)
 		)
-		(property "Footprint" "gg_lcd:TestPoint_Pad_2.0x2.0mm"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
 			(at 280.67 144.78 0)
 			(effects
 				(font
@@ -32365,9 +32365,9 @@
 		(at 280.67 160.02 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
+		(in_bom no)
+		(on_board no)
+		(dnp yes)
 		(uuid "cf8f0fdb-ea06-4986-8653-49a1b278f06e")
 		(property "Reference" "T8"
 			(at 281.305 154.686 0)
@@ -32386,7 +32386,7 @@
 				)
 			)
 		)
-		(property "Footprint" "gg_lcd:TestPoint_Pad_2.0x2.0mm"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
 			(at 280.67 160.02 0)
 			(effects
 				(font
@@ -33641,9 +33641,9 @@
 		(at 280.67 167.64 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
+		(in_bom no)
+		(on_board no)
+		(dnp yes)
 		(uuid "e6714242-a4a1-4d73-b9bb-09543fc02c79")
 		(property "Reference" "T9"
 			(at 281.305 162.306 0)
@@ -33662,7 +33662,7 @@
 				)
 			)
 		)
-		(property "Footprint" "gg_lcd:TestPoint_Pad_2.0x2.0mm"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
 			(at 280.67 167.64 0)
 			(effects
 				(font
@@ -33996,7 +33996,7 @@
 				)
 			)
 		)
-		(property "Footprint" "gg_lcd:TestPoint_Pad_2.0x2.0mm"
+		(property "Footprint" "gg_lcd:TestPoint_Pad_D1.5mm"
 			(at 209.55 78.74 0)
 			(effects
 				(font
@@ -34317,9 +34317,9 @@
 		(at 280.67 152.4 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
+		(in_bom no)
+		(on_board no)
+		(dnp yes)
 		(uuid "f64bf2a2-3cc4-4c50-8329-b958cbd7b444")
 		(property "Reference" "T7"
 			(at 281.305 147.066 0)
@@ -34338,7 +34338,7 @@
 				)
 			)
 		)
-		(property "Footprint" "gg_lcd:TestPoint_Pad_2.0x2.0mm"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
 			(at 280.67 152.4 0)
 			(effects
 				(font

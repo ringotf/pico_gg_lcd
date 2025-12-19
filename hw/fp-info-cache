@@ -1,4 +1,4 @@
-26846552340177756
+26848318810140185
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -106690,6 +106690,13 @@ gg_lcd
 TestPoint_Pad_2.0x2.0mm
 SMD rectangular pad as test Point, square 2.0mm side length
 test point SMD pad rectangle square
+0
+1
+1
+gg_lcd
+TestPoint_Pad_D1.5mm
+SMD pad as test Point, diameter 1.5mm
+test point SMD pad
 0
 1
 1
