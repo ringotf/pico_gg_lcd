@@ -1,0 +1,113 @@
+(footprint "SolderWirePad_1x01_EdgeWithHole_1x2mm"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "Wire Pad, Square, SMD Pad,  1mm x 2mm")
+	(tags "MeasurementPoint Square SMDPad 1mmx2mm ")
+	(property "Reference" "J11"
+		(at 0 -2 0)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "119f322c-c96d-4400-8f2b-571a2623a769")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "REF**"
+		(at -0.0295 -2.413 0)
+		(layer "F.SilkS")
+		(uuid "2432f517-2e39-4896-9c9b-53816a380455")
+		(effects
+			(font
+				(size 1.4 1.4)
+				(thickness 0.175)
+			)
+		)
+	)
+	(property "Datasheet" "~"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2e1db34f-d6f7-4a7e-bf61-31bcb775b23c")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" "Generic connector, single row, 01x01, script generated"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "3573ce0a-c1ad-41ff-b1e8-46b5e7f8f2b0")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr exclude_from_pos_files exclude_from_bom)
+	(fp_rect
+		(start -0.65 -1.25)
+		(end 0.65 1.25)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "1f929998-8145-489e-ba4f-99ec48cad549")
+	)
+	(fp_rect
+		(start -0.5 -1.15)
+		(end 0.5 1.15)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "28810378-1745-4523-ad2a-84820a97d412")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "07a7bccf-ddd5-4939-a53d-209ad40c89d3")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" thru_hole roundrect
+		(at 0 0)
+		(size 1 2)
+		(drill oval 0.5 1.4)
+		(layers "*.Cu" "F.Mask")
+		(remove_unused_layers yes)
+		(keep_end_layers yes)
+		(roundrect_rratio 0.15)
+		(teardrops
+			(best_length_ratio 0.5)
+			(max_length 1)
+			(best_width_ratio 1)
+			(max_width 2)
+			(curved_edges yes)
+			(filter_ratio 0.9)
+			(enabled yes)
+			(allow_two_segments yes)
+			(prefer_zone_connections yes)
+		)
+		(uuid "4ace0782-7fe4-48f5-9465-76c9ef5624d4")
+	)
+	(embedded_fonts no)
+)

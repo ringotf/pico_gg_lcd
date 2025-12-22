@@ -18403,7 +18403,7 @@
 	)
 	(global_label "PICO_BTN_DOWN"
 		(shape input)
-		(at 199.39 228.6 180)
+		(at 199.39 236.22 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -18413,7 +18413,7 @@
 		)
 		(uuid "0bdc8308-ab0e-4936-bb7f-52c26f198ae0")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 181.698 228.6 0)
+			(at 182.8471 236.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19129,7 +19129,7 @@
 	)
 	(global_label "PICO_BTN_UP"
 		(shape input)
-		(at 199.39 231.14 180)
+		(at 199.39 233.68 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -19139,7 +19139,7 @@
 		)
 		(uuid "45f99a8b-6e6c-4975-894a-ac948520afc5")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 184.4799 231.14 0)
+			(at 181.6375 233.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20251,7 +20251,7 @@
 	)
 	(global_label "GG_DW"
 		(shape input)
-		(at 254 227.33 180)
+		(at 254 232.41 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -20261,7 +20261,7 @@
 		)
 		(uuid "851e9148-3ebe-4024-bf75-f39b9766f30b")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 244.5933 227.33 0)
+			(at 244.6538 232.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20669,7 +20669,7 @@
 	)
 	(global_label "PICO_DW"
 		(shape input)
-		(at 173.99 82.55 0)
+		(at 173.99 85.09 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -20679,12 +20679,12 @@
 		)
 		(uuid "a7883a51-6418-471f-8acf-5c3961d3113d")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 182.55 82.55 0)
+			(at 162.7085 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(justify right)
 				(hide yes)
 			)
 		)
@@ -20823,7 +20823,7 @@
 	)
 	(global_label "PICO_BTN_RIGHT"
 		(shape input)
-		(at 199.39 233.68 180)
+		(at 199.39 231.14 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -20833,7 +20833,7 @@
 		)
 		(uuid "b0ef054f-605b-4905-a426-a23fe2f782aa")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 181.6375 233.68 0)
+			(at 184.4799 231.14 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20845,7 +20845,7 @@
 	)
 	(global_label "GG_BTN_UP"
 		(shape input)
-		(at 349.25 229.87 180)
+		(at 349.25 227.33 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -20855,7 +20855,7 @@
 		)
 		(uuid "b13b9fcb-d852-4260-8d11-3afe4c528936")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 334.6424 229.87 0)
+			(at 335.5494 227.33 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20867,7 +20867,7 @@
 	)
 	(global_label "GG_CL2"
 		(shape input)
-		(at 254 232.41 180)
+		(at 254 227.33 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -20877,7 +20877,7 @@
 		)
 		(uuid "b15b7b21-439c-4553-b3bb-d768a3d66d16")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 244.6538 232.41 0)
+			(at 244.5933 227.33 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21043,7 +21043,7 @@
 	)
 	(global_label "PICO_BTN_LEFT"
 		(shape input)
-		(at 199.39 236.22 180)
+		(at 199.39 228.6 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -21053,7 +21053,7 @@
 		)
 		(uuid "b7b2dfe5-ef7b-4709-ade5-affd943f02cd")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 182.8471 236.22 0)
+			(at 181.698 228.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21109,7 +21109,7 @@
 	)
 	(global_label "GG_BTN_DOWN"
 		(shape input)
-		(at 349.25 232.41 180)
+		(at 349.25 224.79 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -21119,7 +21119,7 @@
 		)
 		(uuid "ba839c06-cac4-477e-bb0e-091d6f59897e")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 333.4328 232.41 0)
+			(at 335.7913 224.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21197,7 +21197,7 @@
 	)
 	(global_label "PICO_DW"
 		(shape input)
-		(at 283.21 227.33 0)
+		(at 283.21 232.41 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -21207,7 +21207,7 @@
 		)
 		(uuid "c0fcbba1-087c-4239-aee4-309e5388d87c")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 294.552 227.33 0)
+			(at 294.4915 232.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21219,7 +21219,7 @@
 	)
 	(global_label "GG_CL2"
 		(shape input)
-		(at 349.25 214.63 180)
+		(at 349.25 219.71 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -21229,7 +21229,7 @@
 		)
 		(uuid "c316ef66-a165-49ad-8c74-672d3cb85ef0")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 340.9319 214.63 0)
+			(at 340.9319 219.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21351,7 +21351,7 @@
 	)
 	(global_label "PICO_CL2"
 		(shape input)
-		(at 173.99 85.09 0)
+		(at 173.99 82.55 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -21361,12 +21361,12 @@
 		)
 		(uuid "cf538a40-0a43-465e-b420-b5b72164fa98")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 162.7085 85.09 0)
+			(at 182.55 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 				(hide yes)
 			)
 		)
@@ -21395,7 +21395,7 @@
 	)
 	(global_label "PICO_CL2"
 		(shape input)
-		(at 283.21 232.41 0)
+		(at 283.21 227.33 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -21405,7 +21405,7 @@
 		)
 		(uuid "d11c99ed-fa8b-469e-aa8b-cbc1fe1ba540")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 294.4915 232.41 0)
+			(at 294.552 227.33 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21593,7 +21593,7 @@
 	)
 	(global_label "GG_BTN_RIGHT"
 		(shape input)
-		(at 349.25 227.33 180)
+		(at 349.25 229.87 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -21603,7 +21603,7 @@
 		)
 		(uuid "e3b63c5e-ada3-4159-a92c-fbcbea8c4079")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 335.5494 227.33 0)
+			(at 334.6424 229.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21835,7 +21835,7 @@
 	)
 	(global_label "GG_DW"
 		(shape input)
-		(at 349.25 219.71 180)
+		(at 349.25 214.63 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -21845,7 +21845,7 @@
 		)
 		(uuid "f34e4c20-13e4-4ba3-a00f-d49f88e939d2")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 340.9319 219.71 0)
+			(at 340.9319 214.63 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21901,7 +21901,7 @@
 	)
 	(global_label "GG_BTN_LEFT"
 		(shape input)
-		(at 349.25 224.79 180)
+		(at 349.25 232.41 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -21911,7 +21911,7 @@
 		)
 		(uuid "f6c6a607-a381-432f-acd2-4ae315c48190")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 335.7913 224.79 0)
+			(at 333.4328 232.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)

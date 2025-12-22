@@ -47,10 +47,10 @@ R2,160k,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,167.06,-99.56,0.0,bottom
 R3,100ohm,R_0402_1005Metric_Pad0.72x0.64mm_HandSolder,123.36,-74.39,0.0,bottom
 R4,100ohm,R_0402_1005Metric_Pad0.72x0.64mm_HandSolder,123.3525,-76.45,0.0,bottom
 R5,100ohm,R_0402_1005Metric_Pad0.72x0.64mm_HandSolder,123.35,-78.51,0.0,bottom
-R6,100ohm,R_0402_1005Metric_Pad0.72x0.64mm_HandSolder,133.8175,-77.69,180.0,bottom
-R7,100ohm,R_0402_1005Metric_Pad0.72x0.64mm_HandSolder,133.7875,-76.47,180.0,bottom
-R8,100ohm,R_0402_1005Metric_Pad0.72x0.64mm_HandSolder,133.7775,-75.21,180.0,bottom
-R9,100ohm,R_0402_1005Metric_Pad0.72x0.64mm_HandSolder,133.7675,-73.95,180.0,bottom
+R6,100ohm,R_0402_1005Metric_Pad0.72x0.64mm_HandSolder,133.7675,-73.95,180.0,bottom
+R7,100ohm,R_0402_1005Metric_Pad0.72x0.64mm_HandSolder,133.7775,-75.21,180.0,bottom
+R8,100ohm,R_0402_1005Metric_Pad0.72x0.64mm_HandSolder,133.7875,-76.47,180.0,bottom
+R9,100ohm,R_0402_1005Metric_Pad0.72x0.64mm_HandSolder,133.8175,-77.69,180.0,bottom
 U2,XC6206P332MR-G,SOT-23-3,166.37,-95.44,270.0,bottom
 U3,TPS61040DBV,SOT-23-5,172.57,-100.75,0.0,bottom
 U4,74HC595,SO-16_3.9x9.9mm_P1.27mm,153.7275,-101.9,0.0,bottom
