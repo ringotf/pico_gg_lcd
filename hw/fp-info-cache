@@ -1,4 +1,4 @@
-26848318810140185
+26864219964970529
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -106596,12 +106596,33 @@ Flex Connector 0.5mm
 16
 16
 gg_lcd
+Flex Connector 0.5mm 01x08Pin
+
+
+0
+8
+8
+gg_lcd
+Flex Connector 0.5mm 01x10Pin
+
+
+0
+10
+10
+gg_lcd
 Flex Connector 0.5mm 01x16Pin
 
 
 0
 16
 16
+gg_lcd
+Flex Connector 0.5mm 01x20Pin
+
+
+0
+20
+20
 gg_lcd
 PinHeader_2x27_P2.54mm_Vertical
 Through hole straight pin header, 2x27, 2.54mm pitch, double rows
@@ -106652,6 +106673,13 @@ SOT TO_SOT_SMD
 3
 3
 gg_lcd
+SolderWirePad_1x01_EdgeWithHole_1x2mm
+Wire Pad, Square, SMD Pad,  1mm x 2mm
+MeasurementPoint Square SMDPad 1mmx2mm 
+0
+1
+1
+gg_lcd
 TE_0-1734839-8_1x08-1MP_P0.5mm_Horizontal
 TE FPC connector, 08 top-side contacts, 0.5mm pitch, SMT, https://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Customer+Drawing%7F1734839%7FC%7Fpdf%7FEnglish%7FENG_CD_1734839_C_C_1734839.pdf%7F4-1734839-0
 te fpc 1734839
@@ -106687,6 +106715,27 @@ TSSOP SO
 24
 24
 gg_lcd
+TestPoint_2Pads_Pitch2.00mm_Drill0.8mm
+Test point with 2 pins, pitch 2.54mm, drill diameter 0.8mm
+CONN DEV
+0
+2
+2
+gg_lcd
+TestPoint_2Pads_Pitch2.00mm_Drill1.0mm
+Test point with 2 pins, pitch 2.54mm, drill diameter 0.8mm
+CONN DEV
+0
+2
+2
+gg_lcd
+TestPoint_2Pads_Pitch2.00mm_Drill1.0mm_OneSide
+Test point with 2 pins, pitch 2.54mm, drill diameter 0.8mm
+CONN DEV
+0
+2
+2
+gg_lcd
 TestPoint_Pad_2.0x2.0mm
 SMD rectangular pad as test Point, square 2.0mm side length
 test point SMD pad rectangle square
@@ -106697,6 +106746,20 @@ gg_lcd
 TestPoint_Pad_D1.5mm
 SMD pad as test Point, diameter 1.5mm
 test point SMD pad
+0
+1
+1
+gg_lcd
+TestPoint_THTPad_D2.5mm_Drill1.2mm
+THT pad as test Point, diameter 2.5mm, hole diameter 1.2mm 
+test point THT pad
+0
+1
+1
+gg_lcd
+TestPoint_THTPad_D2.5mm_Drill1.2mm_OneSided
+THT pad as test Point, diameter 2.5mm, hole diameter 1.2mm 
+test point THT pad
 0
 1
 1

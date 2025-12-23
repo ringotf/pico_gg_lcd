@@ -1,4 +1,4 @@
-(footprint "Flex Connector 0.5mm 01x16Pin"
+(footprint "Flex Connector 0.5mm 01x10Pin"
 	(version 20241229)
 	(generator "pcbnew")
 	(generator_version "9.0")
@@ -15,7 +15,7 @@
 			)
 		)
 	)
-	(property "Value" "Flex Connector 0.5mm 01x16Pin"
+	(property "Value" "Flex Connector 0.5mm 01x10Pin"
 		(at 1.82 -8.6 0)
 		(unlocked yes)
 		(layer "F.Fab")
@@ -54,8 +54,8 @@
 	)
 	(attr smd)
 	(fp_rect
-		(start -4.25 0.1)
-		(end 4.25 -5.9)
+		(start -2.75 0.1)
+		(end 2.75 -5.9)
 		(stroke
 			(width 0.15)
 			(type default)
@@ -65,8 +65,8 @@
 		(uuid "715bda1a-f830-46be-ac1d-feac035d0ed1")
 	)
 	(fp_line
-		(start -4.25 -5.9)
-		(end -4.25 -0.2)
+		(start -2.75 -5.9)
+		(end -2.75 -0.2)
 		(stroke
 			(width 0.05)
 			(type default)
@@ -75,8 +75,8 @@
 		(uuid "1ddc3376-4b69-43fc-929b-79349c421275")
 	)
 	(fp_line
-		(start -3.95 0.1)
-		(end 3.95 0.1)
+		(start -2.45 0.1)
+		(end 2.45 0.1)
 		(stroke
 			(width 0.05)
 			(type default)
@@ -85,8 +85,8 @@
 		(uuid "c7726bc2-7df9-48e2-8260-2e76ed56ee01")
 	)
 	(fp_line
-		(start 4.25 -0.2)
-		(end 4.25 -5.9)
+		(start 2.75 -0.2)
+		(end 2.75 -5.9)
 		(stroke
 			(width 0.05)
 			(type default)
@@ -95,9 +95,9 @@
 		(uuid "eebfd5ff-27a6-4641-9a41-4ec789ecd83e")
 	)
 	(fp_arc
-		(start -3.95 0.1)
-		(mid -4.162132 0.012132)
-		(end -4.25 -0.2)
+		(start -2.45 0.1)
+		(mid -2.662132 0.012132)
+		(end -2.75 -0.2)
 		(stroke
 			(width 0.05)
 			(type default)
@@ -106,9 +106,9 @@
 		(uuid "3700d26c-0280-4dae-889a-cc95085935ec")
 	)
 	(fp_arc
-		(start 4.25 -0.2)
-		(mid 4.162132 0.012132)
-		(end 3.95 0.1)
+		(start 2.75 -0.2)
+		(mid 2.662132 0.012132)
+		(end 2.45 0.1)
 		(stroke
 			(width 0.05)
 			(type default)
@@ -117,8 +117,8 @@
 		(uuid "f5a4b217-1911-4234-97e8-fa24b20f1b57")
 	)
 	(fp_rect
-		(start -4.25 -5.9)
-		(end 4.25 0.1)
+		(start -2.75 -5.9)
+		(end 2.75 0.1)
 		(stroke
 			(width 0.15)
 			(type default)
@@ -144,7 +144,7 @@
 		(layer "Cmts.User")
 		(uuid "0ca7b338-b6cd-4eca-b907-421e415b4480")
 		(pts
-			(xy -4.25 0.1) (xy -4.25 -5.9)
+			(xy -2.75 0.1) (xy -2.75 -5.9)
 		)
 		(height -1.05)
 		(orientation 1)
@@ -166,7 +166,7 @@
 			(keep_text_aligned yes)
 		)
 		(gr_text "6mm"
-			(at -6.56 -2.91 90)
+			(at -5.06 -2.909995 90)
 			(layer "Cmts.User")
 			(uuid "0ca7b338-b6cd-4eca-b907-421e415b4480")
 			(effects
@@ -182,7 +182,7 @@
 		(layer "Cmts.User")
 		(uuid "5d5b4447-0803-470e-82f1-c5ba345e0cc5")
 		(pts
-			(xy -4.25 0) (xy 4.25 0.1)
+			(xy -2.75 0.1) (xy 2.75 0.1)
 		)
 		(height 1.49)
 		(orientation 0)
@@ -203,8 +203,8 @@
 			(extension_offset 0.5)
 			(keep_text_aligned yes)
 		)
-		(gr_text "8.5mm"
-			(at -0.03 2.62 0)
+		(gr_text "5.5mm"
+			(at -0.01943 2.72 0)
 			(layer "Cmts.User")
 			(uuid "5d5b4447-0803-470e-82f1-c5ba345e0cc5")
 			(effects
@@ -216,100 +216,64 @@
 		)
 	)
 	(pad "1" connect rect
-		(at -3.75 -2.1 90)
-		(size 4 0.35)
-		(layers "F.Cu" "F.Mask")
-		(uuid "4a78dca8-195f-453a-8553-cc00514d2a19")
-	)
-	(pad "2" connect rect
-		(at -3.25 -2.1 90)
-		(size 4 0.35)
-		(layers "F.Cu" "F.Mask")
-		(uuid "0055ef18-6ae4-4866-b31c-55b3f88addc6")
-	)
-	(pad "3" connect rect
-		(at -2.75 -2.1 90)
-		(size 4 0.35)
-		(layers "F.Cu" "F.Mask")
-		(uuid "9fb4fae9-a19b-4920-af6f-f4eeb947557a")
-	)
-	(pad "4" connect rect
 		(at -2.25 -2.1 90)
 		(size 4 0.35)
 		(layers "F.Cu" "F.Mask")
 		(uuid "4f2a5645-f97a-4dd0-aa9a-7c5532bdc5ac")
 	)
-	(pad "5" connect rect
+	(pad "2" connect rect
 		(at -1.75 -2.1 90)
 		(size 4 0.35)
 		(layers "F.Cu" "F.Mask")
 		(uuid "05c332de-1f5a-4f4f-9271-1191f3c25b13")
 	)
-	(pad "6" connect rect
+	(pad "3" connect rect
 		(at -1.25 -2.1 90)
 		(size 4 0.35)
 		(layers "F.Cu" "F.Mask")
 		(uuid "bf13279b-9dd8-416b-b010-db602e60b9b3")
 	)
-	(pad "7" connect rect
+	(pad "4" connect rect
 		(at -0.75 -2.1 90)
 		(size 4 0.35)
 		(layers "F.Cu" "F.Mask")
 		(uuid "674ad7ba-47b9-4b41-9871-dee6b58bcf34")
 	)
-	(pad "8" connect rect
+	(pad "5" connect rect
 		(at -0.25 -2.1 90)
 		(size 4 0.35)
 		(layers "F.Cu" "F.Mask")
 		(uuid "6dda5dc6-4a77-4895-8a25-0330a06c96c1")
 	)
-	(pad "9" connect rect
+	(pad "6" connect rect
 		(at 0.25 -2.1 90)
 		(size 4 0.35)
 		(layers "F.Cu" "F.Mask")
 		(uuid "609d76b7-f4cc-44ab-8f30-d41163ba5e20")
 	)
-	(pad "10" connect rect
+	(pad "7" connect rect
 		(at 0.75 -2.1 90)
 		(size 4 0.35)
 		(layers "F.Cu" "F.Mask")
 		(uuid "93e87f1a-154c-405b-a985-b1eb4626f80e")
 	)
-	(pad "11" connect rect
+	(pad "8" connect rect
 		(at 1.25 -2.1 90)
 		(size 4 0.35)
 		(layers "F.Cu" "F.Mask")
 		(uuid "6c175268-7601-463a-98b4-60738ec69fc8")
 	)
-	(pad "12" connect rect
+	(pad "9" connect rect
 		(at 1.75 -2.1 90)
 		(size 4 0.35)
 		(layers "F.Cu" "F.Mask")
 		(uuid "89964a80-ac3b-432e-a725-1908d843d1cc")
 	)
-	(pad "13" connect rect
+	(pad "10" connect rect
 		(at 2.25 -2.1 90)
 		(size 4 0.35)
 		(layers "F.Cu" "F.Mask")
 		(uuid "4e53e45e-8a84-48cd-bb00-1c35d73f3311")
-	)
-	(pad "14" connect rect
-		(at 2.75 -2.1 90)
-		(size 4 0.35)
-		(layers "F.Cu" "F.Mask")
-		(uuid "64c2bb41-bffc-41ba-b024-802957c374c9")
-	)
-	(pad "15" connect rect
-		(at 3.25 -2.1 90)
-		(size 4 0.35)
-		(layers "F.Cu" "F.Mask" "F.Paste")
-		(uuid "170672f3-3f33-4cff-892c-1dcc6482a162")
-	)
-	(pad "16" connect rect
-		(at 3.75 -2.1 90)
-		(size 4 0.35)
-		(layers "F.Cu" "F.Mask")
-		(uuid "e39f091f-67a2-43fa-85c6-4c587c06d1bb")
 	)
 	(embedded_fonts no)
 )

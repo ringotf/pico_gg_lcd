@@ -60,7 +60,7 @@
 			(width 0.15)
 			(type default)
 		)
-		(fill no)
+		(fill yes)
 		(layer "B.SilkS")
 		(uuid "715bda1a-f830-46be-ac1d-feac035d0ed1")
 	)
@@ -120,7 +120,7 @@
 		(start -2.25 0.1)
 		(end 2.25 -5.9)
 		(stroke
-			(width 0.1)
+			(width 0.15)
 			(type default)
 		)
 		(fill yes)

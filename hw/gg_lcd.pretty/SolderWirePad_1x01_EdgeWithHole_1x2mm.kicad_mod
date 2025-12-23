@@ -91,10 +91,9 @@
 	(pad "1" thru_hole roundrect
 		(at 0 0)
 		(size 1 2)
-		(drill oval 0.5 1.4)
-		(layers "*.Cu" "F.Mask")
-		(remove_unused_layers yes)
-		(keep_end_layers yes)
+		(drill oval 0.7 1.4)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
 		(roundrect_rratio 0.15)
 		(teardrops
 			(best_length_ratio 0.5)
@@ -108,6 +107,23 @@
 			(prefer_zone_connections yes)
 		)
 		(uuid "4ace0782-7fe4-48f5-9465-76c9ef5624d4")
+		(padstack
+			(mode front_inner_back)
+			(layer "Inner"
+				(shape roundrect)
+				(size 1 2)
+				(roundrect_rratio 0.15)
+				(thermal_bridge_angle 45)
+				(zone_connect -1)
+			)
+			(layer "B.Cu"
+				(shape roundrect)
+				(size 1 2)
+				(roundrect_rratio 0.15)
+				(thermal_bridge_angle 45)
+				(zone_connect -1)
+			)
+		)
 	)
 	(embedded_fonts no)
 )

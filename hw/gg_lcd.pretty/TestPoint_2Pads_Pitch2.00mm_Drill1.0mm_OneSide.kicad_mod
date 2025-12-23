@@ -54,47 +54,27 @@
 		)
 	)
 	(attr exclude_from_pos_files exclude_from_bom)
-	(fp_line
-		(start -0.2 -1.09)
-		(end 2.19 -1.09)
-		(stroke
-			(width 0.15)
-			(type solid)
-		)
-		(layer "F.SilkS")
-		(uuid "f8e18097-6a4a-4075-bc66-adc925a3392c")
-	)
-	(fp_line
-		(start 2.189 1.11)
-		(end -0.199 1.11)
-		(stroke
-			(width 0.15)
-			(type solid)
-		)
-		(layer "F.SilkS")
-		(uuid "1940f0a9-60b2-4f9c-b019-5b9a62da3fd5")
-	)
-	(fp_arc
-		(start -0.199 1.10999)
-		(mid -1.310045 0.0105)
-		(end -0.2 -1.09)
+	(fp_circle
+		(center 0 0)
+		(end 0.98 0)
 		(stroke
 			(width 0.15)
 			(type default)
 		)
+		(fill no)
 		(layer "F.SilkS")
-		(uuid "677bb7a2-a212-484b-883f-7c48e75ccaf7")
+		(uuid "e2619bb5-4b3b-48e0-8322-f8f747bce426")
 	)
-	(fp_arc
-		(start 2.19 -1.09)
-		(mid 3.300045 0.0105)
-		(end 2.189 1.10999)
+	(fp_circle
+		(center 2 0)
+		(end 2.98 0)
 		(stroke
 			(width 0.15)
 			(type default)
 		)
+		(fill no)
 		(layer "F.SilkS")
-		(uuid "1ccf69c0-cbb7-4f79-8ab7-835a4eca7d8b")
+		(uuid "81d778b5-5b5d-428d-9a0e-212c9f7e400e")
 	)
 	(fp_line
 		(start -1.51 -0.5)
