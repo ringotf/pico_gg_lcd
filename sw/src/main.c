@@ -40,21 +40,21 @@
 //#define gg_BTN2_pin 23 //12 		//not used?
 //#define gg_START_pin 22 	//not used?
 
-#define gg_SMS_pin 10
+//#define gg_SMS_pin 10
 
 #define gg_D1_pin 11 //18
 #define gg_D2_pin 12 //19
 #define gg_D3_pin 13 //20
 #define gg_D4_pin 14 //21
 
-#define gg_dw_pin 16 //22
-#define gg_cl2_pin 15 // 23
+#define gg_dw_pin 15 //22
+#define gg_cl2_pin 16 // 23
 #define gg_clk_pin 17 //24
 
 //need to move hdmi pins to free up adc... or use separate adc module
 #define gg_audio_l_pin 26
-#define gg_audio_r_pin 28
-#define gg_audio_pwr_pin 27
+#define gg_audio_r_pin 27
+//#define gg_audio_pwr_pin 27 //3v for voltage divider for 1.65v bias in prototype
 
 //#define pixels_in_scanline 256 //280 //300
 //#define scanlines_in_active_area  192 //160 //144 //192
@@ -67,13 +67,13 @@
 
 #define FRAME_SIZE_MIN (pixels_in_scanline * scanlines_in_active_area_min * 2)
 
-#define lcd_rst 2 //17 //6
+#define lcd_rst 7 //17 //6
 
-#define lcd_spi_latch 3 
-#define lcd_spi_clk 4 
-#define lcd_spi_mosi_1 5 
-#define lcd_spi_mosi_2 6
-#define lcd_spi_mosi_3 7 
+#define lcd_spi_latch 2
+#define lcd_spi_clk 3
+#define lcd_spi_mosi_1 4
+#define lcd_spi_mosi_2 5
+#define lcd_spi_mosi_3 6 
 
 #define in_sr_spi spi1
 #define in_sr_miso 8
@@ -85,7 +85,8 @@
 #define lcd_clk 1 //15
 #define lcd_den 0 //16
 
-#define lcd_backlight 17
+//#define lcd_backlight 28
+
 
 #define lcd_send_pio pio0 //pio1
 #define lcd_send_sm 2
@@ -93,7 +94,7 @@
 #define lcd_send_clk_pio pio0 //pio1
 #define lcd_send_clk_sm 3 //1
 
-#define backlight_fdbck 28 //- swapped with lcd_den
+//#define backlight_fdbck 28 //- swapped with lcd_den
 
 #define gg_capture_pio pio0
 //#define gg_capture_vblank_sm 0
@@ -101,7 +102,8 @@
 #define gg_capture_getdata_sm 1 //2
 //#define gg_capture_front_h_porch_sm 3
 
-#define brightness_pot 27 //29 - moved down 2 pins
+#define brightness_pot 28 //29 - moved down 2 pins
+#define lcd_dim 29
 
 
 #define lcd_pio_hscale 4
@@ -147,8 +149,8 @@ static struct dvi_serialiser_cfg pico_gg_lcd_conf = {
 	.pio = dvi_pio,
 	.sm_tmds = {dvi_tmds_sm_0, dvi_tmds_sm_1, dvi_tmds_sm_2},
 	//.pins_tmds = {28, 2, 0},
-	.pins_tmds = {20, 22, 24},
-	.pins_clk = 18,
+	.pins_tmds = {24, 18, 20},
+	.pins_clk = 22,
 	.invert_diffpairs = true
 };
 
@@ -1249,12 +1251,12 @@ void config_audio()
 //	adc_gpio_init(gg_audio_l_pin);
 	
 
-	gpio_init(gg_audio_pwr_pin);
+	/*gpio_init(gg_audio_pwr_pin);
 	gpio_set_dir(gg_audio_pwr_pin, GPIO_OUT);
-	gpio_put(gg_audio_pwr_pin, 1);
+	gpio_put(gg_audio_pwr_pin, 1);*/
 
 	adc_init();
-	adc_gpio_init(gg_audio_l_pin);
+	adc_gpio_init(gg_audio_l_pin); //enable adc and disabled gpio on these pins
 	adc_gpio_init(gg_audio_r_pin);
 
 	
@@ -1276,69 +1278,70 @@ void config_audio()
 
 
 
-void config_backlight_supply(uint8_t pwm_backlight_slice) {
-	//adc_init();
-	adc_gpio_init(backlight_fdbck);
-	adc_select_input(backlight_fdbck - ADC_BASE_PIN);
-	//adc_run(true);
-	//adc_fifo_setup(true, false, 0, 0, 0);
+// void config_backlight_supply(uint8_t pwm_backlight_slice) {
+// 	//adc_init();
+// 	adc_gpio_init(backlight_fdbck);
+// 	adc_select_input(backlight_fdbck - ADC_BASE_PIN);
+// 	//adc_run(true);
+// 	//adc_fifo_setup(true, false, 0, 0, 0);
 
-	pwm_hw->slice[pwm_backlight_slice].cc = 250;
-	sleep_ms(50);
+// 	pwm_hw->slice[pwm_backlight_slice].cc = 250;
+// 	sleep_ms(50);
 
-	float tensao_media = 0;
+// 	float tensao_media = 0;
 
-	/*while(tensao_media < 19 || tensao_media > 20) {
-		for(uint32_t m = 0; m < 5; m++) {
-			sleep_ms(2);
-			tensao_media += adc_fifo_get();
-		}
+// 	/*while(tensao_media < 19 || tensao_media > 20) {
+// 		for(uint32_t m = 0; m < 5; m++) {
+// 			sleep_ms(2);
+// 			tensao_media += adc_fifo_get();
+// 		}
 
-		tensao_media *= 3.3;
-		tensao_media *= 11;
-		tensao_media /= 5;
-		tensao_media /= 4095;
+// 		tensao_media *= 3.3;
+// 		tensao_media *= 11;
+// 		tensao_media /= 5;
+// 		tensao_media /= 4095;
 
-		if(tensao_media < 10) {
-			pwm_hw->slice[pwm_backlight_slice].cc += 50;
-		}
-		else if(tensao_media < 15) {
-			pwm_hw->slice[pwm_backlight_slice].cc += 20;
-		}
-		else if(tensao_media < 19) {
-			pwm_hw->slice[pwm_backlight_slice].cc += 10;
-		}
-		else if(tensao_media > 21) {
-			pwm_hw->slice[pwm_backlight_slice].cc -= 20;
-		}
-		else if(tensao_media > 19) {
-			pwm_hw->slice[pwm_backlight_slice].cc -= 10;
-		}
+// 		if(tensao_media < 10) {
+// 			pwm_hw->slice[pwm_backlight_slice].cc += 50;
+// 		}
+// 		else if(tensao_media < 15) {
+// 			pwm_hw->slice[pwm_backlight_slice].cc += 20;
+// 		}
+// 		else if(tensao_media < 19) {
+// 			pwm_hw->slice[pwm_backlight_slice].cc += 10;
+// 		}
+// 		else if(tensao_media > 21) {
+// 			pwm_hw->slice[pwm_backlight_slice].cc -= 20;
+// 		}
+// 		else if(tensao_media > 19) {
+// 			pwm_hw->slice[pwm_backlight_slice].cc -= 10;
+// 		}
 
-		gpio_put(led_pin, !gpio_get(led_pin));
-	}*/
-	pwm_hw->slice[pwm_backlight_slice].cc = 500;
-	//pwm_hw->slice[pwm_backlight_slice].cc = 20;
-}
+// 		gpio_put(led_pin, !gpio_get(led_pin));
+// 	}*/
+// 	pwm_hw->slice[pwm_backlight_slice].cc = 500;
+// 	//pwm_hw->slice[pwm_backlight_slice].cc = 20;
+// }
 
 
-uint8_t config_backlight_pwm() {
-	gpio_set_function(lcd_backlight, GPIO_FUNC_PWM);
-	pwm_backlight_slice = pwm_gpio_to_slice_num(lcd_backlight);
+// uint8_t config_backlight_pwm() {
+// 	gpio_set_function(lcd_backlight, GPIO_FUNC_PWM);
+// 	pwm_backlight_slice = pwm_gpio_to_slice_num(lcd_backlight);
 
-	pwm_config config = pwm_get_default_config();
-	pwm_config_set_phase_correct(&config, false);	//default is false anyway
-	pwm_config_set_clkdiv_int(&config, 1);
-	pwm_config_set_clkdiv_mode(&config, PWM_DIV_FREE_RUNNING);
+// 	pwm_config config = pwm_get_default_config();
+// 	pwm_config_set_phase_correct(&config, false);	//default is false anyway
+// 	pwm_config_set_clkdiv_int(&config, 1);
+// 	pwm_config_set_clkdiv_mode(&config, PWM_DIV_FREE_RUNNING);
 	
-	//uint16_t pwm_wrap_target = ((DVI_TIMING.bit_clk_khz * 1000) / 30000);
-	pwm_config_set_wrap(&config, pwm_wrap_target);
-	//pwm_config_set_wrap(&config, (DVI_TIMING.bit_clk_khz * 1000) / 30000);
+// 	//uint16_t pwm_wrap_target = ((DVI_TIMING.bit_clk_khz * 1000) / 30000);
+// 	pwm_config_set_wrap(&config, pwm_wrap_target);
+// 	//pwm_config_set_wrap(&config, (DVI_TIMING.bit_clk_khz * 1000) / 30000);
 
-	pwm_init(pwm_backlight_slice, &config, true);
+// 	pwm_init(pwm_backlight_slice, &config, true);
 
-	return pwm_backlight_slice;
-}
+// 	return pwm_backlight_slice;
+// }
+	
 
 void config_interp() {
 	//Claim both lanes
@@ -1748,6 +1751,12 @@ void core0_main()
 	
 	gpio_put(lcd_clk, 0);
 	//gpio_put(lcd_backlight, 0);
+	
+	//enable the backlight supply from the booster
+	gpio_init(lcd_dim);
+	gpio_set_dir(lcd_dim, GPIO_OUT);
+	gpio_put(lcd_dim, 1);
+
 
 	/*adc_init();
 	adc_gpio_init(brightness_pot);
@@ -1921,7 +1930,7 @@ int __not_in_flash_func(main)()
 	
 	//config_audio();
 
-	for(uint32_t i = 0; i < DVI_AUDIO_BUFFER_SIZE; i++)
+ 	for(uint32_t i = 0; i < DVI_AUDIO_BUFFER_SIZE; i++)
 	{
 		dvi_audio_buffer[i].channels[0] = 0;
 		dvi_audio_buffer[i].channels[1] = 0;
@@ -1934,7 +1943,7 @@ int __not_in_flash_func(main)()
 
 	multicore_reset_core1();
 
-	multicore_launch_core1(core1_main);
+	multicore_launch_core1(core1_main); 
 	
 
 	core0_main();
