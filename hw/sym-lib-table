@@ -1,5 +1,4 @@
 (sym_lib_table
   (version 7)
-  (lib (name "SMS-Flash-Cart-v4-rescue")(type "Legacy")(uri "${KIPRJMOD}/SMS Flash Cart v4-rescue.lib")(options "")(descr ""))
   (lib (name "gg_lcd")(type "KiCad")(uri "${KIPRJMOD}/gg_lcd.kicad_sym")(options "")(descr ""))
 )

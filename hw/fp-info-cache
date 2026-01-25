@@ -1,4 +1,4 @@
-26864219964970529
+26866022830455057
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -69131,41 +69131,6 @@ THT
 0
 4
 2
-InstallationBoard
-SolderWirePad_1x01_Edge_1x2mm
-Wire Pad, Square, SMD Pad,  1mm x 2mm
-MeasurementPoint Square SMDPad 1mmx2mm 
-0
-1
-1
-InstallationBoard
-SolderWirePad_1x01_SMD_1x2mm
-Wire Pad, Square, SMD Pad,  1mm x 2mm
-MeasurementPoint Square SMDPad 1mmx2mm 
-0
-1
-1
-InstallationBoard
-TestPoint_Pad_2.0x2.0mm
-SMD rectangular pad as test Point, square 2.0mm side length
-test point SMD pad rectangle square
-0
-1
-1
-InstallationBoard
-TestPoint_THTPad_D2.5mm_Drill1.2mm
-THT pad as test Point, diameter 2.5mm, hole diameter 1.2mm 
-test point THT pad
-0
-1
-1
-InstallationBoard
-TestPoint_THTPad_D2.5mm_Drill1.2mm_Front
-THT pad as test Point, diameter 2.5mm, hole diameter 1.2mm 
-test point THT pad
-0
-1
-1
 Jumper
 Jumper_Harwin_S1621_P10.9mm
 Harwin SMD jumper link, 12.3x2.3mm, 1.8mm height, 10.9mm pad pitch, https://cdn.harwin.com/pdfs/S1621R.pdf
@@ -106624,6 +106589,34 @@ Flex Connector 0.5mm 01x20Pin
 20
 20
 gg_lcd
+Flex Connector 0.5mm 01x24Pin
+
+
+0
+24
+24
+gg_lcd
+HDMI_A_Molex_208658-1001_Horizontal
+HDMI Molex Type A https://www.molex.com/pdm_docs/sd/2086581001_sd.pdf
+HDMI Molex Type A
+0
+23
+20
+gg_lcd
+Hybrid FPC Video Out 01x20-1SH_P0.5mm_Horizontal
+
+te fpc 1734839
+0
+45
+21
+gg_lcd
+Jushuo_AFC07-S24FCA-00_1x24-1MP_P0.50_Horizontal
+Jushuo AFC07, FFC/FPC connector, AFC07-S24FCA-00, 24 Pins per row (https://datasheet.lcsc.com/lcsc/1811040204_JUSHUO-AFC07-S32FCC-00_C11061.pdf)
+connector jushuo horizontal
+0
+26
+25
+gg_lcd
 PinHeader_2x27_P2.54mm_Vertical
 Through hole straight pin header, 2x27, 2.54mm pitch, double rows
 Through hole pin header THT 2x27 2.54mm double row
@@ -106743,6 +106736,13 @@ test point SMD pad rectangle square
 1
 1
 gg_lcd
+TestPoint_Pad_D1.0mm
+SMD pad as test Point, diameter 1.0mm
+test point SMD pad
+0
+1
+1
+gg_lcd
 TestPoint_Pad_D1.5mm
 SMD pad as test Point, diameter 1.5mm
 test point SMD pad
@@ -106758,6 +106758,13 @@ test point THT pad
 1
 gg_lcd
 TestPoint_THTPad_D2.5mm_Drill1.2mm_OneSided
+THT pad as test Point, diameter 2.5mm, hole diameter 1.2mm 
+test point THT pad
+0
+1
+1
+gg_lcd
+TestPoint_THTPad_D2.5x2.5mm_Drill1.2mm
 THT pad as test Point, diameter 2.5mm, hole diameter 1.2mm 
 test point THT pad
 0

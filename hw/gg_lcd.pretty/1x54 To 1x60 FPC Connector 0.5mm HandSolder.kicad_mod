@@ -223,7 +223,7 @@
 		(uuid "be442eb1-6694-431e-923c-bae7746c9136")
 	)
 	(fp_rect
-		(start -18.35 -3.95)
+		(start -19.55 -3.95)
 		(end 18.19 5.99)
 		(stroke
 			(width 0.05)
@@ -1328,7 +1328,7 @@
 		(primitives
 			(gr_poly
 				(pts
-					(xy 1.1 -1.6) (xy 1.1 2.19) (xy -1.55 2.19) (xy -1.55 -1.6)
+					(xy 1.1 -1.6) (xy 1.1 2.19) (xy -2.55 2.19) (xy -2.55 -1.6)
 				)
 				(width 0)
 				(fill yes)
