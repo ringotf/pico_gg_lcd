@@ -1,0 +1,102 @@
+(footprint "TestPoint_THTPad_D2.5x2.5mm_Drill1.2mm"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "THT pad as test Point, diameter 2.5mm, hole diameter 1.2mm ")
+	(tags "test point THT pad")
+	(property "Reference" "J20"
+		(at 0 -2.148 0)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "02ddede4-7097-4be0-a2ad-45b0ee4b3ae5")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "+5V"
+		(at 0 2.25 0)
+		(layer "F.SilkS")
+		(uuid "2b4066bd-2a09-4a7a-8f7f-77d99da63d81")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" "~"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "01e39bce-6969-49f8-9618-b3c68d9afee6")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" "Generic connector, single row, 01x01, script generated"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8f0924fd-ad7f-49f1-8cd2-2f3770896272")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr exclude_from_pos_files)
+	(fp_rect
+		(start -1.5 -1.5)
+		(end 1.5 1.5)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "f3248a1e-02e5-4c5e-a9ca-7f9d897171d1")
+	)
+	(fp_rect
+		(start -1.7 -1.7)
+		(end 1.7 1.7)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "e3633d3a-5e49-4a46-ab57-ae78dd214943")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 -2.15 0)
+		(layer "F.Fab")
+		(uuid "74413e2c-a5a6-4dbb-8de0-5b36ae55c54a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" thru_hole roundrect
+		(at 0 0)
+		(size 2.5 2.5)
+		(drill 1.2)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(roundrect_rratio 0.125)
+		(solder_mask_margin -0.15)
+		(uuid "07ac2091-d889-48e1-8633-e961ab2e21ef")
+	)
+	(embedded_fonts no)
+)

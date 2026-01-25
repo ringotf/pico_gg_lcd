@@ -1,27 +1,7 @@
 {
   "fpcStiffeners": [
     {
-      "id": "e531",
-      "gerber": "Gerber_BottomStiffenerLayer_pib_0.2.GBSL",
-      "layer": "bottom",
-      "material": "pi",
-      "thickness": "0.2",
-      "path": [
-        [
-          [
-            "R",
-            4783.4866,
-            -3238.189,
-            236.1984,
-            177.1654,
-            0,
-            0
-          ]
-        ]
-      ]
-    },
-    {
-      "id": "e533",
+      "id": "e99",
       "gerber": "Gerber_TopStiffenerLayer_pit_0.2.GTSL",
       "layer": "top",
       "material": "pi",
@@ -30,10 +10,10 @@
         [
           [
             "R",
-            6614.5669,
-            -3224.8032,
+            6496.4567,
+            -3185.4331,
             236.2205,
-            413.3858,
+            492.126,
             0,
             0
           ]
