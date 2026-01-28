@@ -8847,244 +8847,6 @@
 			)
 		)
 	)
-	(footprint "gg_lcd:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
-		(layer "B.Cu")
-		(uuid "09fc350d-b852-4ca5-8b5f-66ce03be68b1")
-		(at 116 98.85)
-		(descr "Capacitor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
-		(tags "capacitor handsolder")
-		(property "Reference" "C15"
-			(at 2.62 -0.01 0)
-			(layer "B.SilkS")
-			(uuid "2092dda7-d757-47b7-bba1-9b838929dd87")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Value" "0.1uf"
-			(at 0 -1.16 0)
-			(layer "B.Fab")
-			(uuid "5d1d382b-a1ab-4827-a774-86ee41ee9adc")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Datasheet" ""
-			(at 0 0 0)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "a62a2a3d-895b-4c24-86d1-8d64a89c285c")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Description" ""
-			(at 0 0 0)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "4c96fe55-ed8f-4150-a1a8-ed08534c8047")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "LCSC" ""
-			(at 0 0 0)
-			(layer "B.SilkS")
-			(hide yes)
-			(uuid "ec5e682d-b780-4f2a-bb35-b5bfa93b2109")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property ki_fp_filters "C_*")
-		(path "/26bfbe40-058e-49d3-a35e-42a42ce39a18")
-		(sheetname "/")
-		(sheetfile "GG_LCD_DIY.kicad_sch")
-		(attr smd)
-		(fp_line
-			(start -0.04 -0.36)
-			(end 0.04 -0.36)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "B.SilkS")
-			(uuid "ff3e792f-9c5e-468e-850a-00aef9f6759f")
-		)
-		(fp_line
-			(start -0.04 0.36)
-			(end 0.05 0.36)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "B.SilkS")
-			(uuid "4c5aae2c-946c-4b7b-92bd-41242bb0a6a8")
-		)
-		(fp_line
-			(start -1.09 -0.46)
-			(end -1.09 0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "422be4f3-69ad-452d-9aa2-0a21a0da491f")
-		)
-		(fp_line
-			(start -1.09 0.46)
-			(end 1.09 0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "494216c5-9d85-40bc-9454-676a86686a45")
-		)
-		(fp_line
-			(start 1.09 -0.46)
-			(end -1.09 -0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "c4d70d67-ad5c-45da-8d93-512d948bf28a")
-		)
-		(fp_line
-			(start 1.09 0.46)
-			(end 1.09 -0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "81b98cb0-4b0c-4cad-9896-ede9e43dbe00")
-		)
-		(fp_line
-			(start -0.5 -0.25)
-			(end -0.5 0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "d1d48b60-c014-4c37-8aa8-5e1cc7076a8e")
-		)
-		(fp_line
-			(start -0.5 0.25)
-			(end 0.5 0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "6273ee88-a069-46f6-9f32-4df7f615ee2e")
-		)
-		(fp_line
-			(start 0.5 -0.25)
-			(end -0.5 -0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "f94ce4d0-9dae-4ed0-9617-fb58f5c8e8d2")
-		)
-		(fp_line
-			(start 0.5 0.25)
-			(end 0.5 -0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "962255f0-5134-4608-a830-742a310ad41f")
-		)
-		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
-			(layer "B.Fab")
-			(uuid "a8dc27d6-7410-4907-80f8-cdde75286112")
-			(effects
-				(font
-					(size 0.25 0.25)
-					(thickness 0.04)
-				)
-				(justify mirror)
-			)
-		)
-		(pad "1" smd roundrect
-			(at -0.5675 0)
-			(size 0.735 0.62)
-			(layers "B.Cu" "B.Mask" "B.Paste")
-			(roundrect_rratio 0.25)
-			(net 69 "/HDMI_D1+")
-			(pintype "passive")
-			(teardrops
-				(best_length_ratio 0.5)
-				(max_length 1)
-				(best_width_ratio 1)
-				(max_width 2)
-				(curved_edges yes)
-				(filter_ratio 0.9)
-				(enabled yes)
-				(allow_two_segments yes)
-				(prefer_zone_connections yes)
-			)
-			(uuid "1e50c408-2660-47a3-a62d-7400d8de292e")
-		)
-		(pad "2" smd roundrect
-			(at 0.5675 0)
-			(size 0.735 0.62)
-			(layers "B.Cu" "B.Mask" "B.Paste")
-			(roundrect_rratio 0.25)
-			(net 77 "PICO_HDMI_D1+")
-			(pintype "passive")
-			(teardrops
-				(best_length_ratio 0.5)
-				(max_length 1)
-				(best_width_ratio 1)
-				(max_width 2)
-				(curved_edges yes)
-				(filter_ratio 0.9)
-				(enabled yes)
-				(allow_two_segments yes)
-				(prefer_zone_connections yes)
-			)
-			(uuid "aa7c336e-d685-4856-89ee-6ae924950aac")
-		)
-		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
-	)
 	(footprint "gg_lcd:R_0402_1005Metric_Pad0.72x0.64mm_HandSolder"
 		(layer "B.Cu")
 		(uuid "0a057c50-fa6d-46ed-bd6c-99f38b3a8619")
@@ -10980,6 +10742,224 @@
 		)
 		(embedded_fonts no)
 		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0805_2012Metric.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+	)
+	(footprint "gg_lcd:R_0402_1005Metric_Pad0.72x0.64mm_HandSolder"
+		(layer "B.Cu")
+		(uuid "176b71a0-31ad-4d7b-874b-afe3f434514e")
+		(at 116 98.85)
+		(descr "Resistor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
+		(tags "resistor handsolder")
+		(property "Reference" "R60"
+			(at 3.07 0.32 0)
+			(layer "B.SilkS")
+			(uuid "27b9571e-fad0-49c1-a3f8-d72d45331f24")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Value" "270R"
+			(at 0 -1.17 0)
+			(layer "B.Fab")
+			(uuid "c8c0c8e8-76dd-4d96-b96f-d2c3303d7d77")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "dd0cff89-18d2-411d-949e-d31bda9fffb1")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "ccbf2a24-4044-4511-ac76-919feb5b43ff")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "LCSC" ""
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "1c8d5e41-252c-48b7-b9dc-dd88542cc695")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property ki_fp_filters "R_*")
+		(path "/43cee64e-2d43-403d-897f-e5ef08a5a130")
+		(sheetname "/")
+		(sheetfile "GG_LCD_DIY.kicad_sch")
+		(attr smd)
+		(fp_line
+			(start -0.09 0.38)
+			(end 0.09 0.38)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "B.SilkS")
+			(uuid "95b7bec8-a84a-43c7-847f-3c6600ad4190")
+		)
+		(fp_line
+			(start -0.08 -0.38)
+			(end 0.1 -0.38)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "B.SilkS")
+			(uuid "5fef09e1-0ce5-4b5e-ae40-e6c0e40e6e02")
+		)
+		(fp_line
+			(start -1.11 -0.47)
+			(end -1.11 0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "cd4cde0b-c86e-4adf-b22c-068c115a7bc1")
+		)
+		(fp_line
+			(start -1.11 0.47)
+			(end 1.11 0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "4861da5e-adda-4421-b0d8-4ec217b78e4d")
+		)
+		(fp_line
+			(start 1.11 -0.47)
+			(end -1.11 -0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "9be774d0-cebc-4f55-8c87-659c63bf02ef")
+		)
+		(fp_line
+			(start 1.11 0.47)
+			(end 1.11 -0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "2578ed38-17ce-45bb-96e4-555ed431a0c0")
+		)
+		(fp_line
+			(start -0.525 -0.27)
+			(end -0.525 0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "d5757969-c721-412c-a17f-80ad1070c23c")
+		)
+		(fp_line
+			(start -0.525 0.27)
+			(end 0.525 0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "5e02318c-6404-42f0-88f5-d5fe869b570b")
+		)
+		(fp_line
+			(start 0.525 -0.27)
+			(end -0.525 -0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "ebd8d479-7267-482e-85e1-40642d4536ae")
+		)
+		(fp_line
+			(start 0.525 0.27)
+			(end 0.525 -0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "58ee6445-30a9-4131-b02c-6edbec805a11")
+		)
+		(fp_text user "${REFERENCE}"
+			(at 0 0 0)
+			(layer "B.Fab")
+			(uuid "0ed3bd62-b3a7-4bbf-9878-2ec59c4eec0d")
+			(effects
+				(font
+					(size 0.26 0.26)
+					(thickness 0.04)
+				)
+				(justify mirror)
+			)
+		)
+		(pad "1" smd roundrect
+			(at -0.5975 0)
+			(size 0.715 0.64)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(net 69 "/HDMI_D1+")
+			(pintype "passive")
+			(uuid "dc63bb25-3163-4ebc-9698-e6e13f3bdca3")
+		)
+		(pad "2" smd roundrect
+			(at 0.5975 0)
+			(size 0.715 0.64)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(net 77 "PICO_HDMI_D1+")
+			(pintype "passive")
+			(uuid "2e6634ff-b042-45b4-893c-945d4d309cfb")
+		)
+		(embedded_fonts no)
+		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -13635,244 +13615,6 @@
 			)
 		)
 	)
-	(footprint "gg_lcd:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
-		(layer "B.Cu")
-		(uuid "3073c9f7-0d07-452c-9e6b-c6cde747a073")
-		(at 116 99.83)
-		(descr "Capacitor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
-		(tags "capacitor handsolder")
-		(property "Reference" "C18"
-			(at -4.03 0.12 0)
-			(layer "B.SilkS")
-			(uuid "516f78dd-664b-457c-9e52-d0008843da8d")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Value" "0.1uf"
-			(at 0 -1.16 0)
-			(layer "B.Fab")
-			(uuid "b00606b0-7c28-4dd3-9b31-c582016326b3")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Datasheet" ""
-			(at 0 0 0)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "31010021-a791-4e3c-8400-bc195ccef22c")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Description" ""
-			(at 0 0 0)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "dd80c411-9b1a-4904-8d77-edd23be2bb51")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "LCSC" ""
-			(at 0 0 0)
-			(layer "B.SilkS")
-			(hide yes)
-			(uuid "c98a0ee6-cc91-4ee8-af36-7e53edad9e3b")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property ki_fp_filters "C_*")
-		(path "/95c68b8f-94eb-4db1-9168-e3bec6f1206e")
-		(sheetname "/")
-		(sheetfile "GG_LCD_DIY.kicad_sch")
-		(attr smd)
-		(fp_line
-			(start -0.04 -0.36)
-			(end 0.04 -0.36)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "B.SilkS")
-			(uuid "8d489504-f01f-4ef0-aa28-bd4a53454c81")
-		)
-		(fp_line
-			(start -0.04 0.36)
-			(end 0.05 0.36)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "B.SilkS")
-			(uuid "d2f91417-bcef-4f97-9bfe-a251fdaca008")
-		)
-		(fp_line
-			(start -1.09 -0.46)
-			(end -1.09 0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "578c9c59-4068-4417-8b80-f0de3b7086de")
-		)
-		(fp_line
-			(start -1.09 0.46)
-			(end 1.09 0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "e395f43b-1ae9-4f18-8f5e-94e30a412d3f")
-		)
-		(fp_line
-			(start 1.09 -0.46)
-			(end -1.09 -0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "c032d91e-295a-463f-918d-267aeeab34d7")
-		)
-		(fp_line
-			(start 1.09 0.46)
-			(end 1.09 -0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "9f48fdb3-ebba-426f-86e5-395e4875a210")
-		)
-		(fp_line
-			(start -0.5 -0.25)
-			(end -0.5 0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "eb5cf373-a611-4b37-8444-0dc2ac84b202")
-		)
-		(fp_line
-			(start -0.5 0.25)
-			(end 0.5 0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "e7d719a1-3720-4b98-a6ba-151026570a75")
-		)
-		(fp_line
-			(start 0.5 -0.25)
-			(end -0.5 -0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "c4c3c89d-8176-4a3c-b7d7-3958c3bd6071")
-		)
-		(fp_line
-			(start 0.5 0.25)
-			(end 0.5 -0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "c0878c77-e7ea-40bf-9217-70f5e0d6b3e9")
-		)
-		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
-			(layer "B.Fab")
-			(uuid "28bfa5d0-9e49-4274-8fbc-31dfa5223c30")
-			(effects
-				(font
-					(size 0.25 0.25)
-					(thickness 0.04)
-				)
-				(justify mirror)
-			)
-		)
-		(pad "1" smd roundrect
-			(at -0.5675 0)
-			(size 0.735 0.62)
-			(layers "B.Cu" "B.Mask" "B.Paste")
-			(roundrect_rratio 0.25)
-			(net 72 "/HDMI_D2-")
-			(pintype "passive")
-			(teardrops
-				(best_length_ratio 0.5)
-				(max_length 1)
-				(best_width_ratio 1)
-				(max_width 2)
-				(curved_edges yes)
-				(filter_ratio 0.9)
-				(enabled yes)
-				(allow_two_segments yes)
-				(prefer_zone_connections yes)
-			)
-			(uuid "25c51e8d-6b06-4c02-95c1-b2647e5882b3")
-		)
-		(pad "2" smd roundrect
-			(at 0.5675 0)
-			(size 0.735 0.62)
-			(layers "B.Cu" "B.Mask" "B.Paste")
-			(roundrect_rratio 0.25)
-			(net 80 "PICO_HDMI_D2-")
-			(pintype "passive")
-			(teardrops
-				(best_length_ratio 0.5)
-				(max_length 1)
-				(best_width_ratio 1)
-				(max_width 2)
-				(curved_edges yes)
-				(filter_ratio 0.9)
-				(enabled yes)
-				(allow_two_segments yes)
-				(prefer_zone_connections yes)
-			)
-			(uuid "f620985b-1c0b-4138-acd4-16c51d3566de")
-		)
-		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
-	)
 	(footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 		(layer "B.Cu")
 		(uuid "36b04f14-d2ce-443a-a590-b76a48052c1c")
@@ -16231,244 +15973,6 @@
 			)
 		)
 	)
-	(footprint "gg_lcd:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
-		(layer "B.Cu")
-		(uuid "47944632-038a-428d-a547-1cf4c0fbf574")
-		(at 116 100.81)
-		(descr "Capacitor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
-		(tags "capacitor handsolder")
-		(property "Reference" "C17"
-			(at 2.7 -0.04 0)
-			(layer "B.SilkS")
-			(uuid "39d24939-4e63-49a5-a008-0d6bb74493cf")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Value" "0.1uf"
-			(at 0 -1.16 0)
-			(layer "B.Fab")
-			(uuid "047b0b30-b39f-407f-825c-2621c7775bf5")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Datasheet" ""
-			(at 0 0 0)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "1c32f55b-3ace-4797-ae1e-7eab25391bd7")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Description" ""
-			(at 0 0 0)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "2b7bbef0-d3d9-4b2c-a30f-24437c75a616")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "LCSC" ""
-			(at 0 0 0)
-			(layer "B.SilkS")
-			(hide yes)
-			(uuid "3b22b2f6-654c-4420-af59-a7bbcb1f58eb")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property ki_fp_filters "C_*")
-		(path "/9643e98e-e1ba-4897-82fe-270069431a32")
-		(sheetname "/")
-		(sheetfile "GG_LCD_DIY.kicad_sch")
-		(attr smd)
-		(fp_line
-			(start -0.04 -0.36)
-			(end 0.04 -0.36)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "B.SilkS")
-			(uuid "2137d5ba-5fe0-4242-8723-0f9294e42356")
-		)
-		(fp_line
-			(start -0.04 0.36)
-			(end 0.05 0.36)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "B.SilkS")
-			(uuid "e10ab85f-b8a4-449e-a8bd-18839f9e3cc6")
-		)
-		(fp_line
-			(start -1.09 -0.46)
-			(end -1.09 0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "041950ba-a63d-45ea-9aae-9cbf8d8a12e2")
-		)
-		(fp_line
-			(start -1.09 0.46)
-			(end 1.09 0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "ee88fbe4-d216-4b62-89b1-a715bd7d3cc3")
-		)
-		(fp_line
-			(start 1.09 -0.46)
-			(end -1.09 -0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "f47cf8fb-92c7-4389-8a74-c64611846252")
-		)
-		(fp_line
-			(start 1.09 0.46)
-			(end 1.09 -0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "7a486329-2c93-4774-af38-cb975991ef96")
-		)
-		(fp_line
-			(start -0.5 -0.25)
-			(end -0.5 0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "be8fbd9f-db8a-44fc-a20c-e0ff5a39a8c2")
-		)
-		(fp_line
-			(start -0.5 0.25)
-			(end 0.5 0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "47d4bf81-238b-4735-aa84-b27f1b537976")
-		)
-		(fp_line
-			(start 0.5 -0.25)
-			(end -0.5 -0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "171fb9d7-e016-4c59-b695-0e97827fe79c")
-		)
-		(fp_line
-			(start 0.5 0.25)
-			(end 0.5 -0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "c09a398c-7199-4c69-b768-bdeed37006e4")
-		)
-		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
-			(layer "B.Fab")
-			(uuid "b783896d-8425-455e-a91a-5235ec26f23e")
-			(effects
-				(font
-					(size 0.25 0.25)
-					(thickness 0.04)
-				)
-				(justify mirror)
-			)
-		)
-		(pad "1" smd roundrect
-			(at -0.5675 0)
-			(size 0.735 0.62)
-			(layers "B.Cu" "B.Mask" "B.Paste")
-			(roundrect_rratio 0.25)
-			(net 71 "/HDMI_D2+")
-			(pintype "passive")
-			(teardrops
-				(best_length_ratio 0.5)
-				(max_length 1)
-				(best_width_ratio 1)
-				(max_width 2)
-				(curved_edges yes)
-				(filter_ratio 0.9)
-				(enabled yes)
-				(allow_two_segments yes)
-				(prefer_zone_connections yes)
-			)
-			(uuid "fc1b6e76-4094-4420-bfef-a0da469d5939")
-		)
-		(pad "2" smd roundrect
-			(at 0.5675 0)
-			(size 0.735 0.62)
-			(layers "B.Cu" "B.Mask" "B.Paste")
-			(roundrect_rratio 0.25)
-			(net 79 "PICO_HDMI_D2+")
-			(pintype "passive")
-			(teardrops
-				(best_length_ratio 0.5)
-				(max_length 1)
-				(best_width_ratio 1)
-				(max_width 2)
-				(curved_edges yes)
-				(filter_ratio 0.9)
-				(enabled yes)
-				(allow_two_segments yes)
-				(prefer_zone_connections yes)
-			)
-			(uuid "d8abfc67-17c1-4f05-b609-276fb4ff4f99")
-		)
-		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
-	)
 	(footprint "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
 		(layer "B.Cu")
 		(uuid "4c870e24-58ad-4ca1-8f0c-37a2fd1d433b")
@@ -17371,6 +16875,224 @@
 				(prefer_zone_connections yes)
 			)
 			(uuid "f0b8fc25-111f-402d-aa0f-7bbdc86c8c29")
+		)
+		(embedded_fonts no)
+		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+	)
+	(footprint "gg_lcd:R_0402_1005Metric_Pad0.72x0.64mm_HandSolder"
+		(layer "B.Cu")
+		(uuid "50ae0f58-dce0-4d7c-9c8d-5ab09b2d632d")
+		(at 116 99.83)
+		(descr "Resistor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
+		(tags "resistor handsolder")
+		(property "Reference" "R59"
+			(at 2.62 0.52 0)
+			(layer "B.SilkS")
+			(uuid "e3515cd1-d2cf-4a93-8470-bbbd25e3b74c")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Value" "270R"
+			(at 0 -1.17 0)
+			(layer "B.Fab")
+			(uuid "e964d3e4-f3d3-45ec-93c0-2315408a8f3e")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "2bd8229f-cbe6-45c7-9cca-5310d1ce7745")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "f010fa3e-3bc3-4f07-88ed-9358b585b4f9")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "LCSC" ""
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "cc861313-29f1-4a44-98de-cc5f51a5529d")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property ki_fp_filters "R_*")
+		(path "/db17ca2e-c03d-481b-bb59-b513a22dad8b")
+		(sheetname "/")
+		(sheetfile "GG_LCD_DIY.kicad_sch")
+		(attr smd)
+		(fp_line
+			(start -0.09 0.38)
+			(end 0.09 0.38)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "B.SilkS")
+			(uuid "e7f68d45-6e16-4e34-8ed2-a1d7d10f125a")
+		)
+		(fp_line
+			(start -0.08 -0.38)
+			(end 0.1 -0.38)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "B.SilkS")
+			(uuid "0c444690-4451-4dec-a155-62c64303a5f9")
+		)
+		(fp_line
+			(start -1.11 -0.47)
+			(end -1.11 0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "0e83eb5b-5ed2-4c00-8846-9028c784ecf6")
+		)
+		(fp_line
+			(start -1.11 0.47)
+			(end 1.11 0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "576a8b6a-a176-495f-9545-07efa0bc6755")
+		)
+		(fp_line
+			(start 1.11 -0.47)
+			(end -1.11 -0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "2a6cb50d-13b7-4612-b9dd-e4f4ceb7a755")
+		)
+		(fp_line
+			(start 1.11 0.47)
+			(end 1.11 -0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "98567628-e617-4f36-96ea-51c72490b51d")
+		)
+		(fp_line
+			(start -0.525 -0.27)
+			(end -0.525 0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "08063f0a-0186-4d67-a067-80739932ceda")
+		)
+		(fp_line
+			(start -0.525 0.27)
+			(end 0.525 0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "a77d31bc-b62f-4a0a-9cdd-30067997dfac")
+		)
+		(fp_line
+			(start 0.525 -0.27)
+			(end -0.525 -0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "aa66c353-b53d-4187-86a8-bbd3b4ec4cab")
+		)
+		(fp_line
+			(start 0.525 0.27)
+			(end 0.525 -0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "ad2dfac7-d3c7-462e-8218-c93fbf44536a")
+		)
+		(fp_text user "${REFERENCE}"
+			(at 0 0 0)
+			(layer "B.Fab")
+			(uuid "a2ca7432-2dc3-4aa5-bf43-18621c748d5f")
+			(effects
+				(font
+					(size 0.26 0.26)
+					(thickness 0.04)
+				)
+				(justify mirror)
+			)
+		)
+		(pad "1" smd roundrect
+			(at -0.5975 0)
+			(size 0.715 0.64)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(net 72 "/HDMI_D2-")
+			(pintype "passive")
+			(uuid "7bbc2a1f-5e7a-45e9-a4b0-47b2f59c6bbb")
+		)
+		(pad "2" smd roundrect
+			(at 0.5975 0)
+			(size 0.715 0.64)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(net 80 "PICO_HDMI_D2-")
+			(pintype "passive")
+			(uuid "8684ae98-5c88-4f7c-a33b-fd3c17029c50")
 		)
 		(embedded_fonts no)
 		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step"
@@ -18996,6 +18718,224 @@
 		)
 		(embedded_fonts no)
 		(model "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+	)
+	(footprint "gg_lcd:R_0402_1005Metric_Pad0.72x0.64mm_HandSolder"
+		(layer "B.Cu")
+		(uuid "65577357-5d9b-47d3-8f4f-03dfe1d8c287")
+		(at 116 96.89)
+		(descr "Resistor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
+		(tags "resistor handsolder")
+		(property "Reference" "R62"
+			(at 3.11 -0.09 0)
+			(layer "B.SilkS")
+			(uuid "9b6045f9-9d11-4993-9d73-bf39180a9462")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Value" "270R"
+			(at 0 -1.17 0)
+			(layer "B.Fab")
+			(uuid "139fc107-7e50-47c2-a31a-2ca5ad493b73")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "d5457c55-4ab0-4233-ba64-3b37850581c9")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "9904b1d2-edf1-42cf-a3c2-6b4d4a47b516")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "LCSC" ""
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "f28171e7-5365-4d60-83a8-e56fdce5477d")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property ki_fp_filters "R_*")
+		(path "/c22f86a7-c5d0-4282-8f21-2e1a54013485")
+		(sheetname "/")
+		(sheetfile "GG_LCD_DIY.kicad_sch")
+		(attr smd)
+		(fp_line
+			(start -0.09 0.38)
+			(end 0.09 0.38)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "B.SilkS")
+			(uuid "c5dfae31-7d3b-4d8d-9e2b-afce96d3fc9a")
+		)
+		(fp_line
+			(start -0.08 -0.38)
+			(end 0.1 -0.38)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "B.SilkS")
+			(uuid "17b404b1-8c7c-4809-ae79-2b2eef9649d7")
+		)
+		(fp_line
+			(start -1.11 -0.47)
+			(end -1.11 0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "cd137e59-650b-4cff-b424-54c950d7a4c6")
+		)
+		(fp_line
+			(start -1.11 0.47)
+			(end 1.11 0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "fe5d5a73-b1a0-4191-a6a6-50b69f5b0002")
+		)
+		(fp_line
+			(start 1.11 -0.47)
+			(end -1.11 -0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "cc2319cc-33b0-4ef6-bd9b-d2dc6a777edc")
+		)
+		(fp_line
+			(start 1.11 0.47)
+			(end 1.11 -0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "19631853-7a99-496c-802d-0c76daddd2a2")
+		)
+		(fp_line
+			(start -0.525 -0.27)
+			(end -0.525 0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "35180551-6c10-42c0-b6b2-2bf9f154102f")
+		)
+		(fp_line
+			(start -0.525 0.27)
+			(end 0.525 0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "5c223aa9-eee6-458b-b41b-c4f1fa638904")
+		)
+		(fp_line
+			(start 0.525 -0.27)
+			(end -0.525 -0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "57f2c360-93ed-481c-be77-1a6aba302af2")
+		)
+		(fp_line
+			(start 0.525 0.27)
+			(end 0.525 -0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "d8d3d648-cd83-428e-810b-17d0f61dadac")
+		)
+		(fp_text user "${REFERENCE}"
+			(at 0 0 0)
+			(layer "B.Fab")
+			(uuid "2684915d-eede-4b37-bd6f-65c5745a856d")
+			(effects
+				(font
+					(size 0.26 0.26)
+					(thickness 0.04)
+				)
+				(justify mirror)
+			)
+		)
+		(pad "1" smd roundrect
+			(at -0.5975 0)
+			(size 0.715 0.64)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(net 7 "/HDMI_D0+")
+			(pintype "passive")
+			(uuid "cc3118f0-15d5-495b-848e-daf799f23015")
+		)
+		(pad "2" smd roundrect
+			(at 0.5975 0)
+			(size 0.715 0.64)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(net 75 "PICO_HDMI_D0+")
+			(pintype "passive")
+			(uuid "797e742d-6cac-40d8-b87e-af45edc3e5ad")
+		)
+		(embedded_fonts no)
+		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -21829,16 +21769,16 @@
 			)
 		)
 	)
-	(footprint "gg_lcd:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
+	(footprint "gg_lcd:R_0402_1005Metric_Pad0.72x0.64mm_HandSolder"
 		(layer "B.Cu")
-		(uuid "8d879c07-9d3a-4bea-ac55-ff700247b786")
-		(at 116 95.91)
-		(descr "Capacitor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
-		(tags "capacitor handsolder")
-		(property "Reference" "C14"
-			(at -4.65 0.21 0)
+		(uuid "8e4dd137-3920-4608-9fd7-cb0a1f6ef723")
+		(at 116 97.87)
+		(descr "Resistor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
+		(tags "resistor handsolder")
+		(property "Reference" "R61"
+			(at 2.54 0.13 0)
 			(layer "B.SilkS")
-			(uuid "76ad3ab6-d2fc-4400-8ccc-0172b0d29a25")
+			(uuid "a8f1bb43-6359-4844-9f85-bdad91ae6f96")
 			(effects
 				(font
 					(size 1 1)
@@ -21847,10 +21787,10 @@
 				(justify mirror)
 			)
 		)
-		(property "Value" "0.1uf"
-			(at 0 -1.16 0)
+		(property "Value" "270R"
+			(at 0 -1.17 0)
 			(layer "B.Fab")
-			(uuid "1306e22c-33cb-4da8-9c05-8581243d5dae")
+			(uuid "d00a114f-961c-4d04-b037-32be5a68cb34")
 			(effects
 				(font
 					(size 1 1)
@@ -21863,7 +21803,7 @@
 			(at 0 0 0)
 			(layer "B.Fab")
 			(hide yes)
-			(uuid "1e167f43-bcfd-471a-9661-fbe5890791cd")
+			(uuid "d2df3998-77fe-4450-810e-ee2c82a35916")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21876,7 +21816,7 @@
 			(at 0 0 0)
 			(layer "B.Fab")
 			(hide yes)
-			(uuid "5b91c20e-71ea-4d4e-ae7c-51d64f16ee91")
+			(uuid "c4b247a9-d807-4bd6-b47a-c4ff3143d087")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21886,176 +21826,156 @@
 			)
 		)
 		(property "LCSC" ""
-			(at 0 0 0)
-			(layer "B.SilkS")
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
 			(hide yes)
-			(uuid "5a80f683-3b90-496e-a7df-9cb657ae9041")
+			(uuid "2590cc52-d167-4804-92f1-dcfeec6e93a8")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
+				(justify mirror)
 			)
 		)
-		(property ki_fp_filters "C_*")
-		(path "/5c3941c9-41fc-47e3-85c3-d009b7bd536e")
+		(property ki_fp_filters "R_*")
+		(path "/71290f82-527e-4a2e-953b-6156c6496fd9")
 		(sheetname "/")
 		(sheetfile "GG_LCD_DIY.kicad_sch")
 		(attr smd)
 		(fp_line
-			(start -0.04 -0.36)
-			(end 0.04 -0.36)
+			(start -0.09 0.38)
+			(end 0.09 0.38)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "B.SilkS")
-			(uuid "f1c75084-f93c-4a79-8b74-556e85a7cde1")
+			(uuid "d7ee2069-8858-4f3c-ae5f-51881b2255c9")
 		)
 		(fp_line
-			(start -0.04 0.36)
-			(end 0.05 0.36)
+			(start -0.08 -0.38)
+			(end 0.1 -0.38)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "B.SilkS")
-			(uuid "c8195821-2316-43d7-8c0a-8d206af115c6")
+			(uuid "31da0a65-258e-4c46-b1d0-0e2537921e26")
 		)
 		(fp_line
-			(start -1.09 -0.46)
-			(end -1.09 0.46)
+			(start -1.11 -0.47)
+			(end -1.11 0.47)
 			(stroke
 				(width 0.05)
 				(type solid)
 			)
 			(layer "B.CrtYd")
-			(uuid "15748a52-a5ef-4b53-96ae-8e13ee4197b5")
+			(uuid "0f97f689-3943-4d92-b39b-6083b61095f0")
 		)
 		(fp_line
-			(start -1.09 0.46)
-			(end 1.09 0.46)
+			(start -1.11 0.47)
+			(end 1.11 0.47)
 			(stroke
 				(width 0.05)
 				(type solid)
 			)
 			(layer "B.CrtYd")
-			(uuid "54fca77b-7989-40f6-a578-450447ef18b8")
+			(uuid "352dcf03-02a3-402f-9afe-b0f17fdfbeb8")
 		)
 		(fp_line
-			(start 1.09 -0.46)
-			(end -1.09 -0.46)
+			(start 1.11 -0.47)
+			(end -1.11 -0.47)
 			(stroke
 				(width 0.05)
 				(type solid)
 			)
 			(layer "B.CrtYd")
-			(uuid "3c7c70ca-a3ab-40e1-b120-4fd702683151")
+			(uuid "3325fb2f-5577-4307-a4b4-ddd691c61d7c")
 		)
 		(fp_line
-			(start 1.09 0.46)
-			(end 1.09 -0.46)
+			(start 1.11 0.47)
+			(end 1.11 -0.47)
 			(stroke
 				(width 0.05)
 				(type solid)
 			)
 			(layer "B.CrtYd")
-			(uuid "98f5ffd1-eadd-421b-b9a1-c83586ac06cf")
+			(uuid "f5a442b5-cce9-41c3-bc9c-4f6207273132")
 		)
 		(fp_line
-			(start -0.5 -0.25)
-			(end -0.5 0.25)
+			(start -0.525 -0.27)
+			(end -0.525 0.27)
 			(stroke
 				(width 0.1)
 				(type solid)
 			)
 			(layer "B.Fab")
-			(uuid "2b733295-094a-451b-b0eb-502bb79427d9")
+			(uuid "164e91db-f557-44e6-ac2d-ce305411e6fb")
 		)
 		(fp_line
-			(start -0.5 0.25)
-			(end 0.5 0.25)
+			(start -0.525 0.27)
+			(end 0.525 0.27)
 			(stroke
 				(width 0.1)
 				(type solid)
 			)
 			(layer "B.Fab")
-			(uuid "4c894617-60cf-41d6-9f19-e41e0491b207")
+			(uuid "847002f7-4f79-4bb5-a107-afb2f05c52bd")
 		)
 		(fp_line
-			(start 0.5 -0.25)
-			(end -0.5 -0.25)
+			(start 0.525 -0.27)
+			(end -0.525 -0.27)
 			(stroke
 				(width 0.1)
 				(type solid)
 			)
 			(layer "B.Fab")
-			(uuid "6e01833d-ea97-40d3-be36-87f7f3c0bdc0")
+			(uuid "650eebb9-cf3f-4885-a150-a08ff8e79f5a")
 		)
 		(fp_line
-			(start 0.5 0.25)
-			(end 0.5 -0.25)
+			(start 0.525 0.27)
+			(end 0.525 -0.27)
 			(stroke
 				(width 0.1)
 				(type solid)
 			)
 			(layer "B.Fab")
-			(uuid "25aed203-7712-48e7-a778-53b5d6111fa9")
+			(uuid "dd9e7b13-28df-4ae9-8d70-7c2df28a0a29")
 		)
 		(fp_text user "${REFERENCE}"
 			(at 0 0 0)
 			(layer "B.Fab")
-			(uuid "4b149c52-c87d-4c75-b311-1fcc5edeb5c6")
+			(uuid "a363e9eb-7599-4842-995f-d45f9e1339ce")
 			(effects
 				(font
-					(size 0.25 0.25)
+					(size 0.26 0.26)
 					(thickness 0.04)
 				)
 				(justify mirror)
 			)
 		)
 		(pad "1" smd roundrect
-			(at -0.5675 0)
-			(size 0.735 0.62)
+			(at -0.5975 0)
+			(size 0.715 0.64)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
-			(net 68 "/HDMI_D0-")
+			(net 70 "/HDMI_D1-")
 			(pintype "passive")
-			(teardrops
-				(best_length_ratio 0.5)
-				(max_length 1)
-				(best_width_ratio 1)
-				(max_width 2)
-				(curved_edges yes)
-				(filter_ratio 0.9)
-				(enabled yes)
-				(allow_two_segments yes)
-				(prefer_zone_connections yes)
-			)
-			(uuid "2fbfc633-edcb-47f2-a69c-9e65cbbb76ca")
+			(uuid "3e73f267-b13b-4d04-badb-f9c9dd0cab11")
 		)
 		(pad "2" smd roundrect
-			(at 0.5675 0)
-			(size 0.735 0.62)
+			(at 0.5975 0)
+			(size 0.715 0.64)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
-			(net 76 "PICO_HDMI_D0-")
+			(net 78 "PICO_HDMI_D1-")
 			(pintype "passive")
-			(teardrops
-				(best_length_ratio 0.5)
-				(max_length 1)
-				(best_width_ratio 1)
-				(max_width 2)
-				(curved_edges yes)
-				(filter_ratio 0.9)
-				(enabled yes)
-				(allow_two_segments yes)
-				(prefer_zone_connections yes)
-			)
-			(uuid "2a4b4534-c715-4ba1-b48c-696bef762782")
+			(uuid "ea34db97-56bf-4d2c-9bdf-8ffadce624ac")
 		)
 		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step"
+		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -24826,244 +24746,6 @@
 		)
 		(embedded_fonts no)
 		(model "${KICAD9_3DMODEL_DIR}/Diode_SMD.3dshapes/D_SOD-323.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
-	)
-	(footprint "gg_lcd:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
-		(layer "B.Cu")
-		(uuid "a303f6f7-9ac4-4e6f-8781-aff00955a763")
-		(at 116 93.95)
-		(descr "Capacitor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
-		(tags "capacitor handsolder")
-		(property "Reference" "C12"
-			(at -3.92 -0.02 0)
-			(layer "B.SilkS")
-			(uuid "7508faea-f9bf-4aa8-bb33-b271f1f61f53")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Value" "0.1uf"
-			(at 0 -1.16 0)
-			(layer "B.Fab")
-			(uuid "2c0c2baf-fbcf-40b3-a225-500d0b974058")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Datasheet" ""
-			(at 0 0 0)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "d67e270a-1d82-49f4-889d-ebf00cbf1623")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Description" ""
-			(at 0 0 0)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "e0edec82-0ba3-4584-8da2-70d96218f326")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "LCSC" ""
-			(at 0 0 0)
-			(layer "B.SilkS")
-			(hide yes)
-			(uuid "e35c6eec-b9c9-4683-baa5-44232c04333d")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property ki_fp_filters "C_*")
-		(path "/301835f7-163c-44a1-b4fe-5af574280b4a")
-		(sheetname "/")
-		(sheetfile "GG_LCD_DIY.kicad_sch")
-		(attr smd)
-		(fp_line
-			(start -0.04 -0.36)
-			(end 0.04 -0.36)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "B.SilkS")
-			(uuid "bf55208f-0b3f-4476-a411-265cce7c0d00")
-		)
-		(fp_line
-			(start -0.04 0.36)
-			(end 0.05 0.36)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "B.SilkS")
-			(uuid "d703f466-1013-4eea-8657-636c13f7770c")
-		)
-		(fp_line
-			(start -1.09 -0.46)
-			(end -1.09 0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "007af198-d23e-4c6e-85b7-c3ca4f51716c")
-		)
-		(fp_line
-			(start -1.09 0.46)
-			(end 1.09 0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "d8c3d1f6-6cf9-4632-af11-e248add55fba")
-		)
-		(fp_line
-			(start 1.09 -0.46)
-			(end -1.09 -0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "e463b34a-ed52-410f-82a1-a14395b07605")
-		)
-		(fp_line
-			(start 1.09 0.46)
-			(end 1.09 -0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "9a75f863-09f4-4092-959a-5333aa3a2f63")
-		)
-		(fp_line
-			(start -0.5 -0.25)
-			(end -0.5 0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "e2c7b62f-682e-4cc0-8afb-6eb8de019740")
-		)
-		(fp_line
-			(start -0.5 0.25)
-			(end 0.5 0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "964d4ee6-3e8d-4aa7-8e7a-685e3d143d6d")
-		)
-		(fp_line
-			(start 0.5 -0.25)
-			(end -0.5 -0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "1f3ec4c7-9d0a-43d6-baee-f9269bbe5a60")
-		)
-		(fp_line
-			(start 0.5 0.25)
-			(end 0.5 -0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "4b10dd13-c45c-4f20-ba18-567b665640cf")
-		)
-		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
-			(layer "B.Fab")
-			(uuid "b8ea384c-3422-4671-abb1-a31fdd9af119")
-			(effects
-				(font
-					(size 0.25 0.25)
-					(thickness 0.04)
-				)
-				(justify mirror)
-			)
-		)
-		(pad "1" smd roundrect
-			(at -0.5675 0)
-			(size 0.735 0.62)
-			(layers "B.Cu" "B.Mask" "B.Paste")
-			(roundrect_rratio 0.25)
-			(net 6 "/HDMI_CLK-")
-			(pintype "passive")
-			(teardrops
-				(best_length_ratio 0.5)
-				(max_length 1)
-				(best_width_ratio 1)
-				(max_width 2)
-				(curved_edges yes)
-				(filter_ratio 0.9)
-				(enabled yes)
-				(allow_two_segments yes)
-				(prefer_zone_connections yes)
-			)
-			(uuid "31b4babe-9fc0-4b8f-b606-49a254bc9e46")
-		)
-		(pad "2" smd roundrect
-			(at 0.5675 0)
-			(size 0.735 0.62)
-			(layers "B.Cu" "B.Mask" "B.Paste")
-			(roundrect_rratio 0.25)
-			(net 74 "PICO_HDMI_CLK-")
-			(pintype "passive")
-			(teardrops
-				(best_length_ratio 0.5)
-				(max_length 1)
-				(best_width_ratio 1)
-				(max_width 2)
-				(curved_edges yes)
-				(filter_ratio 0.9)
-				(enabled yes)
-				(allow_two_segments yes)
-				(prefer_zone_connections yes)
-			)
-			(uuid "4094e751-0452-41f5-aceb-76332bd3d9ff")
-		)
-		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -28150,6 +27832,224 @@
 	)
 	(footprint "gg_lcd:R_0402_1005Metric_Pad0.72x0.64mm_HandSolder"
 		(layer "B.Cu")
+		(uuid "ccd88cd0-1e33-480f-a136-3c7cc54b44d9")
+		(at 116 94.93)
+		(descr "Resistor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
+		(tags "resistor handsolder")
+		(property "Reference" "R64"
+			(at 2.86 -0.51 0)
+			(layer "B.SilkS")
+			(uuid "b999b039-3d3a-4ece-ae16-ca3be339f8fe")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Value" "270R"
+			(at 0 -1.17 0)
+			(layer "B.Fab")
+			(uuid "cf954b8b-f896-4c3a-b072-91f5181169fa")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "320b8d99-fbb3-4973-ad04-c8891484630b")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "6d1ac9dd-14c9-48c0-a82c-19a3c0dafb0f")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "LCSC" ""
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "14aec033-5b65-4580-811c-2214e7802262")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property ki_fp_filters "R_*")
+		(path "/894e26fa-e049-43a9-a31e-8f2b2a901d72")
+		(sheetname "/")
+		(sheetfile "GG_LCD_DIY.kicad_sch")
+		(attr smd)
+		(fp_line
+			(start -0.09 0.38)
+			(end 0.09 0.38)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "B.SilkS")
+			(uuid "0a840584-f96f-4459-b8f9-9c3ab3bd8ef8")
+		)
+		(fp_line
+			(start -0.08 -0.38)
+			(end 0.1 -0.38)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "B.SilkS")
+			(uuid "34b859ed-3dfb-4fde-9ccb-8eccfc4d118c")
+		)
+		(fp_line
+			(start -1.11 -0.47)
+			(end -1.11 0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "3f487b71-782f-402a-ae8a-3a678b08eaf5")
+		)
+		(fp_line
+			(start -1.11 0.47)
+			(end 1.11 0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "56da9464-ed1a-42c0-8d50-cb3787b74b47")
+		)
+		(fp_line
+			(start 1.11 -0.47)
+			(end -1.11 -0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "2d5db481-3079-48f9-aa0e-561aa79e2c29")
+		)
+		(fp_line
+			(start 1.11 0.47)
+			(end 1.11 -0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "7d2cee97-cbbc-420d-853d-d013dc86493e")
+		)
+		(fp_line
+			(start -0.525 -0.27)
+			(end -0.525 0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "2f675c1c-2beb-44b6-b9f6-1160a27b65cb")
+		)
+		(fp_line
+			(start -0.525 0.27)
+			(end 0.525 0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "ce2b97e9-f596-4aed-a1e7-b084ba9487a2")
+		)
+		(fp_line
+			(start 0.525 -0.27)
+			(end -0.525 -0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "95e87c93-53a6-4436-b5c2-7e0b051e682a")
+		)
+		(fp_line
+			(start 0.525 0.27)
+			(end 0.525 -0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "30d3fdb6-b881-4aa0-80ff-bb8e381f59a8")
+		)
+		(fp_text user "${REFERENCE}"
+			(at 0 0 0)
+			(layer "B.Fab")
+			(uuid "dc4af5f9-7444-4d33-ae56-a6d2f7c2271e")
+			(effects
+				(font
+					(size 0.26 0.26)
+					(thickness 0.04)
+				)
+				(justify mirror)
+			)
+		)
+		(pad "1" smd roundrect
+			(at -0.5975 0)
+			(size 0.715 0.64)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(net 2 "/HDMI_CLK+")
+			(pintype "passive")
+			(uuid "01772ae1-21f6-4b23-a252-93b763355307")
+		)
+		(pad "2" smd roundrect
+			(at 0.5975 0)
+			(size 0.715 0.64)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(net 73 "PICO_HDMI_CLK+")
+			(pintype "passive")
+			(uuid "bd86387c-e13d-4904-aba0-749221287393")
+		)
+		(embedded_fonts no)
+		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+	)
+	(footprint "gg_lcd:R_0402_1005Metric_Pad0.72x0.64mm_HandSolder"
+		(layer "B.Cu")
 		(uuid "ce69f9cc-f292-4c55-aa80-2bf31942ee87")
 		(at 149.16 93.41 -90)
 		(descr "Resistor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
@@ -28360,6 +28260,224 @@
 				(prefer_zone_connections yes)
 			)
 			(uuid "35854ba7-b3a6-49b9-a160-efdfe2aee9b0")
+		)
+		(embedded_fonts no)
+		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+	)
+	(footprint "gg_lcd:R_0402_1005Metric_Pad0.72x0.64mm_HandSolder"
+		(layer "B.Cu")
+		(uuid "ce8c8fde-627c-4b2d-a712-71500e0da047")
+		(at 116 93.95)
+		(descr "Resistor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
+		(tags "resistor handsolder")
+		(property "Reference" "R65"
+			(at 2.52 -0.73 0)
+			(layer "B.SilkS")
+			(uuid "0157422e-5e1e-40c0-b65b-0a1b42a187a3")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Value" "270R"
+			(at 0 -1.17 0)
+			(layer "B.Fab")
+			(uuid "2616aa8e-fe5b-4f81-95fb-3fc9602973c9")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "94257abd-b3f9-4326-a3ad-8f2453f7bb18")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "af440c5e-58e3-46dd-a8a9-0b34dcc91e81")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "LCSC" ""
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "a4183ca3-1e0e-4ff2-96e9-e5ea716e6324")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property ki_fp_filters "R_*")
+		(path "/7a682807-dc32-4728-817b-cfd205a3456b")
+		(sheetname "/")
+		(sheetfile "GG_LCD_DIY.kicad_sch")
+		(attr smd)
+		(fp_line
+			(start -0.09 0.38)
+			(end 0.09 0.38)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "B.SilkS")
+			(uuid "bea026de-a52e-4b75-bfe8-f1fd65b0fcab")
+		)
+		(fp_line
+			(start -0.08 -0.38)
+			(end 0.1 -0.38)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "B.SilkS")
+			(uuid "ffb894ab-03eb-4f33-8934-91b2cb3310e7")
+		)
+		(fp_line
+			(start -1.11 -0.47)
+			(end -1.11 0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "c4a12349-fd64-4b71-bd4e-0846786f430c")
+		)
+		(fp_line
+			(start -1.11 0.47)
+			(end 1.11 0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "cc3f1945-6692-41dc-bef1-bc11f45820d1")
+		)
+		(fp_line
+			(start 1.11 -0.47)
+			(end -1.11 -0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "b8f799f6-9eeb-4f29-9941-7d7238f37260")
+		)
+		(fp_line
+			(start 1.11 0.47)
+			(end 1.11 -0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "3b685a53-a500-4551-9c0e-af8cb8eb1a71")
+		)
+		(fp_line
+			(start -0.525 -0.27)
+			(end -0.525 0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "b04641d9-83a7-4fd8-951a-adb67a0428c1")
+		)
+		(fp_line
+			(start -0.525 0.27)
+			(end 0.525 0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "e9059922-20d2-4018-ba28-c5c2f3e10a26")
+		)
+		(fp_line
+			(start 0.525 -0.27)
+			(end -0.525 -0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "e8cdb582-4f69-4454-96a0-54372a2de207")
+		)
+		(fp_line
+			(start 0.525 0.27)
+			(end 0.525 -0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "bfbd884c-f5c4-4a52-8df2-f2ff0dba71bb")
+		)
+		(fp_text user "${REFERENCE}"
+			(at 0 0 0)
+			(layer "B.Fab")
+			(uuid "bd112095-70b4-4583-a0eb-ca1afbcd2160")
+			(effects
+				(font
+					(size 0.26 0.26)
+					(thickness 0.04)
+				)
+				(justify mirror)
+			)
+		)
+		(pad "1" smd roundrect
+			(at -0.5975 0)
+			(size 0.715 0.64)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(net 6 "/HDMI_CLK-")
+			(pintype "passive")
+			(uuid "3f3018bb-3bd2-4d07-a4c7-b0c5d5e33ef5")
+		)
+		(pad "2" smd roundrect
+			(at 0.5975 0)
+			(size 0.715 0.64)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(net 74 "PICO_HDMI_CLK-")
+			(pintype "passive")
+			(uuid "ea3a97ef-fd35-4dc7-b918-9a930da867bb")
 		)
 		(embedded_fonts no)
 		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step"
@@ -29069,6 +29187,224 @@
 		)
 		(embedded_fonts no)
 		(model "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+	)
+	(footprint "gg_lcd:R_0402_1005Metric_Pad0.72x0.64mm_HandSolder"
+		(layer "B.Cu")
+		(uuid "d2d3e0d2-d8db-48be-83b5-d34bfce9190e")
+		(at 116 100.81)
+		(descr "Resistor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
+		(tags "resistor handsolder")
+		(property "Reference" "R58"
+			(at 3.11 0.76 0)
+			(layer "B.SilkS")
+			(uuid "1ddcc6e7-8e42-4fbb-8971-34a94514f038")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Value" "270R"
+			(at 0 -1.17 0)
+			(layer "B.Fab")
+			(uuid "3036bdbd-8dd8-425a-a96c-8e83f4ae4342")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "6882dd88-260d-4b6a-8e44-982d04c5fdbb")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "6acc1604-6c70-4ece-a468-26320bba3cb4")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "LCSC" ""
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "e51d74a9-83b1-4a8f-8cb2-ae9c529cac81")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property ki_fp_filters "R_*")
+		(path "/35095f31-d6c5-45e1-99c1-37692316556e")
+		(sheetname "/")
+		(sheetfile "GG_LCD_DIY.kicad_sch")
+		(attr smd)
+		(fp_line
+			(start -0.09 0.38)
+			(end 0.09 0.38)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "B.SilkS")
+			(uuid "0efb33f9-fb42-4a9f-a061-4b78963bbef4")
+		)
+		(fp_line
+			(start -0.08 -0.38)
+			(end 0.1 -0.38)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "B.SilkS")
+			(uuid "703545ba-5c40-4419-a5c9-b353f4cd3b86")
+		)
+		(fp_line
+			(start -1.11 -0.47)
+			(end -1.11 0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "6b6b7b49-1033-402f-acf8-6e611777daa2")
+		)
+		(fp_line
+			(start -1.11 0.47)
+			(end 1.11 0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "f59ca799-1728-498b-a618-baf4c6d45cfb")
+		)
+		(fp_line
+			(start 1.11 -0.47)
+			(end -1.11 -0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "c6c84e40-8240-44a6-b42e-463fe66c814c")
+		)
+		(fp_line
+			(start 1.11 0.47)
+			(end 1.11 -0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "b0dbcc07-9bbb-4de9-a6f7-03f1e6defd24")
+		)
+		(fp_line
+			(start -0.525 -0.27)
+			(end -0.525 0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "8c0352ea-d429-4715-abfc-3189f301fdda")
+		)
+		(fp_line
+			(start -0.525 0.27)
+			(end 0.525 0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "08edcc32-5475-469f-b033-67c6e0bf2d09")
+		)
+		(fp_line
+			(start 0.525 -0.27)
+			(end -0.525 -0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "129c0690-d187-42ef-9730-67fc167b3112")
+		)
+		(fp_line
+			(start 0.525 0.27)
+			(end 0.525 -0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "8ac66283-f307-41c8-b304-323e0b5b80a6")
+		)
+		(fp_text user "${REFERENCE}"
+			(at 0 0 0)
+			(layer "B.Fab")
+			(uuid "01bdf848-9d0d-46eb-8474-12b1936759f2")
+			(effects
+				(font
+					(size 0.26 0.26)
+					(thickness 0.04)
+				)
+				(justify mirror)
+			)
+		)
+		(pad "1" smd roundrect
+			(at -0.5975 0)
+			(size 0.715 0.64)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(net 71 "/HDMI_D2+")
+			(pintype "passive")
+			(uuid "58edfe1e-957c-46f7-b88d-33002b153541")
+		)
+		(pad "2" smd roundrect
+			(at 0.5975 0)
+			(size 0.715 0.64)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(net 79 "PICO_HDMI_D2+")
+			(pintype "passive")
+			(uuid "50e8868d-a1a7-40bc-a2e5-49baf85a2446")
+		)
+		(embedded_fonts no)
+		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -30160,244 +30496,6 @@
 	)
 	(footprint "gg_lcd:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
 		(layer "B.Cu")
-		(uuid "d3bc54ea-725a-413e-843b-7037d84e0ebc")
-		(at 116 94.93)
-		(descr "Capacitor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
-		(tags "capacitor handsolder")
-		(property "Reference" "C11"
-			(at 2.61 -0.01 0)
-			(layer "B.SilkS")
-			(uuid "83ebc3ac-2b5b-48db-8981-437910609cfb")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Value" "0.1uf"
-			(at 0 -1.16 0)
-			(layer "B.Fab")
-			(uuid "5fd28c8e-18cc-4d35-9d2d-88a0eaa2aabc")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Datasheet" ""
-			(at 0 0 0)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "48b577d1-1cb9-4dd4-80ce-a0fd40676be7")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Description" ""
-			(at 0 0 0)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "8229dbf9-7f17-488b-86fe-1e4a6b52a484")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "LCSC" ""
-			(at 0 0 0)
-			(layer "B.SilkS")
-			(hide yes)
-			(uuid "86ef2941-b1b0-4370-9073-70a4b90c960b")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property ki_fp_filters "C_*")
-		(path "/2a082a12-8957-4e3f-861d-8ad65f165cca")
-		(sheetname "/")
-		(sheetfile "GG_LCD_DIY.kicad_sch")
-		(attr smd)
-		(fp_line
-			(start -0.04 -0.36)
-			(end 0.04 -0.36)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "B.SilkS")
-			(uuid "53494c73-0d56-4792-9917-f20833bdad26")
-		)
-		(fp_line
-			(start -0.04 0.36)
-			(end 0.05 0.36)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "B.SilkS")
-			(uuid "3dfdde13-40c1-4fad-a553-3bc1c61e1b9c")
-		)
-		(fp_line
-			(start -1.09 -0.46)
-			(end -1.09 0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "916eea1b-a0d4-45e9-bb3a-722e94d7f71e")
-		)
-		(fp_line
-			(start -1.09 0.46)
-			(end 1.09 0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "954ebd12-4940-43d6-a8ea-e0d492d031e9")
-		)
-		(fp_line
-			(start 1.09 -0.46)
-			(end -1.09 -0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "9b65acc1-0041-4cd7-90c2-c5ad082a29c1")
-		)
-		(fp_line
-			(start 1.09 0.46)
-			(end 1.09 -0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "5613d152-2191-4204-8e4d-3fc55b6c3a21")
-		)
-		(fp_line
-			(start -0.5 -0.25)
-			(end -0.5 0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "a0b40b94-f9da-47f3-bf18-fb1322900316")
-		)
-		(fp_line
-			(start -0.5 0.25)
-			(end 0.5 0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "5d9875ff-cb12-49a5-96ae-5b2d25243250")
-		)
-		(fp_line
-			(start 0.5 -0.25)
-			(end -0.5 -0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "378a838f-054b-4222-874a-ac16825b5e58")
-		)
-		(fp_line
-			(start 0.5 0.25)
-			(end 0.5 -0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "855fb82a-5bc9-4dee-a2c1-00ee7a4fb3ed")
-		)
-		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
-			(layer "B.Fab")
-			(uuid "11af459f-415b-4667-8176-4e8cdbe8f7b7")
-			(effects
-				(font
-					(size 0.25 0.25)
-					(thickness 0.04)
-				)
-				(justify mirror)
-			)
-		)
-		(pad "1" smd roundrect
-			(at -0.5675 0)
-			(size 0.735 0.62)
-			(layers "B.Cu" "B.Mask" "B.Paste")
-			(roundrect_rratio 0.25)
-			(net 2 "/HDMI_CLK+")
-			(pintype "passive")
-			(teardrops
-				(best_length_ratio 0.5)
-				(max_length 1)
-				(best_width_ratio 1)
-				(max_width 2)
-				(curved_edges yes)
-				(filter_ratio 0.9)
-				(enabled yes)
-				(allow_two_segments yes)
-				(prefer_zone_connections yes)
-			)
-			(uuid "ebaf15a5-939c-4d33-aa85-c8a1c93cc1c6")
-		)
-		(pad "2" smd roundrect
-			(at 0.5675 0)
-			(size 0.735 0.62)
-			(layers "B.Cu" "B.Mask" "B.Paste")
-			(roundrect_rratio 0.25)
-			(net 73 "PICO_HDMI_CLK+")
-			(pintype "passive")
-			(teardrops
-				(best_length_ratio 0.5)
-				(max_length 1)
-				(best_width_ratio 1)
-				(max_width 2)
-				(curved_edges yes)
-				(filter_ratio 0.9)
-				(enabled yes)
-				(allow_two_segments yes)
-				(prefer_zone_connections yes)
-			)
-			(uuid "0526a35f-79d2-4dc5-86e8-3b3c96e569b8")
-		)
-		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
-	)
-	(footprint "gg_lcd:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
-		(layer "B.Cu")
 		(uuid "d4a9f050-25a7-487a-aca9-82dc8147907b")
 		(at 175.19 100.18 180)
 		(descr "Capacitor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
@@ -31101,6 +31199,224 @@
 		)
 		(embedded_fonts no)
 		(model "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+	)
+	(footprint "gg_lcd:R_0402_1005Metric_Pad0.72x0.64mm_HandSolder"
+		(layer "B.Cu")
+		(uuid "d6776951-4f40-4492-8196-5ded604738d4")
+		(at 116 95.91)
+		(descr "Resistor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
+		(tags "resistor handsolder")
+		(property "Reference" "R63"
+			(at 2.55 -0.26 0)
+			(layer "B.SilkS")
+			(uuid "7596ba1c-6319-40f3-9d2b-aa9abcd586b3")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Value" "270R"
+			(at 0 -1.17 0)
+			(layer "B.Fab")
+			(uuid "47ea8ddc-b89a-4744-8970-a92783b0b9fa")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "e8e1d6b6-286a-4d41-a0ba-c70103a6bc50")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "bc80387a-1fe3-4c47-be3d-d4d2b9ecfac0")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "LCSC" ""
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "f6089f84-7525-4655-a59e-7e34d156489e")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property ki_fp_filters "R_*")
+		(path "/555e9d99-9dd0-412f-ba44-d2a4101cb030")
+		(sheetname "/")
+		(sheetfile "GG_LCD_DIY.kicad_sch")
+		(attr smd)
+		(fp_line
+			(start -0.09 0.38)
+			(end 0.09 0.38)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "B.SilkS")
+			(uuid "42415c81-ca8f-44f0-8dfa-2e2ecd7b4629")
+		)
+		(fp_line
+			(start -0.08 -0.38)
+			(end 0.1 -0.38)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "B.SilkS")
+			(uuid "548e80ad-2dbe-4a98-85b7-9fba2e1d6794")
+		)
+		(fp_line
+			(start -1.11 -0.47)
+			(end -1.11 0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "aa5337a5-c546-4dc4-8542-49a95d823ff9")
+		)
+		(fp_line
+			(start -1.11 0.47)
+			(end 1.11 0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "aada4dff-17a6-4ee5-9b4b-4c76d1254a1e")
+		)
+		(fp_line
+			(start 1.11 -0.47)
+			(end -1.11 -0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "3a769df4-ab60-4c43-b193-201635098cdd")
+		)
+		(fp_line
+			(start 1.11 0.47)
+			(end 1.11 -0.47)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "B.CrtYd")
+			(uuid "8e59e7c3-b46f-45a9-a5b1-19f0f49ecb6b")
+		)
+		(fp_line
+			(start -0.525 -0.27)
+			(end -0.525 0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "bfad31d4-d437-4cb1-8944-7362e59b7aca")
+		)
+		(fp_line
+			(start -0.525 0.27)
+			(end 0.525 0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "a4f3ab2a-794c-4897-aa40-165c45b98f31")
+		)
+		(fp_line
+			(start 0.525 -0.27)
+			(end -0.525 -0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "c477e01b-baef-4291-9eaf-c1f1e4986a60")
+		)
+		(fp_line
+			(start 0.525 0.27)
+			(end 0.525 -0.27)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "B.Fab")
+			(uuid "f82ee86e-9408-4c49-94cf-2dc8572afc35")
+		)
+		(fp_text user "${REFERENCE}"
+			(at 0 0 0)
+			(layer "B.Fab")
+			(uuid "0f42446d-6ee9-4f5b-a324-486da7bb7757")
+			(effects
+				(font
+					(size 0.26 0.26)
+					(thickness 0.04)
+				)
+				(justify mirror)
+			)
+		)
+		(pad "1" smd roundrect
+			(at -0.5975 0)
+			(size 0.715 0.64)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(net 68 "/HDMI_D0-")
+			(pintype "passive")
+			(uuid "0d95dce0-236c-4a9c-8734-40d7c43b9bcf")
+		)
+		(pad "2" smd roundrect
+			(at 0.5975 0)
+			(size 0.715 0.64)
+			(layers "B.Cu" "B.Mask" "B.Paste")
+			(roundrect_rratio 0.25)
+			(net 76 "PICO_HDMI_D0-")
+			(pintype "passive")
+			(uuid "42b8f7c0-e398-45f9-8de4-f5a6498b4d05")
+		)
+		(embedded_fonts no)
+		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -33074,244 +33390,6 @@
 			)
 		)
 	)
-	(footprint "gg_lcd:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
-		(layer "B.Cu")
-		(uuid "df1d63a0-8295-47aa-92b0-4fba86454aeb")
-		(at 116 97.87)
-		(descr "Capacitor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
-		(tags "capacitor handsolder")
-		(property "Reference" "C16"
-			(at -4.68 0.15 0)
-			(layer "B.SilkS")
-			(uuid "a13231c5-380e-4249-b532-dcb88fb08d85")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Value" "0.1uf"
-			(at 0 -1.16 0)
-			(layer "B.Fab")
-			(uuid "bb3b9904-00c3-494f-a5b7-294d1822472b")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Datasheet" ""
-			(at 0 0 0)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "275b572c-d27a-4f85-89c6-d7a01c42d23c")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Description" ""
-			(at 0 0 0)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "67655c52-7026-44c1-bf5c-b2ec1f87f741")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "LCSC" ""
-			(at 0 0 0)
-			(layer "B.SilkS")
-			(hide yes)
-			(uuid "d65195e5-3a2d-4b07-8ac1-fa08c4e1879e")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property ki_fp_filters "C_*")
-		(path "/41575736-42db-4cc6-b42d-40c521aa299e")
-		(sheetname "/")
-		(sheetfile "GG_LCD_DIY.kicad_sch")
-		(attr smd)
-		(fp_line
-			(start -0.04 -0.36)
-			(end 0.04 -0.36)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "B.SilkS")
-			(uuid "fa958360-8283-41ef-aefe-b884c9fd627e")
-		)
-		(fp_line
-			(start -0.04 0.36)
-			(end 0.05 0.36)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "B.SilkS")
-			(uuid "83676772-f4cc-4ebe-8b94-84394d69c85e")
-		)
-		(fp_line
-			(start -1.09 -0.46)
-			(end -1.09 0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "36f83c45-fa33-4f9b-a138-842d35737c57")
-		)
-		(fp_line
-			(start -1.09 0.46)
-			(end 1.09 0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "b489edd5-2c5f-46fb-b0b5-2b8035c38072")
-		)
-		(fp_line
-			(start 1.09 -0.46)
-			(end -1.09 -0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "98d51b7e-568a-4e19-970e-5675e5a5c981")
-		)
-		(fp_line
-			(start 1.09 0.46)
-			(end 1.09 -0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "b0d4ac71-6f1b-4b55-8cba-9a728f053dbd")
-		)
-		(fp_line
-			(start -0.5 -0.25)
-			(end -0.5 0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "8aa581c2-e244-42f8-8521-82e09fa8660f")
-		)
-		(fp_line
-			(start -0.5 0.25)
-			(end 0.5 0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "a7e660da-19bc-47db-97e4-f213e306cb07")
-		)
-		(fp_line
-			(start 0.5 -0.25)
-			(end -0.5 -0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "79742f81-f947-4674-83d4-d4e5bbac85c9")
-		)
-		(fp_line
-			(start 0.5 0.25)
-			(end 0.5 -0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "3995a144-2a38-440c-b1d1-dc0e14ef0f18")
-		)
-		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
-			(layer "B.Fab")
-			(uuid "cf0cd023-a708-4372-b1a1-c7374158116d")
-			(effects
-				(font
-					(size 0.25 0.25)
-					(thickness 0.04)
-				)
-				(justify mirror)
-			)
-		)
-		(pad "1" smd roundrect
-			(at -0.5675 0)
-			(size 0.735 0.62)
-			(layers "B.Cu" "B.Mask" "B.Paste")
-			(roundrect_rratio 0.25)
-			(net 70 "/HDMI_D1-")
-			(pintype "passive")
-			(teardrops
-				(best_length_ratio 0.5)
-				(max_length 1)
-				(best_width_ratio 1)
-				(max_width 2)
-				(curved_edges yes)
-				(filter_ratio 0.9)
-				(enabled yes)
-				(allow_two_segments yes)
-				(prefer_zone_connections yes)
-			)
-			(uuid "343d93e5-376c-4c73-9143-5ac6553af199")
-		)
-		(pad "2" smd roundrect
-			(at 0.5675 0)
-			(size 0.735 0.62)
-			(layers "B.Cu" "B.Mask" "B.Paste")
-			(roundrect_rratio 0.25)
-			(net 78 "PICO_HDMI_D1-")
-			(pintype "passive")
-			(teardrops
-				(best_length_ratio 0.5)
-				(max_length 1)
-				(best_width_ratio 1)
-				(max_width 2)
-				(curved_edges yes)
-				(filter_ratio 0.9)
-				(enabled yes)
-				(allow_two_segments yes)
-				(prefer_zone_connections yes)
-			)
-			(uuid "ce5f73c3-c312-409e-a861-cc17b6a756d1")
-		)
-		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
-	)
 	(footprint "gg_lcd:R_0402_1005Metric_Pad0.72x0.64mm_HandSolder"
 		(layer "B.Cu")
 		(uuid "dffd6f69-7f4b-4060-b049-60b6ea805f7b")
@@ -35154,244 +35232,6 @@
 				(prefer_zone_connections yes)
 			)
 			(uuid "e67d59f2-1435-4a43-8507-ac184777039f")
-		)
-		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
-	)
-	(footprint "gg_lcd:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
-		(layer "B.Cu")
-		(uuid "f87ec7f9-f4e7-41bf-889c-6da185309718")
-		(at 116 96.89)
-		(descr "Capacitor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
-		(tags "capacitor handsolder")
-		(property "Reference" "C13"
-			(at 2.7 -0.04 0)
-			(layer "B.SilkS")
-			(uuid "c50b1f76-8dd0-4d72-8a2d-3a8f2c209a8f")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Value" "0.1uf"
-			(at 0 -1.16 0)
-			(layer "B.Fab")
-			(uuid "fdf40580-4344-4dc6-a164-2f9eee013347")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Datasheet" ""
-			(at 0 0 0)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "cd563815-7b53-4d7a-b278-0ae0df3b915f")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Description" ""
-			(at 0 0 0)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "a727250e-414f-4246-8052-6c8389257aa6")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "LCSC" ""
-			(at 0 0 0)
-			(layer "B.SilkS")
-			(hide yes)
-			(uuid "d0aff9de-7d15-4c30-8b96-b9e9442efde4")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property ki_fp_filters "C_*")
-		(path "/faf0578b-1c49-4fad-bdb5-b1a5125286b1")
-		(sheetname "/")
-		(sheetfile "GG_LCD_DIY.kicad_sch")
-		(attr smd)
-		(fp_line
-			(start -0.04 -0.36)
-			(end 0.04 -0.36)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "B.SilkS")
-			(uuid "ce4b1f01-ad8c-47a3-8378-f2efab991afd")
-		)
-		(fp_line
-			(start -0.04 0.36)
-			(end 0.05 0.36)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "B.SilkS")
-			(uuid "96cb97d3-12a5-4717-adc2-ea3229406008")
-		)
-		(fp_line
-			(start -1.09 -0.46)
-			(end -1.09 0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "576ed31c-b6fc-4db3-a71d-5422a8b6e436")
-		)
-		(fp_line
-			(start -1.09 0.46)
-			(end 1.09 0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "f12639d4-bd6f-4d2e-8b65-d451464e1de0")
-		)
-		(fp_line
-			(start 1.09 -0.46)
-			(end -1.09 -0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "09100d49-8934-4933-8a84-4b2e249c2257")
-		)
-		(fp_line
-			(start 1.09 0.46)
-			(end 1.09 -0.46)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "B.CrtYd")
-			(uuid "83351f56-1c7e-4d29-a436-f8570ac5f40f")
-		)
-		(fp_line
-			(start -0.5 -0.25)
-			(end -0.5 0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "54092f08-9757-4697-a4d2-dfa15e3eb818")
-		)
-		(fp_line
-			(start -0.5 0.25)
-			(end 0.5 0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "faf7bfc9-0d83-430b-b3b5-07c9ee14a1d5")
-		)
-		(fp_line
-			(start 0.5 -0.25)
-			(end -0.5 -0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "b6dbfde2-4e04-49c8-ac2d-68f87e243c8f")
-		)
-		(fp_line
-			(start 0.5 0.25)
-			(end 0.5 -0.25)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "B.Fab")
-			(uuid "27f7f5e5-99a6-4193-8a1f-5222b07d9c95")
-		)
-		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
-			(layer "B.Fab")
-			(uuid "0322b278-4c72-485a-9bc4-3a95c8359ec4")
-			(effects
-				(font
-					(size 0.25 0.25)
-					(thickness 0.04)
-				)
-				(justify mirror)
-			)
-		)
-		(pad "1" smd roundrect
-			(at -0.5675 0)
-			(size 0.735 0.62)
-			(layers "B.Cu" "B.Mask" "B.Paste")
-			(roundrect_rratio 0.25)
-			(net 7 "/HDMI_D0+")
-			(pintype "passive")
-			(teardrops
-				(best_length_ratio 0.5)
-				(max_length 1)
-				(best_width_ratio 1)
-				(max_width 2)
-				(curved_edges yes)
-				(filter_ratio 0.9)
-				(enabled yes)
-				(allow_two_segments yes)
-				(prefer_zone_connections yes)
-			)
-			(uuid "55ed5dca-909e-42c3-bb4d-bae3d0e80691")
-		)
-		(pad "2" smd roundrect
-			(at 0.5675 0)
-			(size 0.735 0.62)
-			(layers "B.Cu" "B.Mask" "B.Paste")
-			(roundrect_rratio 0.25)
-			(net 75 "PICO_HDMI_D0+")
-			(pintype "passive")
-			(teardrops
-				(best_length_ratio 0.5)
-				(max_length 1)
-				(best_width_ratio 1)
-				(max_width 2)
-				(curved_edges yes)
-				(filter_ratio 0.9)
-				(enabled yes)
-				(allow_two_segments yes)
-				(prefer_zone_connections yes)
-			)
-			(uuid "78b2cea8-4726-4de4-b329-9b759506a80b")
 		)
 		(embedded_fonts no)
 		(model "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step"
@@ -301478,53 +301318,6 @@
 		)
 	)
 	(zone
-		(net 72)
-		(net_name "/HDMI_D2-")
-		(layer "B.Cu")
-		(uuid "006dfd82-f9b7-4e80-9b11-247df526cd79")
-		(name "$teardrop_padvia$")
-		(hatch none 0.1)
-		(priority 30314)
-		(attr
-			(teardrop
-				(type padvia)
-			)
-		)
-		(connect_pads yes
-			(clearance 0)
-		)
-		(min_thickness 0.0254)
-		(filled_areas_thickness no)
-		(fill yes
-			(thermal_gap 0.5)
-			(thermal_bridge_width 0.5)
-			(island_removal_mode 1)
-			(island_area_min 10)
-		)
-		(polygon
-			(pts
-				(xy 114.76594 99.72) (xy 114.859474 99.739834) (xy 114.914225 99.766912) (xy 114.966772 99.805267)
-				(xy 115.00877 99.849134) (xy 115.042938 99.901831) (xy 115.063892 99.95418) (xy 115.075094 100.012915)
-				(xy 115.07647 100.042662) (xy 115.4335 99.83) (xy 115.481109 99.52) (xy 115.325658 99.540373) (xy 115.084345 99.537202)
-				(xy 114.963026 99.529587) (xy 114.76594 99.52)
-			)
-		)
-		(filled_polygon
-			(layer "B.Cu")
-			(pts
-				(xy 114.778176 99.520595) (xy 114.962976 99.529584) (xy 114.963061 99.529589) (xy 115.084345 99.537202)
-				(xy 115.25809 99.539485) (xy 115.325651 99.540373) (xy 115.325651 99.540372) (xy 115.325658 99.540373)
-				(xy 115.465661 99.522024) (xy 115.474307 99.524347) (xy 115.47878 99.532105) (xy 115.478743 99.535401)
-				(xy 115.434337 99.824547) (xy 115.429694 99.832204) (xy 115.42876 99.832823) (xy 115.093242 100.032671)
-				(xy 115.084381 100.03396) (xy 115.077203 100.028606) (xy 115.075568 100.023163) (xy 115.075094 100.012915)
-				(xy 115.063892 99.95418) (xy 115.042938 99.901831) (xy 115.042935 99.901825) (xy 115.008768 99.849131)
-				(xy 114.966774 99.805268) (xy 114.966768 99.805263) (xy 114.914231 99.766916) (xy 114.91422 99.766909)
-				(xy 114.859482 99.739837) (xy 114.859471 99.739833) (xy 114.775213 99.721965) (xy 114.767831 99.716897)
-				(xy 114.76594 99.71052) (xy 114.76594 99.532282) (xy 114.769367 99.524009) (xy 114.77764 99.520582)
-			)
-		)
-	)
-	(zone
 		(net 96)
 		(net_name "Net-(C25-Pad1)")
 		(layer "B.Cu")
@@ -305968,53 +305761,6 @@
 		)
 	)
 	(zone
-		(net 68)
-		(net_name "/HDMI_D0-")
-		(layer "B.Cu")
-		(uuid "3b411623-e8c5-450d-a19f-da1182e99777")
-		(name "$teardrop_padvia$")
-		(hatch none 0.1)
-		(priority 30366)
-		(attr
-			(teardrop
-				(type padvia)
-			)
-		)
-		(connect_pads yes
-			(clearance 0)
-		)
-		(min_thickness 0.0254)
-		(filled_areas_thickness no)
-		(fill yes
-			(thermal_gap 0.5)
-			(thermal_bridge_width 0.5)
-			(island_removal_mode 1)
-			(island_area_min 10)
-		)
-		(polygon
-			(pts
-				(xy 114.755 96.01) (xy 114.828781 96.015318) (xy 114.91711 96.032546) (xy 114.997346 96.059192)
-				(xy 115.070785 96.097933) (xy 115.114297 96.133667) (xy 115.146943 96.176695) (xy 115.160684 96.208201)
-				(xy 115.4335 95.91) (xy 115.160684 95.611799) (xy 115.119293 95.681084) (xy 115.04054 95.740317)
-				(xy 114.919387 95.786857) (xy 114.772491 95.809641) (xy 114.755 95.81)
-			)
-		)
-		(filled_polygon
-			(layer "B.Cu")
-			(pts
-				(xy 115.168664 95.621252) (xy 115.171296 95.623398) (xy 115.426274 95.902102) (xy 115.42933 95.91052)
-				(xy 115.426274 95.917898) (xy 115.17284 96.194913) (xy 115.164728 96.198703) (xy 115.15631 96.195647)
-				(xy 115.153484 96.191694) (xy 115.146943 96.176695) (xy 115.146942 96.176693) (xy 115.13062 96.155181)
-				(xy 115.114297 96.133667) (xy 115.070785 96.097933) (xy 114.997346 96.059192) (xy 114.997345 96.059191)
-				(xy 114.997344 96.059191) (xy 114.917113 96.032547) (xy 114.91711 96.032546) (xy 114.828781 96.015318)
-				(xy 114.822882 96.014892) (xy 114.765859 96.010782) (xy 114.757853 96.006769) (xy 114.755 95.999112)
-				(xy 114.755 95.821462) (xy 114.758427 95.813189) (xy 114.766459 95.809764) (xy 114.772491 95.809641)
-				(xy 114.919387 95.786857) (xy 115.04054 95.740317) (xy 115.119293 95.681084) (xy 115.152621 95.625294)
-				(xy 115.159804 95.619951)
-			)
-		)
-	)
-	(zone
 		(net 107)
 		(net_name "Net-(C35-Pad2)")
 		(layer "B.Cu")
@@ -306534,53 +306280,6 @@
 				(xy 145.357865 99.607925) (xy 145.393834 99.521375) (xy 145.394712 99.519676) (xy 145.476327 99.389474)
 				(xy 145.536023 99.298309) (xy 145.581987 99.180452) (xy 145.595248 99.102859) (xy 145.599445 99.018803)
 				(xy 145.60328 99.010711) (xy 145.61113 99.007686) (xy 145.788959 99.007686)
-			)
-		)
-	)
-	(zone
-		(net 71)
-		(net_name "/HDMI_D2+")
-		(layer "B.Cu")
-		(uuid "4643b5e5-1025-4a63-afd7-332660a25d14")
-		(name "$teardrop_padvia$")
-		(hatch none 0.1)
-		(priority 30364)
-		(attr
-			(teardrop
-				(type padvia)
-			)
-		)
-		(connect_pads yes
-			(clearance 0)
-		)
-		(min_thickness 0.0254)
-		(filled_areas_thickness no)
-		(fill yes
-			(thermal_gap 0.5)
-			(thermal_bridge_width 0.5)
-			(island_removal_mode 1)
-			(island_area_min 10)
-		)
-		(polygon
-			(pts
-				(xy 114.755 100.91) (xy 114.828781 100.915318) (xy 114.91711 100.932546) (xy 114.997346 100.959192)
-				(xy 115.070785 100.997933) (xy 115.114297 101.033667) (xy 115.146943 101.076695) (xy 115.160684 101.108201)
-				(xy 115.4335 100.81) (xy 115.160684 100.511799) (xy 115.119293 100.581084) (xy 115.04054 100.640317)
-				(xy 114.919387 100.686857) (xy 114.772491 100.709641) (xy 114.755 100.71)
-			)
-		)
-		(filled_polygon
-			(layer "B.Cu")
-			(pts
-				(xy 115.168664 100.521252) (xy 115.171296 100.523398) (xy 115.426274 100.802102) (xy 115.42933 100.81052)
-				(xy 115.426274 100.817898) (xy 115.17284 101.094913) (xy 115.164728 101.098703) (xy 115.15631 101.095647)
-				(xy 115.153484 101.091694) (xy 115.146943 101.076695) (xy 115.146942 101.076693) (xy 115.13062 101.055181)
-				(xy 115.114297 101.033667) (xy 115.070785 100.997933) (xy 114.997346 100.959192) (xy 114.997345 100.959191)
-				(xy 114.997344 100.959191) (xy 114.917113 100.932547) (xy 114.91711 100.932546) (xy 114.828781 100.915318)
-				(xy 114.822882 100.914892) (xy 114.765859 100.910782) (xy 114.757853 100.906769) (xy 114.755 100.899112)
-				(xy 114.755 100.721462) (xy 114.758427 100.713189) (xy 114.766459 100.709764) (xy 114.772491 100.709641)
-				(xy 114.919387 100.686857) (xy 115.04054 100.640317) (xy 115.119293 100.581084) (xy 115.152621 100.525294)
-				(xy 115.159804 100.519951)
 			)
 		)
 	)
@@ -308717,52 +308416,6 @@
 		)
 	)
 	(zone
-		(net 73)
-		(net_name "PICO_HDMI_CLK+")
-		(layer "B.Cu")
-		(uuid "5c2fa0d7-1911-48c2-988a-532df761f6b1")
-		(name "$teardrop_padvia$")
-		(hatch none 0.1)
-		(priority 30405)
-		(attr
-			(teardrop
-				(type padvia)
-			)
-		)
-		(connect_pads yes
-			(clearance 0)
-		)
-		(min_thickness 0.0254)
-		(filled_areas_thickness no)
-		(fill yes
-			(thermal_gap 0.5)
-			(thermal_bridge_width 0.5)
-			(island_removal_mode 1)
-			(island_area_min 10)
-		)
-		(polygon
-			(pts
-				(xy 117.137311 94.770018) (xy 117.042551 94.779247) (xy 116.987065 94.769449) (xy 116.932893 94.747137)
-				(xy 116.894266 94.719137) (xy 116.862162 94.680826) (xy 116.839316 94.631799) (xy 116.566793 94.930707)
-				(xy 116.889602 95.194602) (xy 116.919404 95.128846) (xy 116.994762 95.055032) (xy 117.127466 94.974357)
-				(xy 117.278733 94.91144)
-			)
-		)
-		(filled_polygon
-			(layer "B.Cu")
-			(pts
-				(xy 116.844012 94.644014) (xy 116.846734 94.647718) (xy 116.862162 94.680826) (xy 116.894266 94.719137)
-				(xy 116.920908 94.738449) (xy 116.932891 94.747136) (xy 116.932896 94.747139) (xy 116.969965 94.762406)
-				(xy 116.987065 94.769449) (xy 117.042551 94.779247) (xy 117.131812 94.770553) (xy 117.140377 94.773162)
-				(xy 117.141218 94.773925) (xy 117.266371 94.899078) (xy 117.269798 94.907351) (xy 117.266371 94.915624)
-				(xy 117.262591 94.918154) (xy 117.12746 94.974359) (xy 116.994761 95.055032) (xy 116.919405 95.128844)
-				(xy 116.895883 95.180743) (xy 116.889346 95.186864) (xy 116.880396 95.18657) (xy 116.877821 95.184971)
-				(xy 116.576353 94.938522) (xy 116.572117 94.930633) (xy 116.5747 94.922059) (xy 116.575087 94.921609)
-				(xy 116.827484 94.644776) (xy 116.835589 94.640972)
-			)
-		)
-	)
-	(zone
 		(net 33)
 		(net_name "LCD_B2")
 		(layer "B.Cu")
@@ -308903,53 +308556,6 @@
 				(xy 164.118464 85.295412) (xy 163.988298 85.137747) (xy 163.876192 85.005621) (xy 163.875715 85.00502)
 				(xy 163.695563 84.762095) (xy 163.693388 84.753409) (xy 163.697992 84.745728) (xy 163.698419 84.745426)
 				(xy 164.38849 84.283358) (xy 164.397271 84.281604)
-			)
-		)
-	)
-	(zone
-		(net 2)
-		(net_name "/HDMI_CLK+")
-		(layer "B.Cu")
-		(uuid "5eaba451-931b-48e4-a6bc-eb2b947442bd")
-		(name "$teardrop_padvia$")
-		(hatch none 0.1)
-		(priority 30381)
-		(attr
-			(teardrop
-				(type padvia)
-			)
-		)
-		(connect_pads yes
-			(clearance 0)
-		)
-		(min_thickness 0.0254)
-		(filled_areas_thickness no)
-		(fill yes
-			(thermal_gap 0.5)
-			(thermal_bridge_width 0.5)
-			(island_removal_mode 1)
-			(island_area_min 10)
-		)
-		(polygon
-			(pts
-				(xy 114.755995 94.87) (xy 114.858221 94.890017) (xy 114.918603 94.917252) (xy 114.976721 94.956028)
-				(xy 115.021397 94.998791) (xy 115.057747 95.050174) (xy 115.079602 95.100022) (xy 115.091584 95.15597)
-				(xy 115.092644 95.16803) (xy 115.4335 94.93) (xy 115.22 94.62) (xy 115.161787 94.651466) (xy 115.045378 94.670913)
-				(xy 114.830609 94.671661) (xy 114.755995 94.67)
-			)
-		)
-		(filled_polygon
-			(layer "B.Cu")
-			(pts
-				(xy 115.225958 94.628651) (xy 115.426906 94.920426) (xy 115.428776 94.929183) (xy 115.423969 94.936655)
-				(xy 115.108417 95.157014) (xy 115.099672 95.158941) (xy 115.092125 95.15412) (xy 115.090278 95.149874)
-				(xy 115.079602 95.100022) (xy 115.057747 95.050174) (xy 115.021397 94.998791) (xy 114.995125 94.973644)
-				(xy 114.976728 94.956034) (xy 114.976724 94.956031) (xy 114.976721 94.956028) (xy 114.918603 94.917252)
-				(xy 114.9186 94.917251) (xy 114.918596 94.917248) (xy 114.858227 94.890019) (xy 114.858221 94.890017)
-				(xy 114.765447 94.87185) (xy 114.757986 94.866897) (xy 114.755995 94.860368) (xy 114.755995 94.681963)
-				(xy 114.759422 94.67369) (xy 114.767695 94.670263) (xy 114.767932 94.670265) (xy 114.830609 94.671661)
-				(xy 115.045378 94.670913) (xy 115.142563 94.654677) (xy 115.161782 94.651467) (xy 115.161782 94.651466)
-				(xy 115.161787 94.651466) (xy 115.210761 94.624993) (xy 115.219666 94.624075)
 			)
 		)
 	)
@@ -311854,53 +311460,6 @@
 		)
 	)
 	(zone
-		(net 78)
-		(net_name "PICO_HDMI_D1-")
-		(layer "B.Cu")
-		(uuid "83d2616f-f1ca-4c06-b453-1da990166e55")
-		(name "$teardrop_padvia$")
-		(hatch none 0.1)
-		(priority 30409)
-		(attr
-			(teardrop
-				(type padvia)
-			)
-		)
-		(connect_pads yes
-			(clearance 0)
-		)
-		(min_thickness 0.0254)
-		(filled_areas_thickness no)
-		(fill yes
-			(thermal_gap 0.5)
-			(thermal_bridge_width 0.5)
-			(island_removal_mode 1)
-			(island_area_min 10)
-		)
-		(polygon
-			(pts
-				(xy 117.278733 97.88856) (xy 117.178796 97.84978) (xy 117.061753 97.78983) (xy 116.985807 97.738001)
-				(xy 116.925904 97.679693) (xy 116.902306 97.64323) (xy 116.889602 97.605398) (xy 116.566793 97.869293)
-				(xy 116.839316 98.168201) (xy 116.882392 98.092788) (xy 116.951075 98.043635) (xy 117.042457 98.02076)
-				(xy 117.137311 98.029982)
-			)
-		)
-		(filled_polygon
-			(layer "B.Cu")
-			(pts
-				(xy 116.892957 97.617765) (xy 116.89499 97.621445) (xy 116.902304 97.643225) (xy 116.902307 97.643233)
-				(xy 116.925904 97.679693) (xy 116.98581 97.738004) (xy 116.985811 97.738005) (xy 117.061752 97.78983)
-				(xy 117.061756 97.789832) (xy 117.178786 97.849775) (xy 117.178796 97.84978) (xy 117.252597 97.878418)
-				(xy 117.262003 97.882068) (xy 117.268476 97.888256) (xy 117.268678 97.897209) (xy 117.266043 97.901249)
-				(xy 117.141217 98.026075) (xy 117.132944 98.029502) (xy 117.131812 98.029447) (xy 117.042459 98.02076)
-				(xy 117.042456 98.02076) (xy 116.951076 98.043634) (xy 116.882391 98.092788) (xy 116.847289 98.154241)
-				(xy 116.84021 98.159725) (xy 116.831327 98.158597) (xy 116.828486 98.156322) (xy 116.575111 97.878417)
-				(xy 116.57207 97.869995) (xy 116.575875 97.861889) (xy 116.576336 97.861491) (xy 116.876497 97.61611)
-				(xy 116.885068 97.613529)
-			)
-		)
-	)
-	(zone
 		(net 62)
 		(net_name "GG_+5V")
 		(layer "B.Cu")
@@ -312659,52 +312218,6 @@
 		)
 	)
 	(zone
-		(net 75)
-		(net_name "PICO_HDMI_D0+")
-		(layer "B.Cu")
-		(uuid "8bacbcc3-4b6a-4a74-bb02-031e99ff79d0")
-		(name "$teardrop_padvia$")
-		(hatch none 0.1)
-		(priority 30403)
-		(attr
-			(teardrop
-				(type padvia)
-			)
-		)
-		(connect_pads yes
-			(clearance 0)
-		)
-		(min_thickness 0.0254)
-		(filled_areas_thickness no)
-		(fill yes
-			(thermal_gap 0.5)
-			(thermal_bridge_width 0.5)
-			(island_removal_mode 1)
-			(island_area_min 10)
-		)
-		(polygon
-			(pts
-				(xy 117.137311 96.730018) (xy 117.042551 96.739247) (xy 116.987065 96.729449) (xy 116.932893 96.707137)
-				(xy 116.894266 96.679137) (xy 116.862162 96.640826) (xy 116.839316 96.591799) (xy 116.566793 96.890707)
-				(xy 116.889602 97.154602) (xy 116.919404 97.088846) (xy 116.994762 97.015032) (xy 117.127466 96.934357)
-				(xy 117.278733 96.87144)
-			)
-		)
-		(filled_polygon
-			(layer "B.Cu")
-			(pts
-				(xy 116.844012 96.604014) (xy 116.846734 96.607718) (xy 116.862162 96.640826) (xy 116.894266 96.679137)
-				(xy 116.920908 96.698449) (xy 116.932891 96.707136) (xy 116.932896 96.707139) (xy 116.969965 96.722406)
-				(xy 116.987065 96.729449) (xy 117.042551 96.739247) (xy 117.131812 96.730553) (xy 117.140377 96.733162)
-				(xy 117.141218 96.733925) (xy 117.266371 96.859078) (xy 117.269798 96.867351) (xy 117.266371 96.875624)
-				(xy 117.262591 96.878154) (xy 117.12746 96.934359) (xy 116.994761 97.015032) (xy 116.919405 97.088844)
-				(xy 116.895883 97.140743) (xy 116.889346 97.146864) (xy 116.880396 97.14657) (xy 116.877821 97.144971)
-				(xy 116.576353 96.898522) (xy 116.572117 96.890633) (xy 116.5747 96.882059) (xy 116.575087 96.881609)
-				(xy 116.827484 96.604776) (xy 116.835589 96.600972)
-			)
-		)
-	)
-	(zone
 		(net 13)
 		(net_name "+5V")
 		(layer "B.Cu")
@@ -312844,100 +312357,6 @@
 				(xy 137.596655 97.385236) (xy 137.599429 97.376721) (xy 137.603288 97.373763) (xy 137.655295 97.349005)
 				(xy 137.702961 97.307051) (xy 137.742556 97.25525) (xy 137.781914 97.180122) (xy 137.809188 97.101712)
 				(xy 137.828487 96.974939) (xy 137.83312 96.967276) (xy 137.840054 96.965) (xy 138.019493 96.965)
-			)
-		)
-	)
-	(zone
-		(net 7)
-		(net_name "/HDMI_D0+")
-		(layer "B.Cu")
-		(uuid "8e6b500e-db59-47b2-be8b-f98e00a1a32c")
-		(name "$teardrop_padvia$")
-		(hatch none 0.1)
-		(priority 30367)
-		(attr
-			(teardrop
-				(type padvia)
-			)
-		)
-		(connect_pads yes
-			(clearance 0)
-		)
-		(min_thickness 0.0254)
-		(filled_areas_thickness no)
-		(fill yes
-			(thermal_gap 0.5)
-			(thermal_bridge_width 0.5)
-			(island_removal_mode 1)
-			(island_area_min 10)
-		)
-		(polygon
-			(pts
-				(xy 114.755 96.99) (xy 114.828781 96.995318) (xy 114.91711 97.012546) (xy 114.997346 97.039192)
-				(xy 115.070785 97.077933) (xy 115.114297 97.113667) (xy 115.146943 97.156695) (xy 115.160684 97.188201)
-				(xy 115.4335 96.89) (xy 115.160684 96.591799) (xy 115.119293 96.661084) (xy 115.04054 96.720317)
-				(xy 114.919387 96.766857) (xy 114.772491 96.789641) (xy 114.755 96.79)
-			)
-		)
-		(filled_polygon
-			(layer "B.Cu")
-			(pts
-				(xy 115.168664 96.601252) (xy 115.171296 96.603398) (xy 115.426274 96.882102) (xy 115.42933 96.89052)
-				(xy 115.426274 96.897898) (xy 115.17284 97.174913) (xy 115.164728 97.178703) (xy 115.15631 97.175647)
-				(xy 115.153484 97.171694) (xy 115.146943 97.156695) (xy 115.146942 97.156693) (xy 115.13062 97.135181)
-				(xy 115.114297 97.113667) (xy 115.070785 97.077933) (xy 114.997346 97.039192) (xy 114.997345 97.039191)
-				(xy 114.997344 97.039191) (xy 114.917113 97.012547) (xy 114.91711 97.012546) (xy 114.828781 96.995318)
-				(xy 114.822882 96.994892) (xy 114.765859 96.990782) (xy 114.757853 96.986769) (xy 114.755 96.979112)
-				(xy 114.755 96.801462) (xy 114.758427 96.793189) (xy 114.766459 96.789764) (xy 114.772491 96.789641)
-				(xy 114.919387 96.766857) (xy 115.04054 96.720317) (xy 115.119293 96.661084) (xy 115.152621 96.605294)
-				(xy 115.159804 96.599951)
-			)
-		)
-	)
-	(zone
-		(net 74)
-		(net_name "PICO_HDMI_CLK-")
-		(layer "B.Cu")
-		(uuid "8f0ec55b-3381-4e7c-8b19-52bbd6e40943")
-		(name "$teardrop_padvia$")
-		(hatch none 0.1)
-		(priority 30408)
-		(attr
-			(teardrop
-				(type padvia)
-			)
-		)
-		(connect_pads yes
-			(clearance 0)
-		)
-		(min_thickness 0.0254)
-		(filled_areas_thickness no)
-		(fill yes
-			(thermal_gap 0.5)
-			(thermal_bridge_width 0.5)
-			(island_removal_mode 1)
-			(island_area_min 10)
-		)
-		(polygon
-			(pts
-				(xy 117.278733 93.96856) (xy 117.178796 93.92978) (xy 117.061753 93.86983) (xy 116.985807 93.818001)
-				(xy 116.925904 93.759693) (xy 116.902306 93.72323) (xy 116.889602 93.685398) (xy 116.566793 93.949293)
-				(xy 116.839316 94.248201) (xy 116.882392 94.172788) (xy 116.951075 94.123635) (xy 117.042457 94.10076)
-				(xy 117.137311 94.109982)
-			)
-		)
-		(filled_polygon
-			(layer "B.Cu")
-			(pts
-				(xy 116.892957 93.697765) (xy 116.89499 93.701445) (xy 116.902304 93.723225) (xy 116.902307 93.723233)
-				(xy 116.925904 93.759693) (xy 116.98581 93.818004) (xy 116.985811 93.818005) (xy 117.061752 93.86983)
-				(xy 117.061756 93.869832) (xy 117.178786 93.929775) (xy 117.178796 93.92978) (xy 117.252597 93.958418)
-				(xy 117.262003 93.962068) (xy 117.268476 93.968256) (xy 117.268678 93.977209) (xy 117.266043 93.981249)
-				(xy 117.141217 94.106075) (xy 117.132944 94.109502) (xy 117.131812 94.109447) (xy 117.042459 94.10076)
-				(xy 117.042456 94.10076) (xy 116.951076 94.123634) (xy 116.882391 94.172788) (xy 116.847289 94.234241)
-				(xy 116.84021 94.239725) (xy 116.831327 94.238597) (xy 116.828486 94.236322) (xy 116.575111 93.958417)
-				(xy 116.57207 93.949995) (xy 116.575875 93.941889) (xy 116.576336 93.941491) (xy 116.876497 93.69611)
-				(xy 116.885068 93.693529)
 			)
 		)
 	)
@@ -313740,53 +313159,6 @@
 				(xy 147.412136 111.244855) (xy 147.403505 111.247243) (xy 147.395714 111.242829) (xy 147.395223 111.242151)
 				(xy 147.181718 110.924049) (xy 147.179953 110.91527) (xy 147.179963 110.915218) (xy 147.214203 110.745264)
 				(xy 147.255624 110.539656) (xy 147.260618 110.532224) (xy 147.269405 110.530498)
-			)
-		)
-	)
-	(zone
-		(net 80)
-		(net_name "PICO_HDMI_D2-")
-		(layer "B.Cu")
-		(uuid "9f15bda3-412f-4e7d-a3fa-eefa08c7ba1f")
-		(name "$teardrop_padvia$")
-		(hatch none 0.1)
-		(priority 30406)
-		(attr
-			(teardrop
-				(type padvia)
-			)
-		)
-		(connect_pads yes
-			(clearance 0)
-		)
-		(min_thickness 0.0254)
-		(filled_areas_thickness no)
-		(fill yes
-			(thermal_gap 0.5)
-			(thermal_bridge_width 0.5)
-			(island_removal_mode 1)
-			(island_area_min 10)
-		)
-		(polygon
-			(pts
-				(xy 117.278733 99.84856) (xy 117.178796 99.80978) (xy 117.061753 99.74983) (xy 116.985807 99.698001)
-				(xy 116.925904 99.639693) (xy 116.902306 99.60323) (xy 116.889602 99.565398) (xy 116.566793 99.829293)
-				(xy 116.839316 100.128201) (xy 116.882392 100.052788) (xy 116.951075 100.003635) (xy 117.042457 99.98076)
-				(xy 117.137311 99.989982)
-			)
-		)
-		(filled_polygon
-			(layer "B.Cu")
-			(pts
-				(xy 116.892957 99.577765) (xy 116.89499 99.581445) (xy 116.902304 99.603225) (xy 116.902307 99.603233)
-				(xy 116.925904 99.639693) (xy 116.98581 99.698004) (xy 116.985811 99.698005) (xy 117.061752 99.74983)
-				(xy 117.061756 99.749832) (xy 117.178786 99.809775) (xy 117.178796 99.80978) (xy 117.252597 99.838418)
-				(xy 117.262003 99.842068) (xy 117.268476 99.848256) (xy 117.268678 99.857209) (xy 117.266043 99.861249)
-				(xy 117.141217 99.986075) (xy 117.132944 99.989502) (xy 117.131812 99.989447) (xy 117.042459 99.98076)
-				(xy 117.042456 99.98076) (xy 116.951076 100.003634) (xy 116.882391 100.052788) (xy 116.847289 100.114241)
-				(xy 116.84021 100.119725) (xy 116.831327 100.118597) (xy 116.828486 100.116322) (xy 116.575111 99.838417)
-				(xy 116.57207 99.829995) (xy 116.575875 99.821889) (xy 116.576336 99.821491) (xy 116.876497 99.57611)
-				(xy 116.885068 99.573529)
 			)
 		)
 	)
@@ -315129,53 +314501,6 @@
 		)
 	)
 	(zone
-		(net 76)
-		(net_name "PICO_HDMI_D0-")
-		(layer "B.Cu")
-		(uuid "ae45ee5d-2e3b-4f34-aaf9-f87d38d53eb9")
-		(name "$teardrop_padvia$")
-		(hatch none 0.1)
-		(priority 30407)
-		(attr
-			(teardrop
-				(type padvia)
-			)
-		)
-		(connect_pads yes
-			(clearance 0)
-		)
-		(min_thickness 0.0254)
-		(filled_areas_thickness no)
-		(fill yes
-			(thermal_gap 0.5)
-			(thermal_bridge_width 0.5)
-			(island_removal_mode 1)
-			(island_area_min 10)
-		)
-		(polygon
-			(pts
-				(xy 117.278733 95.92856) (xy 117.178796 95.88978) (xy 117.061753 95.82983) (xy 116.985807 95.778001)
-				(xy 116.925904 95.719693) (xy 116.902306 95.68323) (xy 116.889602 95.645398) (xy 116.566793 95.909293)
-				(xy 116.839316 96.208201) (xy 116.882392 96.132788) (xy 116.951075 96.083635) (xy 117.042457 96.06076)
-				(xy 117.137311 96.069982)
-			)
-		)
-		(filled_polygon
-			(layer "B.Cu")
-			(pts
-				(xy 116.892957 95.657765) (xy 116.89499 95.661445) (xy 116.902304 95.683225) (xy 116.902307 95.683233)
-				(xy 116.925904 95.719693) (xy 116.98581 95.778004) (xy 116.985811 95.778005) (xy 117.061752 95.82983)
-				(xy 117.061756 95.829832) (xy 117.178786 95.889775) (xy 117.178796 95.88978) (xy 117.252597 95.918418)
-				(xy 117.262003 95.922068) (xy 117.268476 95.928256) (xy 117.268678 95.937209) (xy 117.266043 95.941249)
-				(xy 117.141217 96.066075) (xy 117.132944 96.069502) (xy 117.131812 96.069447) (xy 117.042459 96.06076)
-				(xy 117.042456 96.06076) (xy 116.951076 96.083634) (xy 116.882391 96.132788) (xy 116.847289 96.194241)
-				(xy 116.84021 96.199725) (xy 116.831327 96.198597) (xy 116.828486 96.196322) (xy 116.575111 95.918417)
-				(xy 116.57207 95.909995) (xy 116.575875 95.901889) (xy 116.576336 95.901491) (xy 116.876497 95.65611)
-				(xy 116.885068 95.653529)
-			)
-		)
-	)
-	(zone
 		(net 151)
 		(net_name "SR_G3")
 		(layer "B.Cu")
@@ -315894,52 +315219,6 @@
 		)
 	)
 	(zone
-		(net 77)
-		(net_name "PICO_HDMI_D1+")
-		(layer "B.Cu")
-		(uuid "b8cb3922-1428-4b9e-a843-38c2ea301a43")
-		(name "$teardrop_padvia$")
-		(hatch none 0.1)
-		(priority 30402)
-		(attr
-			(teardrop
-				(type padvia)
-			)
-		)
-		(connect_pads yes
-			(clearance 0)
-		)
-		(min_thickness 0.0254)
-		(filled_areas_thickness no)
-		(fill yes
-			(thermal_gap 0.5)
-			(thermal_bridge_width 0.5)
-			(island_removal_mode 1)
-			(island_area_min 10)
-		)
-		(polygon
-			(pts
-				(xy 117.137311 98.690018) (xy 117.042551 98.699247) (xy 116.987065 98.689449) (xy 116.932893 98.667137)
-				(xy 116.894266 98.639137) (xy 116.862162 98.600826) (xy 116.839316 98.551799) (xy 116.566793 98.850707)
-				(xy 116.889602 99.114602) (xy 116.919404 99.048846) (xy 116.994762 98.975032) (xy 117.127466 98.894357)
-				(xy 117.278733 98.83144)
-			)
-		)
-		(filled_polygon
-			(layer "B.Cu")
-			(pts
-				(xy 116.844012 98.564014) (xy 116.846734 98.567718) (xy 116.862162 98.600826) (xy 116.894266 98.639137)
-				(xy 116.920908 98.658449) (xy 116.932891 98.667136) (xy 116.932896 98.667139) (xy 116.969965 98.682406)
-				(xy 116.987065 98.689449) (xy 117.042551 98.699247) (xy 117.131812 98.690553) (xy 117.140377 98.693162)
-				(xy 117.141218 98.693925) (xy 117.266371 98.819078) (xy 117.269798 98.827351) (xy 117.266371 98.835624)
-				(xy 117.262591 98.838154) (xy 117.12746 98.894359) (xy 116.994761 98.975032) (xy 116.919405 99.048844)
-				(xy 116.895883 99.100743) (xy 116.889346 99.106864) (xy 116.880396 99.10657) (xy 116.877821 99.104971)
-				(xy 116.576353 98.858522) (xy 116.572117 98.850633) (xy 116.5747 98.842059) (xy 116.575087 98.841609)
-				(xy 116.827484 98.564776) (xy 116.835589 98.560972)
-			)
-		)
-	)
-	(zone
 		(net 28)
 		(net_name "GG_D3")
 		(layer "B.Cu")
@@ -316125,52 +315404,6 @@
 				(xy 126.455912 106.23088) (xy 126.488337 106.145324) (xy 126.489015 106.143854) (xy 126.56038 106.013826)
 				(xy 126.560473 106.013662) (xy 126.606622 105.934095) (xy 126.652072 105.81037) (xy 126.665259 105.72878)
 				(xy 126.669477 105.638837) (xy 126.673287 105.630734) (xy 126.681164 105.627686) (xy 126.95905 105.627686)
-			)
-		)
-	)
-	(zone
-		(net 79)
-		(net_name "PICO_HDMI_D2+")
-		(layer "B.Cu")
-		(uuid "bdbc0104-1dae-4a70-a354-c3e480ef7ec5")
-		(name "$teardrop_padvia$")
-		(hatch none 0.1)
-		(priority 30404)
-		(attr
-			(teardrop
-				(type padvia)
-			)
-		)
-		(connect_pads yes
-			(clearance 0)
-		)
-		(min_thickness 0.0254)
-		(filled_areas_thickness no)
-		(fill yes
-			(thermal_gap 0.5)
-			(thermal_bridge_width 0.5)
-			(island_removal_mode 1)
-			(island_area_min 10)
-		)
-		(polygon
-			(pts
-				(xy 117.137311 100.650018) (xy 117.042551 100.659247) (xy 116.987065 100.649449) (xy 116.932893 100.627137)
-				(xy 116.894266 100.599137) (xy 116.862162 100.560826) (xy 116.839316 100.511799) (xy 116.566793 100.810707)
-				(xy 116.889602 101.074602) (xy 116.919404 101.008846) (xy 116.994762 100.935032) (xy 117.127466 100.854357)
-				(xy 117.278733 100.79144)
-			)
-		)
-		(filled_polygon
-			(layer "B.Cu")
-			(pts
-				(xy 116.844012 100.524014) (xy 116.846734 100.527718) (xy 116.862162 100.560826) (xy 116.894266 100.599137)
-				(xy 116.920908 100.618449) (xy 116.932891 100.627136) (xy 116.932896 100.627139) (xy 116.969965 100.642406)
-				(xy 116.987065 100.649449) (xy 117.042551 100.659247) (xy 117.131812 100.650553) (xy 117.140377 100.653162)
-				(xy 117.141218 100.653925) (xy 117.266371 100.779078) (xy 117.269798 100.787351) (xy 117.266371 100.795624)
-				(xy 117.262591 100.798154) (xy 117.12746 100.854359) (xy 116.994761 100.935032) (xy 116.919405 101.008844)
-				(xy 116.895883 101.060743) (xy 116.889346 101.066864) (xy 116.880396 101.06657) (xy 116.877821 101.064971)
-				(xy 116.576353 100.818522) (xy 116.572117 100.810633) (xy 116.5747 100.802059) (xy 116.575087 100.801609)
-				(xy 116.827484 100.524776) (xy 116.835589 100.520972)
 			)
 		)
 	)
@@ -320270,53 +319503,6 @@
 		)
 	)
 	(zone
-		(net 6)
-		(net_name "/HDMI_CLK-")
-		(layer "B.Cu")
-		(uuid "f047f7a6-3791-40bf-b876-ba697e0356a2")
-		(name "$teardrop_padvia$")
-		(hatch none 0.1)
-		(priority 30313)
-		(attr
-			(teardrop
-				(type padvia)
-			)
-		)
-		(connect_pads yes
-			(clearance 0)
-		)
-		(min_thickness 0.0254)
-		(filled_areas_thickness no)
-		(fill yes
-			(thermal_gap 0.5)
-			(thermal_bridge_width 0.5)
-			(island_removal_mode 1)
-			(island_area_min 10)
-		)
-		(polygon
-			(pts
-				(xy 114.76594 93.84) (xy 114.859474 93.859834) (xy 114.914225 93.886912) (xy 114.966772 93.925267)
-				(xy 115.00877 93.969134) (xy 115.042938 94.021831) (xy 115.063892 94.07418) (xy 115.075094 94.132915)
-				(xy 115.07647 94.162662) (xy 115.4335 93.95) (xy 115.481109 93.64) (xy 115.325658 93.660373) (xy 115.084345 93.657202)
-				(xy 114.963026 93.649587) (xy 114.76594 93.64)
-			)
-		)
-		(filled_polygon
-			(layer "B.Cu")
-			(pts
-				(xy 114.778176 93.640595) (xy 114.962976 93.649584) (xy 114.963061 93.649589) (xy 115.084345 93.657202)
-				(xy 115.25809 93.659485) (xy 115.325651 93.660373) (xy 115.325651 93.660372) (xy 115.325658 93.660373)
-				(xy 115.465661 93.642024) (xy 115.474307 93.644347) (xy 115.47878 93.652105) (xy 115.478743 93.655401)
-				(xy 115.434337 93.944547) (xy 115.429694 93.952204) (xy 115.42876 93.952823) (xy 115.093242 94.152671)
-				(xy 115.084381 94.15396) (xy 115.077203 94.148606) (xy 115.075568 94.143163) (xy 115.075094 94.132915)
-				(xy 115.063892 94.07418) (xy 115.042938 94.021831) (xy 115.042935 94.021825) (xy 115.008768 93.969131)
-				(xy 114.966774 93.925268) (xy 114.966768 93.925263) (xy 114.914231 93.886916) (xy 114.91422 93.886909)
-				(xy 114.859482 93.859837) (xy 114.859471 93.859833) (xy 114.775213 93.841965) (xy 114.767831 93.836897)
-				(xy 114.76594 93.83052) (xy 114.76594 93.652282) (xy 114.769367 93.644009) (xy 114.77764 93.640582)
-			)
-		)
-	)
-	(zone
 		(net 25)
 		(net_name "GG_CLK")
 		(layer "B.Cu")
@@ -320604,53 +319790,6 @@
 		)
 	)
 	(zone
-		(net 69)
-		(net_name "/HDMI_D1+")
-		(layer "B.Cu")
-		(uuid "f5c6d084-e4f1-43e1-942a-d67557ba6435")
-		(name "$teardrop_padvia$")
-		(hatch none 0.1)
-		(priority 30312)
-		(attr
-			(teardrop
-				(type padvia)
-			)
-		)
-		(connect_pads yes
-			(clearance 0)
-		)
-		(min_thickness 0.0254)
-		(filled_areas_thickness no)
-		(fill yes
-			(thermal_gap 0.5)
-			(thermal_bridge_width 0.5)
-			(island_removal_mode 1)
-			(island_area_min 10)
-		)
-		(polygon
-			(pts
-				(xy 114.76594 98.74) (xy 114.859474 98.759834) (xy 114.914225 98.786912) (xy 114.966772 98.825267)
-				(xy 115.00877 98.869134) (xy 115.042938 98.921831) (xy 115.063892 98.97418) (xy 115.075094 99.032915)
-				(xy 115.07647 99.062662) (xy 115.4335 98.85) (xy 115.481109 98.54) (xy 115.325658 98.560373) (xy 115.084345 98.557202)
-				(xy 114.963026 98.549587) (xy 114.76594 98.54)
-			)
-		)
-		(filled_polygon
-			(layer "B.Cu")
-			(pts
-				(xy 114.778176 98.540595) (xy 114.962976 98.549584) (xy 114.963061 98.549589) (xy 115.084345 98.557202)
-				(xy 115.25809 98.559485) (xy 115.325651 98.560373) (xy 115.325651 98.560372) (xy 115.325658 98.560373)
-				(xy 115.465661 98.542024) (xy 115.474307 98.544347) (xy 115.47878 98.552105) (xy 115.478743 98.555401)
-				(xy 115.434337 98.844547) (xy 115.429694 98.852204) (xy 115.42876 98.852823) (xy 115.093242 99.052671)
-				(xy 115.084381 99.05396) (xy 115.077203 99.048606) (xy 115.075568 99.043163) (xy 115.075094 99.032915)
-				(xy 115.063892 98.97418) (xy 115.042938 98.921831) (xy 115.042935 98.921825) (xy 115.008768 98.869131)
-				(xy 114.966774 98.825268) (xy 114.966768 98.825263) (xy 114.914231 98.786916) (xy 114.91422 98.786909)
-				(xy 114.859482 98.759837) (xy 114.859471 98.759833) (xy 114.775213 98.741965) (xy 114.767831 98.736897)
-				(xy 114.76594 98.73052) (xy 114.76594 98.552282) (xy 114.769367 98.544009) (xy 114.77764 98.540582)
-			)
-		)
-	)
-	(zone
 		(net 25)
 		(net_name "GG_CLK")
 		(layer "B.Cu")
@@ -320893,53 +320032,6 @@
 				(xy 175.266205 104.210623) (xy 175.236569 104.199681) (xy 175.236566 104.19968) (xy 175.236565 104.19968)
 				(xy 175.208571 104.19517) (xy 175.200948 104.190471) (xy 175.198881 104.181758) (xy 175.202443 104.175071)
 				(xy 175.752011 103.661466) (xy 175.760396 103.658321)
-			)
-		)
-	)
-	(zone
-		(net 70)
-		(net_name "/HDMI_D1-")
-		(layer "B.Cu")
-		(uuid "f8cfb805-8a0a-4f09-a945-e26eff7f6cd4")
-		(name "$teardrop_padvia$")
-		(hatch none 0.1)
-		(priority 30365)
-		(attr
-			(teardrop
-				(type padvia)
-			)
-		)
-		(connect_pads yes
-			(clearance 0)
-		)
-		(min_thickness 0.0254)
-		(filled_areas_thickness no)
-		(fill yes
-			(thermal_gap 0.5)
-			(thermal_bridge_width 0.5)
-			(island_removal_mode 1)
-			(island_area_min 10)
-		)
-		(polygon
-			(pts
-				(xy 114.755 97.97) (xy 114.828781 97.975318) (xy 114.91711 97.992546) (xy 114.997346 98.019192)
-				(xy 115.070785 98.057933) (xy 115.114297 98.093667) (xy 115.146943 98.136695) (xy 115.160684 98.168201)
-				(xy 115.4335 97.87) (xy 115.160684 97.571799) (xy 115.119293 97.641084) (xy 115.04054 97.700317)
-				(xy 114.919387 97.746857) (xy 114.772491 97.769641) (xy 114.755 97.77)
-			)
-		)
-		(filled_polygon
-			(layer "B.Cu")
-			(pts
-				(xy 115.168664 97.581252) (xy 115.171296 97.583398) (xy 115.426274 97.862102) (xy 115.42933 97.87052)
-				(xy 115.426274 97.877898) (xy 115.17284 98.154913) (xy 115.164728 98.158703) (xy 115.15631 98.155647)
-				(xy 115.153484 98.151694) (xy 115.146943 98.136695) (xy 115.146942 98.136693) (xy 115.13062 98.115181)
-				(xy 115.114297 98.093667) (xy 115.070785 98.057933) (xy 114.997346 98.019192) (xy 114.997345 98.019191)
-				(xy 114.997344 98.019191) (xy 114.917113 97.992547) (xy 114.91711 97.992546) (xy 114.828781 97.975318)
-				(xy 114.822882 97.974892) (xy 114.765859 97.970782) (xy 114.757853 97.966769) (xy 114.755 97.959112)
-				(xy 114.755 97.781462) (xy 114.758427 97.773189) (xy 114.766459 97.769764) (xy 114.772491 97.769641)
-				(xy 114.919387 97.746857) (xy 115.04054 97.700317) (xy 115.119293 97.641084) (xy 115.152621 97.585294)
-				(xy 115.159804 97.579951)
 			)
 		)
 	)
