@@ -626,7 +626,9 @@
     "pinned_footprint_libs": [
       "gg_lcd"
     ],
-    "pinned_symbol_libs": []
+    "pinned_symbol_libs": [
+      "gg_lcd"
+    ]
   },
   "meta": {
     "filename": "GG_LCD_DIY.kicad_pro",
