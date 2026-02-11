@@ -1,5 +1,5 @@
-.define dw 15 ;Vsync
-.define cl2 16; ;Hsync
+.define dw 16 ;Vsync
+.define cl2 15; ;Hsync
 .define clk 17 ;Pixel clock
 
 ;///////////////////////////////////////
@@ -65,8 +65,8 @@ inner_loop:
 
 skip_start:
 
-	wait 0 gpio clk
-	wait 1 gpio clk
+	wait 0 gpio clk [2] ;can just wait some cycles once the clk signal goes low....
+	;wait 1 gpio clk
 
 	in pins, 4
 
