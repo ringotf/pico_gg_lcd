@@ -4878,7 +4878,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 52.578 44.45 0)
+			(at 45.72 43.942 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5073,7 +5073,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 52.578 41.656 0)
+			(at 46.482 42.164 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5597,71 +5597,6 @@
 			(project "InstallationFlex"
 				(path "/a76be214-be29-4d5c-b6c1-be579b0fd0f5"
 					(reference "TP9")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:Conn_01x01_Pin")
-		(at 49.53 43.18 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(dnp no)
-		(uuid "fbd2ebde-fb96-4caa-bc4b-9775f13f3aa7")
-		(property "Reference" "J2"
-			(at 51.816 41.656 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 46.736 43.18 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "gg_lcd:TestPoint_THTPad_D2.5mm_Drill1.2mm"
-			(at 49.53 43.18 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 49.53 43.18 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 49.53 43.18 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "503b6cf5-5909-4af8-afdb-270833089c83")
-		)
-		(instances
-			(project "InstallationFlex"
-				(path "/a76be214-be29-4d5c-b6c1-be579b0fd0f5"
-					(reference "J2")
 					(unit 1)
 				)
 			)
