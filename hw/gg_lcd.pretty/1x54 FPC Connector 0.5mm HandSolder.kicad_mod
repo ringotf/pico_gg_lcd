@@ -1,4 +1,4 @@
-(footprint "1x54 To 1x60 FPC Connector 0.5mm HandSolder"
+(footprint "1x54 FPC Connector 0.5mm HandSolder"
 	(version 20241229)
 	(generator "pcbnew")
 	(generator_version "9.0")
@@ -95,8 +95,8 @@
 		(uuid "a955181b-4e7a-4dbb-8227-d67b127020a8")
 	)
 	(fp_line
-		(start 15.155 -2.6)
-		(end 17.63 -2.6)
+		(start 12.155 -2.6)
+		(end 14.63 -2.6)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -105,8 +105,8 @@
 		(uuid "928b5610-42b7-48c8-8392-216d436b4115")
 	)
 	(fp_line
-		(start 17.59 2.86)
-		(end 17.95 2.86)
+		(start 14.59 2.86)
+		(end 14.95 2.86)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -115,8 +115,8 @@
 		(uuid "202504ba-97a4-4685-b253-bbf1988b4961")
 	)
 	(fp_line
-		(start 17.63 -2.6)
-		(end 17.63 -1.66)
+		(start 14.63 -2.6)
+		(end 14.63 -1.66)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -125,8 +125,8 @@
 		(uuid "1915b715-9272-4fe5-8e83-46e1fdbd16c3")
 	)
 	(fp_line
-		(start 17.95 2.86)
-		(end 17.95 3.655)
+		(start 14.95 2.86)
+		(end 14.95 3.655)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -135,7 +135,7 @@
 		(uuid "514b6534-9900-4b90-8e03-e7ab82e0d138")
 	)
 	(fp_line
-		(start 17.95 3.66)
+		(start 14.95 3.66)
 		(end -18.1 3.66)
 		(stroke
 			(width 0.15)
@@ -143,72 +143,6 @@
 		)
 		(layer "F.SilkS")
 		(uuid "cd975da9-5c70-441e-b2c7-7b962ac92654")
-	)
-	(fp_rect
-		(start 12.170006 -3.38)
-		(end 12.33 -2.42)
-		(stroke
-			(width 0.15)
-			(type default)
-		)
-		(fill yes)
-		(layer "F.SilkS")
-		(uuid "d61b2184-a6e7-4759-bd55-f1a32d9bf27f")
-	)
-	(fp_rect
-		(start 12.670006 -3.38)
-		(end 12.83 -2.42)
-		(stroke
-			(width 0.15)
-			(type default)
-		)
-		(fill yes)
-		(layer "F.SilkS")
-		(uuid "44670248-7daf-4339-b63a-5ed7213dd288")
-	)
-	(fp_rect
-		(start 13.170006 -3.38)
-		(end 13.33 -2.42)
-		(stroke
-			(width 0.15)
-			(type default)
-		)
-		(fill yes)
-		(layer "F.SilkS")
-		(uuid "420fc375-3746-471e-be12-878f10467943")
-	)
-	(fp_rect
-		(start 13.670006 -3.38)
-		(end 13.83 -2.42)
-		(stroke
-			(width 0.15)
-			(type default)
-		)
-		(fill yes)
-		(layer "F.SilkS")
-		(uuid "e5a9e710-4053-44ac-a57a-2039bba38dad")
-	)
-	(fp_rect
-		(start 14.170003 -3.38)
-		(end 14.329997 -2.42)
-		(stroke
-			(width 0.15)
-			(type default)
-		)
-		(fill yes)
-		(layer "F.SilkS")
-		(uuid "7b559160-5e77-4791-b695-7f5d6b3c2a31")
-	)
-	(fp_rect
-		(start 14.670006 -3.38)
-		(end 14.83 -2.42)
-		(stroke
-			(width 0.15)
-			(type default)
-		)
-		(fill yes)
-		(layer "F.SilkS")
-		(uuid "f8dc3b27-0a88-4cd0-a8ab-ae2856e83763")
 	)
 	(fp_poly
 		(pts
@@ -224,7 +158,7 @@
 	)
 	(fp_rect
 		(start -19.55 -4.1)
-		(end 18.19 5.99)
+		(end 15.19 5.99)
 		(stroke
 			(width 0.05)
 			(type solid)
@@ -235,7 +169,7 @@
 	)
 	(fp_line
 		(start -17.2 -2.25)
-		(end 17.2 -2.25)
+		(end 14.2 -2.25)
 		(stroke
 			(width 0.1)
 			(type solid)
@@ -294,7 +228,7 @@
 		(uuid "84288708-c54f-44c0-a8bf-fcd6b96781ed")
 	)
 	(fp_line
-		(start 14.75 3.55)
+		(start 11.75 3.55)
 		(end -14.75 3.55)
 		(stroke
 			(width 0.1)
@@ -304,8 +238,8 @@
 		(uuid "b57c3214-9600-4c9c-afba-b6e9cc9e0c2f")
 	)
 	(fp_line
-		(start 15.5 3)
-		(end 14.75 3.55)
+		(start 12.5 3)
+		(end 11.75 3.55)
 		(stroke
 			(width 0.1)
 			(type solid)
@@ -314,8 +248,8 @@
 		(uuid "91157451-1b98-424d-ae7b-c41cfab4293c")
 	)
 	(fp_line
-		(start 15.5 3)
-		(end 17.19 3)
+		(start 12.5 3)
+		(end 14.19 3)
 		(stroke
 			(width 0.1)
 			(type solid)
@@ -324,8 +258,8 @@
 		(uuid "f2b8f9ff-65cd-48fe-8138-b67c0d539302")
 	)
 	(fp_line
-		(start 17.2 -2.25)
-		(end 17.2 3)
+		(start 14.2 -2.25)
+		(end 14.2 3)
 		(stroke
 			(width 0.1)
 			(type solid)
@@ -1348,7 +1282,7 @@
 		(uuid "b4b0e49e-27dc-46d8-b408-dc1ec9049d4e")
 	)
 	(pad "MP" smd custom
-		(at 16.48 -0.16)
+		(at 13.88 -0.08)
 		(size 1 1)
 		(layers "F.Cu" "F.Mask" "F.Paste")
 		(thermal_bridge_angle 90)
@@ -1359,7 +1293,7 @@
 		(primitives
 			(gr_poly
 				(pts
-					(xy -3.98 -1.18) (xy -3.98 2.66) (xy 1.479392 2.66) (xy 1.480354 -1.18)
+					(xy -1.38 -1.26) (xy -1.38 2.58) (xy 1.079392 2.58) (xy 1.080354 -1.26)
 				)
 				(width 0)
 				(fill yes)
