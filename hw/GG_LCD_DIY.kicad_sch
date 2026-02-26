@@ -5854,6 +5854,113 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Mechanical:MountingHole_Pad"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom no)
+			(on_board yes)
+			(property "Reference" "H"
+				(at 0 6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "MountingHole_Pad"
+				(at 0 4.445 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Mounting Hole with connection"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "mounting hole"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "MountingHole*Pad*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "MountingHole_Pad_0_1"
+				(circle
+					(center 0 1.27)
+					(radius 1.27)
+					(stroke
+						(width 1.27)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "MountingHole_Pad_1_1"
+				(pin input line
+					(at 0 -2.54 90)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Regulator_Linear:XC6206PxxxMR"
 			(pin_names
 				(offset 0.254)
@@ -9671,6 +9778,12 @@
 		(uuid "260db009-c83c-4b94-b259-b71ee79899bc")
 	)
 	(junction
+		(at 369.57 262.89)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "26c613e7-6460-440d-8838-104f3b878a47")
+	)
+	(junction
 		(at 217.17 30.48)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -13374,6 +13487,16 @@
 	)
 	(wire
 		(pts
+			(xy 369.57 262.89) (xy 369.57 265.43)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7bda2f0b-8dc5-4d80-9124-a178d20b4dc0")
+	)
+	(wire
+		(pts
 			(xy 269.24 130.81) (xy 270.51 130.81)
 		)
 		(stroke
@@ -14281,6 +14404,16 @@
 			(type default)
 		)
 		(uuid "a629bb55-791d-4afd-827a-0a1ef75b56ec")
+	)
+	(wire
+		(pts
+			(xy 361.95 262.89) (xy 369.57 262.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a68bcc6e-373a-4f97-871c-c9c4cc595e9f")
 	)
 	(wire
 		(pts
@@ -15441,6 +15574,16 @@
 			(type default)
 		)
 		(uuid "d7954e84-8769-43c9-bb90-80e9dd8cb6c9")
+	)
+	(wire
+		(pts
+			(xy 369.57 262.89) (xy 377.19 262.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d7ccfefe-3a41-4a25-ac36-87fa836208d3")
 	)
 	(wire
 		(pts
@@ -20352,7 +20495,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603"
+		(property "Footprint" "gg_lcd:R_Array_Convex_4x0603"
 			(at 114.808 240.03 90)
 			(effects
 				(font
@@ -20877,7 +21020,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603"
+		(property "Footprint" "gg_lcd:R_Array_Convex_4x0603"
 			(at 74.168 240.03 90)
 			(effects
 				(font
@@ -21263,6 +21406,72 @@
 			(project "GG_LCD_DIY"
 				(path "/3d44d538-5a98-46a3-9be3-06226a7e61c1"
 					(reference "#PWR0153")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_name "GND_8")
+		(lib_id "power:GND")
+		(at 369.57 265.43 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "14993898-c736-42a4-9cbe-2a032d7081d6")
+		(property "Reference" "#PWR03"
+			(at 369.57 271.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 373.634 267.716 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 369.57 265.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 369.57 265.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 369.57 265.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c3b8a6aa-8f5a-4665-b1fd-75b337cfc1d5")
+		)
+		(instances
+			(project "GG_LCD_DIY"
+				(path "/3d44d538-5a98-46a3-9be3-06226a7e61c1"
+					(reference "#PWR03")
 					(unit 1)
 				)
 			)
@@ -21786,7 +21995,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603"
+		(property "Footprint" "gg_lcd:R_Array_Convex_4x0603"
 			(at 123.698 248.92 90)
 			(effects
 				(font
@@ -22561,7 +22770,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603"
+		(property "Footprint" "gg_lcd:R_Array_Convex_4x0603"
 			(at 118.618 248.92 90)
 			(effects
 				(font
@@ -22749,6 +22958,73 @@
 			(project "GG_LCD_DIY"
 				(path "/3d44d538-5a98-46a3-9be3-06226a7e61c1"
 					(reference "#PWR0105")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 369.57 260.35 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "2f735dae-222a-4f31-9c32-70738f24cbef")
+		(property "Reference" "H2"
+			(at 372.11 257.8099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole_Pad"
+			(at 372.11 260.3499 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_2.2mm_M2_ISO7380_Pad"
+			(at 369.57 260.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 369.57 260.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole with connection"
+			(at 369.57 260.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "4d755cbe-4e74-40bc-8253-d9395f4e3da0")
+		)
+		(instances
+			(project ""
+				(path "/3d44d538-5a98-46a3-9be3-06226a7e61c1"
+					(reference "H2")
 					(unit 1)
 				)
 			)
@@ -24517,7 +24793,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603"
+		(property "Footprint" "gg_lcd:R_Array_Convex_4x0603"
 			(at 69.088 240.03 90)
 			(effects
 				(font
@@ -24936,7 +25212,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603"
+		(property "Footprint" "gg_lcd:R_Array_Convex_4x0603"
 			(at 119.888 240.03 90)
 			(effects
 				(font
@@ -25311,7 +25587,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603"
+		(property "Footprint" "gg_lcd:R_Array_Convex_4x0603"
 			(at 84.328 240.03 90)
 			(effects
 				(font
@@ -26226,7 +26502,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603"
+		(property "Footprint" "gg_lcd:R_Array_Convex_4x0603"
 			(at 108.458 248.92 90)
 			(effects
 				(font
@@ -26588,7 +26864,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603"
+		(property "Footprint" "gg_lcd:R_Array_Convex_4x0603"
 			(at 83.058 248.92 90)
 			(effects
 				(font
@@ -27288,7 +27564,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603"
+		(property "Footprint" "gg_lcd:R_Array_Convex_4x0603"
 			(at 94.488 240.03 90)
 			(effects
 				(font
@@ -27585,7 +27861,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603"
+		(property "Footprint" "gg_lcd:R_Array_Convex_4x0603"
 			(at 124.968 240.03 90)
 			(effects
 				(font
@@ -27881,7 +28157,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603"
+		(property "Footprint" "gg_lcd:R_Array_Convex_4x0603"
 			(at 77.978 248.92 90)
 			(effects
 				(font
@@ -28783,6 +29059,73 @@
 		)
 	)
 	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 361.95 260.35 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "8d224641-da50-40d3-98ea-63d2d9bf55e3")
+		(property "Reference" "H1"
+			(at 364.49 257.8099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole_Pad"
+			(at 364.49 260.3499 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_2.2mm_M2_ISO7380_Pad"
+			(at 361.95 260.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 361.95 260.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole with connection"
+			(at 361.95 260.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "4d755cbe-4e74-40bc-8253-d9395f4e3da0")
+		)
+		(instances
+			(project ""
+				(path "/3d44d538-5a98-46a3-9be3-06226a7e61c1"
+					(reference "H1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector:TestPoint")
 		(at 40.64 21.59 0)
 		(unit 1)
@@ -28943,7 +29286,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603"
+		(property "Footprint" "gg_lcd:R_Array_Convex_4x0603"
 			(at 79.248 240.03 90)
 			(effects
 				(font
@@ -29031,7 +29374,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603"
+		(property "Footprint" "gg_lcd:R_Array_Convex_4x0603"
 			(at 93.218 248.92 90)
 			(effects
 				(font
@@ -29837,7 +30180,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603"
+		(property "Footprint" "gg_lcd:R_Array_Convex_4x0603"
 			(at 98.298 248.92 90)
 			(effects
 				(font
@@ -30534,7 +30877,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603"
+		(property "Footprint" "gg_lcd:R_Array_Convex_4x0603"
 			(at 66.548 248.92 90)
 			(effects
 				(font
@@ -30739,6 +31082,73 @@
 		)
 	)
 	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 377.19 260.35 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b200a709-8a15-4e18-bdd6-2c04d1b0ba2c")
+		(property "Reference" "H3"
+			(at 379.73 257.8099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole_Pad"
+			(at 379.73 260.3499 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_2.2mm_M2_ISO7380_Pad"
+			(at 377.19 260.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 377.19 260.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole with connection"
+			(at 377.19 260.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "4d755cbe-4e74-40bc-8253-d9395f4e3da0")
+		)
+		(instances
+			(project ""
+				(path "/3d44d538-5a98-46a3-9be3-06226a7e61c1"
+					(reference "H3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R_Pack04_Split")
 		(at 115.57 248.92 0)
 		(unit 2)
@@ -30766,7 +31176,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603"
+		(property "Footprint" "gg_lcd:R_Array_Convex_4x0603"
 			(at 113.538 248.92 90)
 			(effects
 				(font
@@ -30921,7 +31331,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603"
+		(property "Footprint" "gg_lcd:R_Array_Convex_4x0603"
 			(at 104.648 240.03 90)
 			(effects
 				(font
@@ -31419,7 +31829,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603"
+		(property "Footprint" "gg_lcd:R_Array_Convex_4x0603"
 			(at 109.728 240.03 90)
 			(effects
 				(font
@@ -32302,7 +32712,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603"
+		(property "Footprint" "gg_lcd:R_Array_Convex_4x0603"
 			(at 103.378 248.92 90)
 			(effects
 				(font
@@ -32390,7 +32800,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603"
+		(property "Footprint" "gg_lcd:R_Array_Convex_4x0603"
 			(at 72.898 248.92 90)
 			(effects
 				(font
@@ -32614,7 +33024,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603"
+		(property "Footprint" "gg_lcd:R_Array_Convex_4x0603"
 			(at 99.568 240.03 90)
 			(effects
 				(font
@@ -34269,7 +34679,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603"
+		(property "Footprint" "gg_lcd:R_Array_Convex_4x0603"
 			(at 89.408 240.03 90)
 			(effects
 				(font
@@ -35318,7 +35728,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603"
+		(property "Footprint" "gg_lcd:R_Array_Convex_4x0603"
 			(at 88.138 248.92 90)
 			(effects
 				(font

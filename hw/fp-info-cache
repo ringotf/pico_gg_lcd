@@ -1,4 +1,4 @@
-27194236535546438
+27196008642405222
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -107683,6 +107683,13 @@ resistor handsolder
 gg_lcd
 R_Array_Convex_4x0402
 Chip Resistor Network, ROHM MNR04 (see mnr_g.pdf)
+resistor array
+0
+8
+8
+gg_lcd
+R_Array_Convex_4x0603
+Chip Resistor Network, ROHM MNR14 (see mnr_g.pdf)
 resistor array
 0
 8
