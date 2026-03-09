@@ -71,7 +71,7 @@ void core1_main() {
 
 //Use two framebuffers to prevent tearing
 uint16_t * framebuffer = (uint16_t *)(0x20000000 + (1024 * 30));
-uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 30) + (pixels_in_scanline * scanlines_in_active_area));
+uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 30) + (pixels_in_scanline * scanlines_in_active_area * 2));
 
 uint32_t pot_history[16];
 uint32_t brightness = 0;
