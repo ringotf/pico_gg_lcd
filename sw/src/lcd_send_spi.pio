@@ -21,6 +21,8 @@ irq set 4 ;flag for when we get stalled waiting to pull a byte
 
 ;pull ; autopull is enabled this isnt needed
 
+;out X 20 ;discard top 20 bits - oops! Not needed when the shift register order is fixed
+
 ;send the bits to the shift buffer
 buffer_target: 
 

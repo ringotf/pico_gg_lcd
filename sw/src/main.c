@@ -225,8 +225,8 @@ static inline __attribute__ ((always_inline)) void send_lcd_pixel(uint16_t data)
 	//bit shifting is just because the shift register pins are wired MSB first so RGB but the lcd pins are aligned LSB first so BGR
 	//change the shift register to lcd pin order and the shifting isnt needed
 	//but the shifting doesnt seem to take much time anyway
-	//pio_sm_put(lcd_send_pio, lcd_send_sm, (uint32_t)data << 20 );
-	pio_sm_put(lcd_send_pio, lcd_send_sm, (uint32_t)data << 20 );
+	pio_sm_put(lcd_send_pio, lcd_send_sm, (uint32_t)data << 20 ); //SHIFTING SHOULDNT BE NEEDED WHEN THE SR ORDER IS FIXED
+	//pio_sm_put(lcd_send_pio, lcd_send_sm, (uint32_t)data); //Work around is now in PIO program to "out NULL 20" discard the MSB 20 bits
 
 	//pio_sm_put(lcd_send_pio, lcd_send_sm, (uint32_t)data);
 
@@ -263,6 +263,7 @@ static inline __attribute__ ((always_inline)) void lcd_den_set(bool lcd_den_valu
 		__asm volatile("nop");
 	}
 	
+	//wait for pio interrupt to flag it's stalled and waiting for bytes
 	while(!skip_interrupt && !pio_interrupt_get(lcd_send_pio, 4));
 
 	gpio_put(lcd_den, lcd_den_value);
@@ -293,7 +294,9 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 	//If neither of these two DMA channels is busy, then the console must be in vblank
 	//while(!dma_channel_is_busy(dma_chan_fb1_write) && !dma_channel_is_busy(dma_chan_fb2_write)) ;
 
-	uint16_t spi_buffer[4] = {0x800, 0x800, 0x800, 0x800};  
+	//uint16_t spi_buffer[4] = {0x800, 0x800, 0x800, 0x800};  
+	//uint16_t spi_buffer[4] = {0x0007, 0x0007, 0x0007, 0x0007};  
+	//uint16_t spi_buffer[4] = {0x004, 0x004, 0x004, 0x004};  
 
 	//See which of the two framebuffer is currently being written to and pick the other one to send to the LCD
 	//This introduces a single frame of latency
@@ -533,6 +536,12 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 				send_lcd_pixel(curr_framebuffer[x+1]);
 				send_lcd_pixel(curr_framebuffer[x+2]);
 				send_lcd_pixel(curr_framebuffer[x+3]);
+
+				
+				/*send_lcd_pixel(spi_buffer[0]);
+				send_lcd_pixel(spi_buffer[1]);
+				send_lcd_pixel(spi_buffer[2]);
+				send_lcd_pixel(spi_buffer[3]);*/
 
 	
 			}
@@ -783,7 +792,9 @@ void config_pios() {
 	//sm_config_set_set_pins(&lcd_send_config, lcd_spi_latch, 1);
 	//sm_config_set_set_pins(&lcd_send_config, lcd_clk, 1);
 
+	//sm_config_set_out_shift(&lcd_send_config, false, true, 32);
 	sm_config_set_out_shift(&lcd_send_config, false, true, 12);
+	//sm_config_set_out_shift(&lcd_send_config, true, true, 12);  //THIS CAN RIGHT SHIFT INSTEAD OF LEFT SHIFT WHEN THE SHIFT REGISTER ORDER IS FIXED, and only trigger on 12
 
 	sm_config_set_clkdiv(&lcd_send_clk_config, 1);
 	sm_config_set_set_pins(&lcd_send_clk_config, lcd_clk, 1);
@@ -1576,11 +1587,11 @@ void init_lcd() {
 void draw_rectangle_empty(uint16_t * current_framebuffer, uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
 {
 	uint32_t ypos = (y * pixels_in_scanline) + x;
-	uint32_t ypos2 = ((y + h) * pixels_in_scanline) + x;
+	uint32_t ypos2 = ((y + h - 2) * pixels_in_scanline) + x;
 	uint32_t xpos_base = (y * pixels_in_scanline) + x;
-	uint32_t xpos2_base = (y * pixels_in_scanline) + x + w;
+	uint32_t xpos2_base = (y * pixels_in_scanline) + x + w - 1;
 	
-	for(uint32_t line = 0; line < w;line++)
+	for(uint32_t line = 0; line < w-1;line++)
 	{
 		//top line
 		current_framebuffer[ypos + line] = color;
@@ -1589,7 +1600,7 @@ void draw_rectangle_empty(uint16_t * current_framebuffer, uint16_t x, uint16_t y
 		current_framebuffer[ypos2 + line] = color;
 	}
 
-	for(uint32_t line = 0; line < h; line++)
+	for(uint32_t line = 0; line < h-1; line++)
 	{
 		//left line
 		current_framebuffer[xpos_base + (line * pixels_in_scanline)] = color;
@@ -1820,7 +1831,6 @@ void send_frame_over_usb()
 
 void __not_in_flash_func(core1_main)() 
 {
-
 	//configure audio events on current core
 	config_audio();
 
@@ -1971,6 +1981,7 @@ void draw_overlay(uint16_t * current_framebuffer, uint8_t fps)
 }
 
 uint32_t last_frame_time = 0;
+uint32_t last_frame_start = 0;
 uint32_t last_pwm_feedback_time = 0;
 void core0_main() 
 {
@@ -2016,11 +2027,20 @@ void core0_main()
 */
 
 
+
+		//while(dma_channel_is_busy(dma_chan_fb1_write) && dma_channel_is_busy(dma_chan_fb2_write)) ;
+
+		
+
+		//draw_overlay(framebuffer_to_use, 1000000 / (last_frame_start - last_frame_time));
+		//draw_overlay(framebuffer, 1000000 / (last_frame_start - last_frame_time));
+		//draw_overlay(framebuffer2, 1000000 / (last_frame_start - last_frame_time));
+		last_frame_time = last_frame_start;
 		uint32_t start = time_us_32();
 
 		//update lcd after 15ms for just over 60fps
 		//if(start - last_frame_time > 15000)
-		if(start - last_frame_time > 10000)
+		if(start - last_frame_time > 12000)
 		{
 			//while(dma_channel_is_busy(dma_chan_fb1_write) && dma_channel_is_busy(dma_chan_fb2_write)) ;
 
@@ -2028,7 +2048,6 @@ void core0_main()
 			else framebuffer_to_use = framebuffer;
 
 			//framebuffer_to_use = framebuffer2;
-
 			//draw_overlay(framebuffer_to_use, 1000000 / (start - last_frame_time));
 		
 			/*if(gg_btn1_now || gg_btn2_now || gg_start_now)
@@ -2038,7 +2057,8 @@ void core0_main()
 			}*/
 
 			update_lcd_gg(framebuffer_to_use);
-			last_frame_time = start;
+			last_frame_start = start;
+			//last_frame_time = start;
 #ifdef DEBUG
 			uint32_t end = time_us_32();
 			
