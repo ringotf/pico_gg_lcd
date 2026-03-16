@@ -317,14 +317,14 @@ void __dvi_func(dvi_scanbuf_main_12bpp_noqueue)(struct dvi_inst *inst, uint16_t 
     uint16_t header_scanlines = ((v_lines - gg_pixel_height) / 2);
     uint16_t pixels_border = (h_pixels - output_width) / 2;
 
-    uint16_t footer_lines_start = header_scanlines + gg_pixel_height;
+    uint16_t footer_lines_start = header_scanlines + gg_pixel_height +1;
 
-    while(dma_channel_is_busy(dma_chan_fb1) && dma_channel_is_busy(dma_chan_fb2));
+    //while(dma_channel_is_busy(dma_chan_fb1) && dma_channel_is_busy(dma_chan_fb2));
 
-    if(dma_channel_is_busy(dma_chan_fb1)) curr_framebuffer = scanbuf2;
-    else curr_framebuffer = scanbuf1;
-    
-    uint16_t y_base_offset = gg_pixel_x_offset_dvi + (pixels_in_scanline - gg_pixel_width) * 0.5;
+    //if(dma_channel_is_busy(dma_chan_fb1)) curr_framebuffer = scanbuf2;
+    //else curr_framebuffer = scanbuf1;
+    curr_framebuffer = scanbuf1;
+    uint16_t y_base_offset =(v_lines_to_skip * pixels_in_scanline) + gg_pixel_x_offset_dvi + (pixels_in_scanline - gg_pixel_width) * 0.5;
 
 	while (1) {
 
@@ -333,6 +333,7 @@ void __dvi_func(dvi_scanbuf_main_12bpp_noqueue)(struct dvi_inst *inst, uint16_t 
 		//if(y > header_scanlines && y < scanlines_in_active_area + header_scanlines - 1) {
 		//if(y < scanlines_in_active_area) {
         if(y > header_scanlines && y < footer_lines_start) {
+        //if(y > header_scanlines ) {
 
 			//const uint16_t *scanline = &curr_framebuffer[y * pixels_in_scanline];
 			//_dvi_prepare_scanline_12bpp(inst, (uint32_t *) &scanline);
@@ -385,7 +386,7 @@ void __dvi_func(dvi_scanbuf_main_12bpp_noqueue)(struct dvi_inst *inst, uint16_t 
                     //empty_scanline[c+1] = 0;
                 //}
 			}
-            for(c = pixels_border + output_width; c < h_pixels; c++)
+            for(c = pixels_border + output_width; c < h_pixels-1; c++)
             {
                 empty_scanline[c] = 0;
             }
@@ -416,9 +417,10 @@ void __dvi_func(dvi_scanbuf_main_12bpp_noqueue)(struct dvi_inst *inst, uint16_t 
             scanbuf_pointer = y_base_offset;
 			frame_tail = false;
             
-            while(dma_channel_is_busy(dma_chan_fb1) && dma_channel_is_busy(dma_chan_fb2));
-            if(dma_channel_is_busy(dma_chan_fb1)) curr_framebuffer = scanbuf2;
-            else curr_framebuffer = scanbuf1;
+            //while(dma_channel_is_busy(dma_chan_fb1) && dma_channel_is_busy(dma_chan_fb2));
+            //if(dma_channel_is_busy(dma_chan_fb1)) curr_framebuffer = scanbuf2;
+            //else curr_framebuffer = scanbuf1;
+            curr_framebuffer = scanbuf1;
 		}
     }
     __builtin_unreachable();

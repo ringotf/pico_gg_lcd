@@ -59,16 +59,6 @@
 #define gg_audio_r_pin 26
 //#define gg_audio_pwr_pin 27 //3v for voltage divider for 1.65v bias in prototype
 
-//#define pixels_in_scanline 256 //280 //300
-//#define scanlines_in_active_area  192 //160 //144 //192
-
-
-#define scanlines_in_active_area_min 100
-
-#define FRAME_SIZE (pixels_in_scanline * scanlines_in_active_area * 2)
-#define FRAME_SIZE_HALF (pixels_in_scanline * scanlines_in_active_area)
-
-#define FRAME_SIZE_MIN (pixels_in_scanline * scanlines_in_active_area_min * 2)
 
 
 #define lcd_spi_latch 18
@@ -151,19 +141,20 @@ struct dvi_inst dvi0;
 static struct dvi_serialiser_cfg pico_gg_lcd_conf = {
 	.pio = dvi_pio,
 	.sm_tmds = {dvi_tmds_sm_0, dvi_tmds_sm_1, dvi_tmds_sm_2},
-	.pins_tmds = {2, 4, 6},
+	.pins_tmds = {4, 2, 0},
 	//.pins_tmds = {24, 18, 20},
-	.pins_clk = 0,
+	.pins_clk = 6,
 	//.pins_clk = 22,
-	.invert_diffpairs = true
+	.invert_diffpairs = false
 };
+
 
 #define DVI_DMA_IRQ DMA_IRQ_0
 
 
 //Use two framebuffers to prevent tearing
 uint16_t * framebuffer = (uint16_t *)(0x20000000 + (1024 * 40));
-uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 40) + (pixels_in_scanline * scanlines_in_active_area * 2));
+uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 40) + FRAME_SIZE_BYTES);
 //uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 30) + (pixels_in_scanline * scanlines_in_active_area * 2) + (pixels_in_scanline * 8));
 
 //uint16_t send_buffer[512];
@@ -225,10 +216,10 @@ static inline __attribute__ ((always_inline)) void send_lcd_pixel(uint16_t data)
 	//bit shifting is just because the shift register pins are wired MSB first so RGB but the lcd pins are aligned LSB first so BGR
 	//change the shift register to lcd pin order and the shifting isnt needed
 	//but the shifting doesnt seem to take much time anyway
-	pio_sm_put(lcd_send_pio, lcd_send_sm, (uint32_t)data << 20 ); //SHIFTING SHOULDNT BE NEEDED WHEN THE SR ORDER IS FIXED
+	//pio_sm_put(lcd_send_pio, lcd_send_sm, (uint32_t)data << 20 ); //SHIFTING SHOULDNT BE NEEDED WHEN THE SR ORDER IS FIXED
 	//pio_sm_put(lcd_send_pio, lcd_send_sm, (uint32_t)data); //Work around is now in PIO program to "out NULL 20" discard the MSB 20 bits
 
-	//pio_sm_put(lcd_send_pio, lcd_send_sm, (uint32_t)data);
+	pio_sm_put(lcd_send_pio, lcd_send_sm, (uint32_t)data);
 
 	//pio_sm_put_blocking(lcd_send_pio, lcd_send_sm, (uint32_t)data << 20 );
 	//pio_sm_put_blocking(lcd_send_pio, lcd_send_sm, (uint32_t)data << 18 | hsync << 30 | vsync << 31 );
@@ -314,7 +305,7 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 
 	//Because of the LCD's orientation, we actually need to scan the image out upside down and flipped
 	//base points to the bottom right of the original image
-	uint32_t base = pixels_in_scanline + 48 - 52 + (pixels_in_scanline * scanlines_in_active_area) - pixels_in_scanline * 51;
+	uint32_t base = pixels_in_scanline + 48 - 52 + FRAME_SIZE_PIXELS - pixels_in_scanline * 51;
 
 
 	lcd_den_set(0, true);
@@ -390,8 +381,7 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 
 	//frame footer
 //do some blank footer lines....
-	//for (uint32_t y = gg_pixel_height; y < gg_pixel_height + footer_count; y++)
-/*	for (uint32_t y = 0; y < footer_count ; y++)
+	for (uint32_t y = gg_pixel_height; y < gg_pixel_height + footer_count; y++)
 	{
 		for (uint32_t w = 0; w < lcd_vscale_factor; w++)
 		{
@@ -412,19 +402,18 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 
 			//blank line
 
-			for(uint32_t x = y_base; x < y_base + lcd_send_width; x +=4) {
+			//for(uint32_t x = y_base; x < y_base + lcd_send_width; x +=4) 
+			for (uint32_t x = y_base + lcd_send_width; x > y_base; x -=4)
+			{
 				while(!pio_sm_is_tx_fifo_empty(lcd_send_pio, lcd_send_sm)) ;
-				
-				//send_lcd_pixel(curr_framebuffer[x], hsync, vsync);
-				//send_lcd_pixel(curr_framebuffer[x+1], hsync, vsync);
-				//send_lcd_pixel(curr_framebuffer[x+2], hsync, vsync);
-				//send_lcd_pixel(curr_framebuffer[x+3], hsync, vsync);
+				send_4blank_lcd_pixel();
 
-				
-				send_lcd_pixel(spi_buffer[0]);
-				send_lcd_pixel(spi_buffer[1]);
-				send_lcd_pixel(spi_buffer[2]);
-				send_lcd_pixel(spi_buffer[3]);
+				/*
+				send_lcd_pixel(curr_framebuffer[x]);
+				send_lcd_pixel(curr_framebuffer[x+1]);
+				send_lcd_pixel(curr_framebuffer[x+2]);
+				send_lcd_pixel(curr_framebuffer[x+3]);
+				*/
 			}
 			
 			//Signal end of active scanline portion
@@ -437,18 +426,19 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 			
 		}
 	}
-*/
+
 
 
 
 
 	//frame body
 	//start frame data
-	for (uint32_t y = 0; y < lcd_active_lines; y++)
+	//for (uint32_t y = 0; y < lcd_active_lines; y++)
 	//for (uint32_t y = lcd_active_lines; y > 0; y--)
 	//for (uint32_t y = 0; y < gg_pixel_height + footer_count; y++)	
 	//for (int32_t y = gg_pixel_height + footer_count-1  ; y >= 0 ; y--)	
 	//for (int32_t y = gg_pixel_height-1; y > 0 ; y--)	
+	for (int32_t y = gg_pixel_height + v_lines_to_skip; y > v_lines_to_skip - header_count ; y--)	
 	{
 		for (uint32_t w = 0; w < lcd_vscale_factor; w++)
 		{
@@ -478,8 +468,8 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 			//uint32_t framebuffer_pix_value = curr_framebuffer[y_base] & 4095;
 			//uint32_t old_pix_value = unpack(curr_framebuffer[y_base] & 4095);
 			
-			for (uint32_t x = y_base; x < y_base + lcd_send_width; x +=4)
-			//for (uint32_t x = y_base + lcd_send_width; x > y_base; x -=4)
+			//for (uint32_t x = y_base; x < y_base + lcd_send_width; x +=4)
+			for (uint32_t x = y_base + lcd_send_width; x > y_base; x -=4)
 			{
 
 				/*
@@ -528,14 +518,14 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 
 				//fill the fifo - does not correlate to lcd_pio_hscale. the fifo is just 4 words max
 
-				/*send_lcd_pixel(curr_framebuffer[x]);
+				send_lcd_pixel(curr_framebuffer[x]);
 				send_lcd_pixel(curr_framebuffer[x-1]);
 				send_lcd_pixel(curr_framebuffer[x-2]);
-				send_lcd_pixel(curr_framebuffer[x-3]);*/
-				send_lcd_pixel(curr_framebuffer[x]);
+				send_lcd_pixel(curr_framebuffer[x-3]);
+				/*send_lcd_pixel(curr_framebuffer[x]);
 				send_lcd_pixel(curr_framebuffer[x+1]);
 				send_lcd_pixel(curr_framebuffer[x+2]);
-				send_lcd_pixel(curr_framebuffer[x+3]);
+				send_lcd_pixel(curr_framebuffer[x+3]);*/
 
 				
 				/*send_lcd_pixel(spi_buffer[0]);
@@ -558,7 +548,7 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 	}
 
 	//as the frame is output upside-down, the header goes at the bottom
-/*	for (uint32_t y = 0; y <= header_count ; y++)
+	/*for (uint32_t y = 0; y < header_count ; y++)
 	{
 		for (uint32_t w = 0; w < lcd_vscale_factor; w++)
 		{
@@ -581,12 +571,8 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 			for (uint32_t x = y_target; x > y_base; x -=4) {	
 
 				while(!pio_sm_is_tx_fifo_empty(lcd_send_pio, lcd_send_sm)) ;
-				//send_4blank_lcd_pixel();
+				send_4blank_lcd_pixel();
 				//send_4header_lcd_pixel(spi_buffer[0]);
-				send_lcd_pixel(spi_buffer[0]);
-				send_lcd_pixel(spi_buffer[1]);
-				send_lcd_pixel(spi_buffer[2]);
-				send_lcd_pixel(spi_buffer[3]);
 			}
 
 			//Signal end of active scanline portion
@@ -598,8 +584,8 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 			}
 
 		}
-	}
-*/
+	}*/
+
 
 	//Start of vblank
 	//lcd_den_set(1, false);
@@ -793,8 +779,8 @@ void config_pios() {
 	//sm_config_set_set_pins(&lcd_send_config, lcd_clk, 1);
 
 	//sm_config_set_out_shift(&lcd_send_config, false, true, 32);
-	sm_config_set_out_shift(&lcd_send_config, false, true, 12);
-	//sm_config_set_out_shift(&lcd_send_config, true, true, 12);  //THIS CAN RIGHT SHIFT INSTEAD OF LEFT SHIFT WHEN THE SHIFT REGISTER ORDER IS FIXED, and only trigger on 12
+	//sm_config_set_out_shift(&lcd_send_config, false, true, 12);
+	sm_config_set_out_shift(&lcd_send_config, true, true, 12);  //THIS CAN RIGHT SHIFT INSTEAD OF LEFT SHIFT WHEN THE SHIFT REGISTER ORDER IS FIXED, and only trigger on 12
 
 	sm_config_set_clkdiv(&lcd_send_clk_config, 1);
 	sm_config_set_set_pins(&lcd_send_clk_config, lcd_clk, 1);
@@ -925,7 +911,7 @@ void config_dma() {
 			//Again, the active area has border scanlines that don't actually contain game graphics
 			//We only save the *real* scanlines into the framebuffer
 			//Then chain to dma_chan1
-			pixels_in_scanline * scanlines_in_active_area,
+			FRAME_SIZE_PIXELS,
 			false);
 
 	//Reset dma_chan0's write address register to point to the start of framebuffer0
@@ -978,7 +964,7 @@ void config_dma() {
 			&f,
 			&framebuffer2[0],
 			&gg_capture_pio->rxf[gg_capture_getdata_sm],
-			pixels_in_scanline * scanlines_in_active_area,
+			FRAME_SIZE_PIXELS,
 			false);
 
 	//Reset dma_chan4's write address and chain into dma_chan2 to restart the whole DMA chain
@@ -1770,7 +1756,7 @@ void send_frame_over_usb()
 				curr_framebuffer = framebuffer;
 			
 				
-				uint32_t frame_size_to_use = FRAME_SIZE;// * 2;//_MIN; //FRAME_SIZE_HALF;
+				uint32_t frame_size_to_use = FRAME_SIZE_BYTES;// * 2;//_MIN; //FRAME_SIZE_HALF;
 
 				//frame_size_to_use -= pixels_in_scanline * 16; //51;
 				
@@ -2248,7 +2234,13 @@ int __not_in_flash_func(main)()
 	//config_interp();
 	config_in_spi();
 
-
+	//changes strength of hdmi pins
+/*	
+	for(int pin = 0; pin < 8; pin++)
+	{
+		gpio_set_drive_strength(pin, GPIO_DRIVE_STRENGTH_12MA);
+	}
+*/
 
 	dvi0.timing = &DVI_TIMING;
 	dvi0.ser_cfg = pico_gg_lcd_conf;
