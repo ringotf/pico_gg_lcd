@@ -1,6 +1,5 @@
 .define dw_vsync 16 ;Vsync
 .define cl2_hsync 15; ;Hsync
-.define clk 17 ;Pixel clock
 
 ;///////////////////////////////////////
 ;/////////////// WARNING ///////////////
@@ -9,14 +8,6 @@
 ;The timings involved in capturing data from the GG are quite finicky
 ;Modify these programs with caution, especially get_data
 
-;.program detect_vblank
-;.wrap_target
-;    	wait 0 gpio dw_vsync
-;		wait 1 gpio dw_vsync 
-;		irq set 0
-;.wrap
-
-
 .program detect_hblank
 .wrap_target
 	
@@ -24,8 +15,7 @@
 
 	wait 0 gpio dw_vsync		;wait for vblank
 
-
-	set y 30
+	set y 31					;skip a bunch of lines after vblank before starting capture, ensures first line is read
 skip_vblank_lines:
 	wait 1 gpio cl2_hsync
 	wait 0 gpio cl2_hsync
@@ -33,61 +23,32 @@ skip_vblank_lines:
 	wait 0 gpio cl2_hsync
 	jmp y-- skip_vblank_lines
 
-
-
-	;wait 1 gpio dw_vsync 		;wait for vsync (misses first line, better to count lines after vblank....)
-
-;		wait 1 irq 0
-
-
 loop_scanline:
-	wait 1 gpio cl2_hsync [30] 		;wait for hsync, delay for some cycles....
-
-
-;	set y, 4					;some left-edge hsync pixels to skip
-
-wait_cycles:
-;	wait 0 gpio clk
-;	wait 1 gpio clk
-;	jmp y-- wait_cycles
-		
-;		set y, 28
-;
-;wait_cycles_2:
-;		wait 0 gpio clk
-;		wait 1 gpio clk
-;		jmp y-- wait_cycles_2
+	wait 1 gpio cl2_hsync [29] 		;wait for hsync, delay for some cycles to skip some left-edge pixels
 
 	irq set 1					;flag to start capturing data
-
+	irq set 0					;flag cpu frame started
 
 	wait 0 gpio cl2_hsync		;wait for hblank
 	jmp x-- loop_scanline
+	
 .wrap
 
 
+;the pio clock divider for this state machine is set as a multiple of the gg clock
+;so we can use delay cycles to match the gg pixel timing
+;currently 4 cycles per clock, so 3 post-instruction delay cycles
 .program get_data
 .wrap_target
 	mov x, osr					;OSR -> Amount of pixels_in_scanline to capture
-	wait 1 irq 1 [10]			;wait for hysnc to be signalled, delay for a cycle and a half
+	wait 1 irq 1 [6] 			;wait for hysnc to be signalled, delay for a cycle or six
 
 capture_pixels:
-	set y, 2 
 
-inner_loop:
-	wait 1 gpio clk [10]		;wait for pixel clock, then delay enough for another clock cycle and a half
+	in pins, 4 [3]  			;will auto-push after the 3rd "in" with 12 bits
+	in pins, 4 [3] 				;will auto-push after the 3rd "in" with 12 bits
+	in pins, 4 [2] 				;will auto-push after the 3rd "in" with 12 bits
 
-skip_start:
-
-	;wait 0 gpio clk [2] 		;can just wait some cycles once the clk signal goes low....
-	;wait 1 gpio clk
-
-	in pins, 4					;will auto-push after the 3rd "in" with 12 bits
-
-	;wait 0 gpio clk				
-
-	jmp y-- inner_loop			;read next sub-pixel
-
-	jmp x-- capture_pixels		;read next pxiel
+	jmp x-- capture_pixels 		;read next pixel
 
 .wrap

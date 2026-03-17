@@ -1,11 +1,11 @@
 
 #define pixels_in_scanline 250 //280 //300
-#define scanlines_in_active_area  198 //180 //144 //192
+#define scanlines_in_active_area  196 //180 //144 //192
 
 #define FRAME_SIZE_PIXELS (pixels_in_scanline * scanlines_in_active_area)
 #define FRAME_SIZE_BYTES (FRAME_SIZE_PIXELS * 2)
 
-#define v_lines_to_skip 53
+#define v_lines_to_skip 51
 #define h_pixels_to_skip 64
 
 #define gg_pixel_width 160

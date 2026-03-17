@@ -6,85 +6,48 @@
 .wrap_target
 
 
+    ;clear the latch
 
-;clear the latch
+    ;loop 4 times for 12 bits total
+    set y, 3 side 0             ;clear latch and clock
 
-;loop 4 times for 12 bits total
-set y, 3 side 0 ;clear latch and clock
 
-;;set pins 0 side 0 
-;nop side 0 ;clear latch and clock
+    irq set 4                   ;flag for when we get stalled waiting to pull a byte
 
-;wait 1 irq 3 ;wait for 2nd stage to be ready
-
-irq set 4 ;flag for when we get stalled waiting to pull a byte
-
-;pull ; autopull is enabled this isnt needed
-
-;out X 20 ;discard top 20 bits - oops! Not needed when the shift register order is fixed
-
-;send the bits to the shift buffer
+                                ;send the bits to the shift buffer
 buffer_target: 
 
-;;set pins 0  ;unclock the lcd
+    out pins 3 side 0 [2]       ;put the bits on the "serial" out pins, clear latch and clock
 
-out pins 3 side 0 [2]   ;put the bits on the "serial" out pins, clear latch and clock
+    irq clear 4
 
-irq clear 4
-
-;;set pins 1 ;clk the lcd for the previous pixel on the current registered latch
-
-jmp y--  buffer_target side 2 [2]  ;clock the shift registers clk on the side pins
+    jmp y--  buffer_target side 2 [2]  ;clock the shift registers clk on the side pins
 
 ;wait 1 irq 3    ;check ready for next pixel so we dont latch the bits before the lcd has finished with the last ones
 
-;latch the bits through the shift registers
-;set pins 1  [1]
-nop side 1 [3]
-
+    nop side 1 [3]              ;latch the bits through the shift registers
 
 ;trigger lcd_send_clk
-irq set 2       ;flag next pixel ready
-
-
-;set y, 3 ;clock the lcd in this program
-
-;lcd_target_inline:
-;set pins 1 [1]
-;set pins 0 [0]
-
-;jmp y-- lcd_target_inline 
-	
-;set pins 0
-
-;wait 1 irq 4 ;wait for last pixel to be sent
-
-;irq set 0 ;flag current byte has been sent
+    irq set 2                   ;flag next pixel ready
 
 .wrap
 
 
 
-;this can also be done in the main lcd_send to save a statemachine, using 2 sideset pins for the spi clk and latch
-;but by doing separately we can clock the lcd whilst the next bits are being clock through the shift registers 
+;this could be done in the main lcd_send to save a statemachine, using 2 sideset pins for the spi clk and latch
+;but by doing separately we can clock the lcd whilst the next bits are being clocked through the shift registers 
 ;set pin is lcd clk
 .program lcd_send_clk
 .wrap_target
 
-set y, 3
+    set y, 3                    ;counter to repeat pixels 4 times total
 
-;irq set 3     ;ready for next pixel
-wait 1 irq 2  ;waiting for next pixel
-;irq clear 3  ;processing next pixel
-
-;clock the lcd
+    wait 1 irq 2                ;waiting for next pixel
 
 lcd_target:
-set pins 1 [2]
-set pins 0 [1]
+    set pins 1 [2]              ;clock the lcd
+    set pins 0 [1]
 
-jmp y-- lcd_target [1]
-
-;irq set 0
+    jmp y-- lcd_target [1]
 
 .wrap

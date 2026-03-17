@@ -29,30 +29,27 @@ include(pico_sdk_import.cmake)
 
 #set(PICO_SDK_VERSION_REVISION 0)
 
-project(pico_gg_hd)
+project(pico_gg_lcd)
 
 pico_sdk_init()
 
-add_executable(pico_gg_hd 
+add_executable(pico_gg_lcd 
 	${CMAKE_CURRENT_LIST_DIR}/src/main.c
 )
 
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/src/libdvi)
 
-pico_generate_pio_header(pico_gg_hd ${CMAKE_CURRENT_LIST_DIR}/src/gg_capture.pio)
-pico_generate_pio_header(pico_gg_hd ${CMAKE_CURRENT_LIST_DIR}/src/lcd_send.pio)
-pico_generate_pio_header(pico_gg_hd ${CMAKE_CURRENT_LIST_DIR}/src/lcd_send_2x.pio)
-pico_generate_pio_header(pico_gg_hd ${CMAKE_CURRENT_LIST_DIR}/src/lcd_send_4x.pio)
-pico_generate_pio_header(pico_gg_hd ${CMAKE_CURRENT_LIST_DIR}/src/lcd_send_spi.pio)
+pico_generate_pio_header(pico_gg_lcd ${CMAKE_CURRENT_LIST_DIR}/src/gg_capture.pio)
+pico_generate_pio_header(pico_gg_lcd ${CMAKE_CURRENT_LIST_DIR}/src/lcd_send_spi.pio)
 
-target_link_libraries(pico_gg_hd pico_stdlib pico_time 
+target_link_libraries(pico_gg_lcd pico_stdlib pico_time 
 hardware_pio hardware_sync hardware_dma hardware_clocks pico_multicore 
 pico_time hardware_adc hardware_pwm hardware_interp libdvi hardware_spi hardware_watchdog hardware_resets pico_bootrom)
 
-pico_add_extra_outputs(pico_gg_hd)
+pico_add_extra_outputs(pico_gg_lcd)
 
-pico_enable_stdio_usb(pico_gg_hd 1)
-pico_enable_stdio_uart(pico_gg_hd 1)
+pico_enable_stdio_usb(pico_gg_lcd 1)
+pico_enable_stdio_uart(pico_gg_lcd 1)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_definitions(-DDEBUG)

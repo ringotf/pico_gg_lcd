@@ -307,84 +307,49 @@ void __dvi_func(dvi_scanbuf_main_12bpp_noqueue)(struct dvi_inst *inst, uint16_t 
     uint16_t t1,t2,t3,t4;
     uint16_t buf;
     
-    uint16_t h_pixels = inst->timing->h_active_pixels / DVI_SYMBOLS_PER_WORD; // >> 1;
+    uint16_t h_pixels = inst->timing->h_active_pixels / DVI_SYMBOLS_PER_WORD;
 
-    //DVI_VERTICAL_REPEAT set to 3 so triple line scaling...
-    uint16_t v_lines = inst->timing->v_active_lines / DVI_VERTICAL_REPEAT; //(inst->timing->v_active_lines >> 1);
+    //DVI_VERTICAL_REPEAT set to 3 so triple line scaling!!!
+    uint16_t v_lines = inst->timing->v_active_lines / DVI_VERTICAL_REPEAT; 
 
     uint16_t output_width = gg_pixel_width * 2;
 
     uint16_t header_scanlines = ((v_lines - gg_pixel_height) / 2);
     uint16_t pixels_border = (h_pixels - output_width) / 2;
 
-    uint16_t footer_lines_start = header_scanlines + gg_pixel_height +1;
+    uint16_t footer_lines_start = header_scanlines + gg_pixel_height + 1;
 
-    //while(dma_channel_is_busy(dma_chan_fb1) && dma_channel_is_busy(dma_chan_fb2));
+    
 
     //if(dma_channel_is_busy(dma_chan_fb1)) curr_framebuffer = scanbuf2;
     //else curr_framebuffer = scanbuf1;
     curr_framebuffer = scanbuf1;
+
     uint16_t y_base_offset =(v_lines_to_skip * pixels_in_scanline) + gg_pixel_x_offset_dvi + (pixels_in_scanline - gg_pixel_width) * 0.5;
+
+    //wait for a vblank to start with, should be good after this, right?
+    while(dma_channel_is_busy(dma_chan_fb1) || dma_channel_is_busy(dma_chan_fb2)){tight_loop_contents();};
 
 	while (1) {
 
-        //curr_framebuffer = scanbuf;
 
-		//if(y > header_scanlines && y < scanlines_in_active_area + header_scanlines - 1) {
-		//if(y < scanlines_in_active_area) {
         if(y > header_scanlines && y < footer_lines_start) {
-        //if(y > header_scanlines ) {
 
-			//const uint16_t *scanline = &curr_framebuffer[y * pixels_in_scanline];
-			//_dvi_prepare_scanline_12bpp(inst, (uint32_t *) &scanline);
             static uint32_t c = 0;
-
-			//for(c = 0; c < 320; c++) 
-            //for(c = 0; c < gg_pixel_width * 2; c+=2) 
-
 
             for(c = 0; c < pixels_border; c++) 
             {
                 empty_scanline[c] = 0;
             }
 
-            //for(c = 0; c < h_pixels; c+=2) 
-            //for(c = 0; c < h_pixels; c++) 
-            //for(c = pixels_border; c < pixels_border + gg_pixel_width; c++) 
+            //repeats each pixel twice. this gets doubled again by libdvi for total 4x horizontal scaling
             for(c = pixels_border; c < pixels_border + output_width; c+=2) 
 			{
-                //if(c > pixels_border && c < pixels_in_scanline + pixels_border +1) {
-				//	empty_scanline[c] = curr_framebuffer[scanbuf_pointer];
-				//	scanbuf_pointer++;
-				//}
-                
-				//if(c > pixels_border && c < pixels_border + gg_pixel_width){
 
                     empty_scanline[c] = curr_framebuffer[scanbuf_pointer];
                     empty_scanline[c+1] = curr_framebuffer[scanbuf_pointer];
 
-/*
-                    buf = curr_framebuffer[scanbuf_pointer];
-
-                    //temporary code to switch reverse bits as the PCB was wrong way around!
-
-                    //t1 = reverse_colors_lookup[buf & 0xF];
-                    t2 = buf & 0xF0;
-                    //t2 = reverse_colors_lookup[t2 >> 4] << 4;
-                    t3 = buf & 0xF00;
-                    //t3 = reverse_colors_lookup[t3 >> 8] << 8;
-
-                    //empty_scanline[c] = t1 | t2 | t3;// << 4;
-                    //buf = t1 | t2 | t3;
-                    empty_scanline[c] = reverse_colors_lookup[buf & 0xF] | reverse_colors_lookup[t2 >> 4] << 4 | reverse_colors_lookup[t3 >> 8] << 8;
-*/
 					scanbuf_pointer++;
-				//}
-				//else 
-                //{
-                    //empty_scanline[c] = 0;
-                    //empty_scanline[c+1] = 0;
-                //}
 			}
             for(c = pixels_border + output_width; c < h_pixels-1; c++)
             {
@@ -408,18 +373,17 @@ void __dvi_func(dvi_scanbuf_main_12bpp_noqueue)(struct dvi_inst *inst, uint16_t 
 		}
 
 		_dvi_prepare_scanline_12bpp(inst, (uint32_t *) &empty_scanline[0]);
-		//_dvi_prepare_scanline_16bpp(inst, (uint32_t *) &empty_scanline[0]);
 
 		++y;
-		if (y == v_lines) {
-			//gpio_put(25, !gpio_get(25));
+		if (y == v_lines) 
+        {
 			y = 0;
             scanbuf_pointer = y_base_offset;
 			frame_tail = false;
             
             //while(dma_channel_is_busy(dma_chan_fb1) && dma_channel_is_busy(dma_chan_fb2));
-            //if(dma_channel_is_busy(dma_chan_fb1)) curr_framebuffer = scanbuf2;
-            //else curr_framebuffer = scanbuf1;
+            if(dma_channel_is_busy(dma_chan_fb1)) curr_framebuffer = scanbuf2;
+            else curr_framebuffer = scanbuf1;
             curr_framebuffer = scanbuf1;
 		}
     }

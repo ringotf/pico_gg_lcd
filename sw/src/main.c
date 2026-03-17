@@ -22,9 +22,6 @@
 
 #include "main.h"
 #include "../build/gg_capture.pio.h"
-#include "../build/lcd_send.pio.h"
-#include "../build/lcd_send_2x.pio.h"
-#include "../build/lcd_send_4x.pio.h"
 #include "../build/lcd_send_spi.pio.h"
 #include "font8x8_basic.h"
 
@@ -35,15 +32,9 @@
 #include "tusb.h"
 
 #define DVI_TIMING dvi_timing_640x480p_60hz
-//#define DVI_TIMING dvi_timing_720x480p_60hz
 
-#define led_pin 25 //not used?
+#define gg_clock_khz 32215.9 //32.215mhz game gear "pixel" clock
 
-//#define gg_BTN1_pin 24 //11 	//not used?
-//#define gg_BTN2_pin 23 //12 		//not used?
-//#define gg_START_pin 22 	//not used?
-
-//#define gg_SMS_pin 10
 
 #define gg_D1_pin 11 
 #define gg_D2_pin 12 
@@ -54,11 +45,8 @@
 #define gg_dw_pin 16
 #define gg_clk_pin 17
 
-//need to move hdmi pins to free up adc... or use separate adc module
 #define gg_audio_l_pin 27
 #define gg_audio_r_pin 26
-//#define gg_audio_pwr_pin 27 //3v for voltage divider for 1.65v bias in prototype
-
 
 
 #define lcd_spi_latch 18
@@ -72,28 +60,22 @@
 #define btn_sr_load 21
 #define btn_sr_clk 22
 
-//#define lcd_hsync 13
-//#define lcd_vsync 8 //14
 
 #define lcd_rst 10
 #define lcd_clk 9
 #define lcd_den 8
 
-//#define lcd_backlight 28
 
-#define lcd_send_pio pio0 //pio1
+#define lcd_send_pio pio0 
 #define lcd_send_sm 2
 
-#define lcd_send_clk_pio pio0 //pio1
-#define lcd_send_clk_sm 3 //1
+#define lcd_send_clk_pio pio0
+#define lcd_send_clk_sm 3
 
-//#define backlight_fdbck 28 //- swapped with lcd_den
 
 #define gg_capture_pio pio0
-//#define gg_capture_vblank_sm 0
-#define gg_capture_hblank_sm 0 //1
-#define gg_capture_getdata_sm 1 //2
-//#define gg_capture_front_h_porch_sm 3
+#define gg_capture_hblank_sm 0 
+#define gg_capture_getdata_sm 1 
 
 #define brightness_pot 28
 #define lcd_dim 29
@@ -155,25 +137,19 @@ static struct dvi_serialiser_cfg pico_gg_lcd_conf = {
 //Use two framebuffers to prevent tearing
 uint16_t * framebuffer = (uint16_t *)(0x20000000 + (1024 * 40));
 uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 40) + FRAME_SIZE_BYTES);
-//uint16_t * framebuffer2 = (uint16_t *)(0x20000000 + (1024 * 30) + (pixels_in_scanline * scanlines_in_active_area * 2) + (pixels_in_scanline * 8));
 
-//uint16_t send_buffer[512];
 
 #define ADC_SAMPLE_MULTIPLIER 1
 #define AUDIO_SAMPLE_RATE 44100
 #define AUDIO_CHANNEL_COUNT 2
 #define AUDIO_BUFFER_BITS 11
 #define AUDIO_BUFFER_SIZE (1 << AUDIO_BUFFER_BITS)
-//uint16_t AUDIO_BUFFER_SIZE = 1 << AUDIO_BUFFER_BITS;
-//uint16_t AUDIO_BUFFER_SIZE = 1 << AUDIO_BUFFER_BITS;
 //#define AUDIO_BUFFER_SIZE 1024
 #define AUDIO_DMA_IRQ DMA_IRQ_1
 
 __attribute__((aligned((1 << AUDIO_BUFFER_BITS))))
 __attribute__((section(".time_critical.ram")))
 static uint16_t audio_buffer[AUDIO_BUFFER_SIZE];
-//volatile uint16_t audio_l_buffer[AUDIO_BUFFER_SIZE];
-//volatile uint16_t audio_r_buffer[AUDIO_BUFFER_SIZE];
 
 static const uint32_t audio_buffer_addr = (uint32_t)audio_buffer;
 
@@ -199,11 +175,13 @@ uint32_t last_gg;
 uint32_t gg_start_now;
 uint32_t gg_btn1_now;
 uint32_t gg_btn2_now;
+uint32_t gg_btn_up_now;
+uint32_t gg_btn_dn_now;
+uint32_t gg_btn_lt_now;
+uint32_t gg_btn_rt_now;
 
 uint32_t dma_chan_fb1_write;
 uint32_t dma_chan_fb1_reset;
-//uint32_t dma_chan2;
-//uint32_t dma_chan3;
 uint32_t dma_chan_fb2_write;
 uint32_t dma_chan_fb2_reset;
 
@@ -212,22 +190,7 @@ uint32_t last_frame_sent;
 
 static inline __attribute__ ((always_inline)) void send_lcd_pixel(uint16_t data)
 {
-	
-	//bit shifting is just because the shift register pins are wired MSB first so RGB but the lcd pins are aligned LSB first so BGR
-	//change the shift register to lcd pin order and the shifting isnt needed
-	//but the shifting doesnt seem to take much time anyway
-	//pio_sm_put(lcd_send_pio, lcd_send_sm, (uint32_t)data << 20 ); //SHIFTING SHOULDNT BE NEEDED WHEN THE SR ORDER IS FIXED
-	//pio_sm_put(lcd_send_pio, lcd_send_sm, (uint32_t)data); //Work around is now in PIO program to "out NULL 20" discard the MSB 20 bits
-
 	pio_sm_put(lcd_send_pio, lcd_send_sm, (uint32_t)data);
-
-	//pio_sm_put_blocking(lcd_send_pio, lcd_send_sm, (uint32_t)data << 20 );
-	//pio_sm_put_blocking(lcd_send_pio, lcd_send_sm, (uint32_t)data << 18 | hsync << 30 | vsync << 31 );
-	//pio_sm_put_blocking(lcd_send_pio, lcd_send_sm, (uint32_t)data << 18 | 0 << 30 | 0 << 31 );
-	//pio_sm_put_blocking(lcd_send_pio, lcd_send_sm, data);
-
-	//send_to_shift_dma(data, 2);
-	
 }
 
 static inline __attribute__ ((always_inline)) void send_4blank_lcd_pixel()
@@ -653,7 +616,7 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_sms() {
 	dma_hw->ch[3].transfer_count = pixels_in_scanline * scanlines_to_skip;
 
 	uint32_t line_counter = 0;
-	uint32_t base = pixels_in_scanline + 256 + 48 - 3 + (pixels_in_scanline * scanlines_in_active_area) - pixels_in_scanline * 2;
+	uint32_t base = pixels_in_scanline + 256 + 48 - 3 + (FRAME_SIZE_PIXELS - pixels_in_scanline * 2;
 
 	for (uint32_t y = 0; y < 240; y ++)
 	{
@@ -819,6 +782,7 @@ void config_pios() {
 	uint8_t detect_hblank = pio_add_program(gg_capture_pio, &detect_hblank_program);
 	pio_sm_config detect_hblank_config = detect_hblank_program_get_default_config(detect_hblank);
 	sm_config_set_clkdiv(&detect_hblank_config, 1);
+	
 
 	//uint8_t front_h_porch = pio_add_program(gg_capture_pio, &front_h_porch_program);
 	//pio_sm_config front_h_porch_config = front_h_porch_program_get_default_config(front_h_porch);
@@ -827,7 +791,10 @@ void config_pios() {
 
 	uint8_t get_data = pio_add_program(gg_capture_pio, &get_data_program);
 	pio_sm_config get_data_config = get_data_program_get_default_config(get_data);
-	sm_config_set_clkdiv(&get_data_config, 1);
+	//sm_config_set_clkdiv(&get_data_config, 1);
+
+	sm_config_set_clkdiv(&get_data_config, (DVI_TIMING.bit_clk_khz / gg_clock_khz) / 2);
+
 	sm_config_set_in_pins(&get_data_config, gg_D1_pin);
 	sm_config_set_in_shift(&get_data_config, false, true, 12);
 	//sm_config_set_jmp_pin(&get_data_config, gg_clk_pin);
@@ -1778,7 +1745,7 @@ void send_frame_over_usb()
 
 
 						//tud_cdc_write(test_frame_buffer, sizeof(test_frame_buffer));
-						//if(tud_cdc_write_available() >= (pixels_in_scanline * scanlines_in_active_area))
+						//if(tud_cdc_write_available() >= FRAME_SIZE_PIXELS)
 			//			if(tud_cdc_write_available() >= sizeof(framebuffer))
 						if(tud_cdc_write_available() >= chunk)
 						{
@@ -1791,10 +1758,10 @@ void send_frame_over_usb()
 							offset += chunk;
 							
 							//tud_cdc_write(framebuffer, sizeof(framebuffer));
-							//tud_cdc_write(framebuffer, (pixels_in_scanline * scanlines_in_active_area));
+							//tud_cdc_write(framebuffer, FRAME_SIZE_PIXELS);
 
 							//if(tud_cdc_write_available() >= sizeof(framebuffer))
-							//if(tud_cdc_write_available() >= (pixels_in_scanline * scanlines_in_active_area) *2)
+							//if(tud_cdc_write_available() >= FRAME_SIZE_BYTES
 							/*{
 								
 								//fill_framebuffer_with_test_pattern();
@@ -1859,10 +1826,14 @@ void read_in_spi()
 
 	//printf("SPI IN DATA %i\n", data);
 
-	gg_now = !(data & 0x1);
-	gg_start_now = !(data & 0x8);
-	gg_btn1_now = !(data & 0x4);
-	gg_btn2_now = !(data & 0x2);
+	gg_btn_dn_now = !(data & 0x1);
+	gg_start_now = !(data & 0x2);
+	gg_btn2_now = !(data & 0x4);
+	gg_btn1_now = !(data & 0x8);
+	gg_btn_lt_now = !(data & 0x10);
+	gg_btn_rt_now = !(data & 0x20);
+	gg_btn_up_now = !(data & 0x40);
+	gg_now = !(data & 80);
 
 
 }
@@ -1955,14 +1926,14 @@ void draw_overlay(uint16_t * current_framebuffer, uint8_t fps)
 	{
 		draw_string(current_framebuffer, overlay_xpos + font_size, overlay_ypos + font_size + 4, "BTN1 Pressed!", font_color);
 	}
-	if(gg_btn2_now)
+	/*if(gg_btn2_now)
 	{
 		draw_string(current_framebuffer, overlay_xpos + font_size, overlay_ypos + font_size + 4, "BTN2 Pressed!", font_color);
 	}
 	if(gg_start_now)
 	{
 		draw_string(current_framebuffer, overlay_xpos + font_size, overlay_ypos + font_size + 4, "START Pressed!", font_color);
-	}
+	}*/
 
 }
 
@@ -1973,9 +1944,6 @@ void core0_main()
 {
 
 	gpio_put(lcd_den, 0);
-	//gpio_put(lcd_hsync, 0);
-	//gpio_put(lcd_vsync, 0);
-	gpio_put(led_pin, 1);
 	
 	gpio_put(lcd_clk, 0);
 	//gpio_put(lcd_backlight, 0);
@@ -1998,6 +1966,12 @@ void core0_main()
 	//dma_channel_start(dma_chan2);
 	dma_channel_start(dma_chan_fb1_write);
 
+	//wait for a vblank to start with, should be good after this, right?
+	//while(dma_channel_is_busy(dma_chan_fb1_write) && dma_channel_is_busy(dma_chan_fb2_write)) ;
+
+
+	pio_interrupt_clear(gg_capture_pio, 0);
+
 	while(1) {
 
 		watchdog_update();
@@ -2017,6 +1991,7 @@ void core0_main()
 		//while(dma_channel_is_busy(dma_chan_fb1_write) && dma_channel_is_busy(dma_chan_fb2_write)) ;
 
 		
+		//framebuffer_to_use = framebuffer;
 
 		//draw_overlay(framebuffer_to_use, 1000000 / (last_frame_start - last_frame_time));
 		//draw_overlay(framebuffer, 1000000 / (last_frame_start - last_frame_time));
@@ -2024,14 +1999,13 @@ void core0_main()
 		last_frame_time = last_frame_start;
 		uint32_t start = time_us_32();
 
+
 		//update lcd after 15ms for just over 60fps
-		//if(start - last_frame_time > 15000)
-		if(start - last_frame_time > 12000)
+		//if(start - last_frame_time > 14000)
+		//if(start - last_frame_time > 12000)
 		{
 			//while(dma_channel_is_busy(dma_chan_fb1_write) && dma_channel_is_busy(dma_chan_fb2_write)) ;
 
-			if(dma_channel_is_busy(dma_chan_fb1_write)) framebuffer_to_use = framebuffer2;
-			else framebuffer_to_use = framebuffer;
 
 			//framebuffer_to_use = framebuffer2;
 			//draw_overlay(framebuffer_to_use, 1000000 / (start - last_frame_time));
@@ -2041,15 +2015,24 @@ void core0_main()
 				draw_overlay(framebuffer, 1000000 / (start - last_frame_time));
 				draw_overlay(framebuffer2, 1000000 / (start - last_frame_time));
 			}*/
+			
+			
+			if(pio_interrupt_get(gg_capture_pio, 0))
+			{
+				pio_interrupt_clear(gg_capture_pio, 0);
 
-			update_lcd_gg(framebuffer_to_use);
-			last_frame_start = start;
+				if(dma_channel_is_busy(dma_chan_fb1_write)) framebuffer_to_use = framebuffer2;
+				else framebuffer_to_use = framebuffer;
+
+				update_lcd_gg(framebuffer_to_use);
+				last_frame_start = start;
 			//last_frame_time = start;
 #ifdef DEBUG
 			uint32_t end = time_us_32();
 			
 			printf("Rendering time: %i us, time since last: %i us\n", end - start, start - last_frame_time); 
 #endif
+			}
 		}
 
 		/*
@@ -2214,12 +2197,8 @@ int __not_in_flash_func(main)()
 
 
 	gpio_init_mask(0b11111111111111111111111111111111);
-	gpio_set_dir_out_masked(1 << led_pin);
 	gpio_set_dir_out_masked(1 << lcd_rst);
 	gpio_set_dir_out_masked(1 << lcd_den);
-	//gpio_set_dir_out_masked(1 << lcd_hsync);
-	//gpio_set_dir_out_masked(1 << lcd_vsync);
-	//gpio_set_dir_out_masked(1 << lcd_backlight);
 	
 	//adc_init();
 	
