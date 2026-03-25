@@ -1,1 +1,0 @@
-#define TUD_OPT_HIGH_SPEED 1

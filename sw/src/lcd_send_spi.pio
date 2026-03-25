@@ -5,12 +5,10 @@
 .side_set 2 opt 
 .wrap_target
 
-
     ;clear the latch
 
     ;loop 4 times for 12 bits total
     set y, 3 side 0             ;clear latch and clock
-
 
     irq set 4                   ;flag for when we get stalled waiting to pull a byte
 

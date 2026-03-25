@@ -63,27 +63,27 @@
 // 12bpp layout for GG screen
 
 #ifndef DVI_12BPP_RED_MSB
-#define DVI_12BPP_RED_MSB 11 //15
+#define DVI_12BPP_RED_MSB 11
 #endif
 
 #ifndef DVI_12BPP_RED_LSB
-#define DVI_12BPP_RED_LSB 8 //12
+#define DVI_12BPP_RED_LSB 8
 #endif
 
 #ifndef DVI_12BPP_GREEN_MSB
-#define DVI_12BPP_GREEN_MSB 7 //11
+#define DVI_12BPP_GREEN_MSB 7
 #endif
 
 #ifndef DVI_12BPP_GREEN_LSB
-#define DVI_12BPP_GREEN_LSB 4 //8
+#define DVI_12BPP_GREEN_LSB 4
 #endif
 
 #ifndef DVI_12BPP_BLUE_MSB
-#define DVI_12BPP_BLUE_MSB 3 //7
+#define DVI_12BPP_BLUE_MSB 3
 #endif
 
 #ifndef DVI_12BPP_BLUE_LSB
-#define DVI_12BPP_BLUE_LSB 0 //4
+#define DVI_12BPP_BLUE_LSB 0
 #endif
 
 

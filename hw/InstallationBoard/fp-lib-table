@@ -1,4 +1,0 @@
-(fp_lib_table
-  (version 7)
-  (lib (name "InstallationBoard")(type "KiCad")(uri "${KIPRJMOD}/InstallationBoard.pretty")(options "")(descr ""))
-)

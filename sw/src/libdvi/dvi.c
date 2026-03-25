@@ -269,34 +269,11 @@ void __dvi_func(dvi_scanbuf_main_12bpp)(struct dvi_inst *inst) {
 
 
 //
-//delete this when new pcbs have the colors the gg pins corrected
+//PICO GG LCD DVI Output
 //
-uint8_t reverse_colors_lookup[16] =
-{
-    0b0000,
-    0b1000,
-    0b0100,
-    0b1100,
-    0b0010,
-    0b1010,
-
-    0b0110,
-    0b1110,
-    0b0001,
-
-    0b1001,
-
-    0b0101,
-    0b1101,
-    0b0011,
-    0b1011,
-    0b0111,
-    0b1111,
-};
 
 uint32_t scanbuf_pointer = 0;
 uint16_t empty_scanline[320];
-
 
 // Ugh copy/paste but it lets us garbage collect the TMDS stuff that is not being used from .scratch_x
 void __dvi_func(dvi_scanbuf_main_12bpp_noqueue)(struct dvi_inst *inst, uint16_t *scanbuf1, uint16_t *scanbuf2, uint32_t dma_chan_fb1, uint32_t dma_chan_fb2) {
@@ -319,19 +296,16 @@ void __dvi_func(dvi_scanbuf_main_12bpp_noqueue)(struct dvi_inst *inst, uint16_t 
 
     uint16_t footer_lines_start = header_scanlines + gg_pixel_height + 1;
 
-    
-
-    //if(dma_channel_is_busy(dma_chan_fb1)) curr_framebuffer = scanbuf2;
-    //else curr_framebuffer = scanbuf1;
-    curr_framebuffer = scanbuf1;
-
     uint16_t y_base_offset =(v_lines_to_skip * pixels_in_scanline) + gg_pixel_x_offset_dvi + (pixels_in_scanline - gg_pixel_width) * 0.5;
 
-    //wait for a vblank to start with, should be good after this, right?
+    //wait for a vblank to start with, should be good after this, right??
     while(dma_channel_is_busy(dma_chan_fb1) || dma_channel_is_busy(dma_chan_fb2)){tight_loop_contents();};
 
+    if(dma_channel_is_busy(dma_chan_fb1)) curr_framebuffer = scanbuf2;
+    else curr_framebuffer = scanbuf1;
+    
 	while (1) {
-
+        
 
         if(y > header_scanlines && y < footer_lines_start) {
 
@@ -381,10 +355,8 @@ void __dvi_func(dvi_scanbuf_main_12bpp_noqueue)(struct dvi_inst *inst, uint16_t 
             scanbuf_pointer = y_base_offset;
 			frame_tail = false;
             
-            //while(dma_channel_is_busy(dma_chan_fb1) && dma_channel_is_busy(dma_chan_fb2));
             if(dma_channel_is_busy(dma_chan_fb1)) curr_framebuffer = scanbuf2;
             else curr_framebuffer = scanbuf1;
-            curr_framebuffer = scanbuf1;
 		}
     }
     __builtin_unreachable();

@@ -9563,20 +9563,6 @@
 		)
 		(uuid "660aed67-a490-4be0-bdcf-36b62ba1d27f")
 	)
-	(text "SR BIT ORDER FIXED IN NEW PROTOTYPE"
-		(exclude_from_sim no)
-		(at 41.402 54.102 0)
-		(effects
-			(font
-				(size 3.81 3.81)
-				(thickness 0.508)
-				(bold yes)
-				(italic yes)
-				(color 0 0 0 1)
-			)
-		)
-		(uuid "76dc2466-48fe-483c-8647-1db0b17fe7a1")
-	)
 	(text "GG Inputs"
 		(exclude_from_sim no)
 		(at 223.266 14.986 0)
@@ -29114,7 +29100,7 @@
 			)
 		)
 		(pin "1"
-			(uuid "4d755cbe-4e74-40bc-8253-d9395f4e3da0")
+			(uuid "4d755cbe-4e74-40bc-8253-d9395f4e3da1")
 		)
 		(instances
 			(project ""
@@ -31137,7 +31123,7 @@
 			)
 		)
 		(pin "1"
-			(uuid "4d755cbe-4e74-40bc-8253-d9395f4e3da0")
+			(uuid "4d755cbe-4e74-40bc-8253-d9395f4e3da2")
 		)
 		(instances
 			(project ""

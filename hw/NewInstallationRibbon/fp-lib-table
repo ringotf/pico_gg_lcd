@@ -1,5 +1,0 @@
-(fp_lib_table
-  (version 7)
-  (lib (name "gg_lcd")(type "KiCad")(uri "C:/Users/Gavin/Documents/pico_gg_lcd/hw/gg_lcd.pretty")(options "")(descr ""))
-  (lib (name "InstallationBoard")(type "KiCad")(uri "C:/Users/Gavin/Documents/pico_gg_lcd/hw/InstallationBoard/InstallationBoard.pretty")(options "")(descr ""))
-)
