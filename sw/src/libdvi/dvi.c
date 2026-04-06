@@ -272,11 +272,11 @@ void __dvi_func(dvi_scanbuf_main_12bpp)(struct dvi_inst *inst) {
 //PICO GG LCD DVI Output
 //
 
-uint32_t scanbuf_pointer = 0;
 uint16_t empty_scanline[320];
 
 // Ugh copy/paste but it lets us garbage collect the TMDS stuff that is not being used from .scratch_x
-void __dvi_func(dvi_scanbuf_main_12bpp_noqueue)(struct dvi_inst *inst, uint16_t *scanbuf1, uint16_t *scanbuf2, uint32_t dma_chan_fb1, uint32_t dma_chan_fb2) {
+void __dvi_func(dvi_scanbuf_main_12bpp_noqueue_gg)(struct dvi_inst *inst, uint16_t *scanbuf1, uint16_t *scanbuf2, uint32_t dma_chan_fb1, uint32_t dma_chan_fb2) 
+{
 	uint16_t y = 0;
 	uint16_t * curr_framebuffer;
 
@@ -296,14 +296,16 @@ void __dvi_func(dvi_scanbuf_main_12bpp_noqueue)(struct dvi_inst *inst, uint16_t 
 
     uint16_t footer_lines_start = header_scanlines + gg_pixel_height + 1;
 
-    uint16_t y_base_offset =(v_lines_to_skip * pixels_in_scanline) + gg_pixel_x_offset_dvi + (pixels_in_scanline - gg_pixel_width) * 0.5;
+    uint16_t y_base_offset =(gg_v_lines_to_skip * pixels_in_scanline) + gg_pixel_x_offset_dvi + (pixels_in_scanline - gg_pixel_width) * 0.5;
 
     //wait for a vblank to start with, should be good after this, right??
     while(dma_channel_is_busy(dma_chan_fb1) || dma_channel_is_busy(dma_chan_fb2)){tight_loop_contents();};
 
     if(dma_channel_is_busy(dma_chan_fb1)) curr_framebuffer = scanbuf2;
     else curr_framebuffer = scanbuf1;
-    
+
+    uint32_t scanbuf_pointer = y_base_offset;
+
 	while (1) {
         
 
@@ -319,11 +321,10 @@ void __dvi_func(dvi_scanbuf_main_12bpp_noqueue)(struct dvi_inst *inst, uint16_t 
             //repeats each pixel twice. this gets doubled again by libdvi for total 4x horizontal scaling
             for(c = pixels_border; c < pixels_border + output_width; c+=2) 
 			{
+                empty_scanline[c] = curr_framebuffer[scanbuf_pointer];
+                empty_scanline[c+1] = curr_framebuffer[scanbuf_pointer];
 
-                    empty_scanline[c] = curr_framebuffer[scanbuf_pointer];
-                    empty_scanline[c+1] = curr_framebuffer[scanbuf_pointer];
-
-					scanbuf_pointer++;
+                scanbuf_pointer++;
 			}
             for(c = pixels_border + output_width; c < h_pixels-1; c++)
             {
@@ -358,6 +359,93 @@ void __dvi_func(dvi_scanbuf_main_12bpp_noqueue)(struct dvi_inst *inst, uint16_t 
             if(dma_channel_is_busy(dma_chan_fb1)) curr_framebuffer = scanbuf2;
             else curr_framebuffer = scanbuf1;
 		}
+    }
+    __builtin_unreachable();
+}
+
+void __dvi_func(dvi_scanbuf_main_12bpp_noqueue_sms)(struct dvi_inst *inst, uint16_t *scanbuf1, uint16_t *scanbuf2, uint32_t dma_chan_fb1, uint32_t dma_chan_fb2) 
+{
+    
+	uint16_t y = 0;
+	uint16_t * curr_framebuffer;
+
+	bool frame_tail = false;
+    uint16_t t1,t2,t3,t4;
+    uint16_t buf;
+    
+    uint16_t h_pixels = inst->timing->h_active_pixels / DVI_SYMBOLS_PER_WORD;
+
+    //DVI_VERTICAL_REPEAT set to 3 so triple line scaling!!!
+    uint16_t v_lines = inst->timing->v_active_lines / DVI_VERTICAL_REPEAT; 
+
+    uint16_t output_width = sms_pixel_width; // * 2;
+
+    uint16_t header_scanlines = ((v_lines - sms_pixel_height) / 2);
+    uint16_t pixels_border = (h_pixels - output_width) / 2;
+
+    uint16_t footer_lines_start = header_scanlines + sms_pixel_height;
+
+    uint16_t y_base_offset =(sms_v_lines_to_skip * pixels_in_scanline) + sms_pixel_x_offset_dvi + (pixels_in_scanline - sms_pixel_width) * 0.5;
+
+    //wait for a vblank to start with, should be good after this, right??
+    while(dma_channel_is_busy(dma_chan_fb1) || dma_channel_is_busy(dma_chan_fb2)) { tight_loop_contents(); };
+
+    if(dma_channel_is_busy(dma_chan_fb1)) curr_framebuffer = scanbuf2;
+    else curr_framebuffer = scanbuf1;
+    
+    uint32_t scanbuf_pointer = y_base_offset;
+
+	while (1) {
+        
+        if(y >= header_scanlines && y < footer_lines_start) {
+
+            static uint32_t c = 0;
+
+            for(c = 0; c < pixels_border; c++) 
+            {
+                empty_scanline[c] = 0;
+            }
+            
+            for(c = pixels_border; c < pixels_border + output_width; c++)
+			{
+                empty_scanline[c] = curr_framebuffer[scanbuf_pointer];
+
+                scanbuf_pointer++;
+			}
+            for(c = pixels_border + output_width; c < h_pixels-1; c++)
+            {
+                empty_scanline[c] = 0;
+            }
+	    
+            frame_tail = false;
+		}
+		else {
+			if(!frame_tail)
+			{
+				for(uint32_t c = 0; c < h_pixels; c++) {
+					empty_scanline[c] = 0;
+				}
+				frame_tail = true;
+			}
+		}
+
+		_dvi_prepare_scanline_12bpp(inst, (uint32_t *) &empty_scanline[0]);
+
+		++y;
+		if (y == v_lines) 
+        {
+			y = 0;
+            scanbuf_pointer = y_base_offset;
+			frame_tail = false;
+            
+            if(dma_channel_is_busy(dma_chan_fb1)) curr_framebuffer = scanbuf2;
+            else curr_framebuffer = scanbuf1;
+		}
+        else
+        {
+            //scanbuf_pointer = y_base_offset + ((y>>1) * pixels_in_scanline);
+            scanbuf_pointer = y_base_offset + ((y - header_scanlines) * pixels_in_scanline);
+        }
     }
     __builtin_unreachable();
 }

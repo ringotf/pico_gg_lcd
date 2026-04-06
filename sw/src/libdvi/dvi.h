@@ -95,7 +95,9 @@ void dvi_start(struct dvi_inst *inst);
 //Modified function for Pico GG
 //Manually sends each scanline on CPU core 1, instead of just passing buffers
 void dvi_scanbuf_main_12bpp(struct dvi_inst *inst);
-void dvi_scanbuf_main_12bpp_noqueue(struct dvi_inst *inst, uint16_t *scanbuf1, uint16_t *scanbuf2, uint32_t dma_chan_fb1, uint32_t dma_chan_fb2);
+void dvi_scanbuf_main_12bpp_noqueue_gg(struct dvi_inst *inst, uint16_t *scanbuf1, uint16_t *scanbuf2, uint32_t dma_chan_fb1, uint32_t dma_chan_fb2);
+void dvi_scanbuf_main_12bpp_noqueue_sms(struct dvi_inst *inst, uint16_t *scanbuf1, uint16_t *scanbuf2, uint32_t dma_chan_fb1, uint32_t dma_chan_fb2);
+
 //Stops DVI pairs generations
 void dvi_stop(struct dvi_inst *inst);
 

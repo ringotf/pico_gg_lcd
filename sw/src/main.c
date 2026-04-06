@@ -18,6 +18,7 @@
 #include "hardware/spi.h"
 
 #include "../build/gg_capture.pio.h"
+#include "../build/sms_capture.pio.h"
 #include "../build/lcd_send_spi.pio.h"
 #include "font8x8_basic.h"
 
@@ -337,7 +338,7 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 
 	//frame body
 	//start frame data - this reads from bottom line to top line so the frame is sent upside-down	
-	for (y = gg_pixel_height + v_lines_to_skip; y > v_lines_to_skip ; y--)	
+	for (y = gg_pixel_height + gg_v_lines_to_skip; y > gg_v_lines_to_skip ; y--)	
 	{
 		for (w = 0; w < lcd_vscale_factor; w++)
 		{
@@ -576,8 +577,67 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_sms() {
 */
 
 
+void config_pios_capture()
+{
 
-void config_pios() {
+	uint8_t detect_hblank;
+	pio_sm_config detect_hblank_config;
+	uint8_t get_data;
+	pio_sm_config get_data_config;
+	//
+	//gg video capture pio programs
+	//
+	//if(gg_now)
+	{
+		detect_hblank = pio_add_program(gg_capture_pio, &detect_hblank_gg_program);
+		detect_hblank_config = detect_hblank_gg_program_get_default_config(detect_hblank);
+		sm_config_set_clkdiv(&detect_hblank_config, 1);
+		
+		get_data = pio_add_program(gg_capture_pio, &get_data_gg_program);
+		get_data_config = get_data_gg_program_get_default_config(get_data);
+	}
+	/*else
+	{
+		//
+		//sms video capture pio programs
+		//
+		detect_hblank = pio_add_program(gg_capture_pio, &detect_hblank_sms_program);
+		detect_hblank_config = detect_hblank_sms_program_get_default_config(detect_hblank);
+		sm_config_set_clkdiv(&detect_hblank_config, 1);
+		
+		get_data = pio_add_program(gg_capture_pio, &get_data_sms_program);
+		get_data_config = get_data_sms_program_get_default_config(get_data);
+	}*/
+
+
+	//clock divider set to a multiple of the gg "sub-pixel" clock
+	sm_config_set_clkdiv(&get_data_config, (DVI_TIMING.bit_clk_khz / gg_clock_khz) / 2);
+
+	sm_config_set_in_pins(&get_data_config, gg_D1_pin);
+	sm_config_set_in_shift(&get_data_config, false, true, 12);	//autopush after 12 bits have been read i.e. one RGB444 pixel	
+
+	pio_sm_init(gg_capture_pio, gg_capture_hblank_sm, detect_hblank, &detect_hblank_config);
+	pio_sm_init(gg_capture_pio, gg_capture_getdata_sm, get_data, &get_data_config);
+
+	//push the number of lines per frame to capture
+	pio_sm_put_blocking(gg_capture_pio, gg_capture_hblank_sm, scanlines_in_active_area - 1);
+	
+	//encode a pull to save an instruction
+	pio_sm_exec(gg_capture_pio, gg_capture_hblank_sm, pio_encode_pull(false, true));
+	
+	
+	//push the number of pixels per line to capture
+	pio_sm_put_blocking(gg_capture_pio, gg_capture_getdata_sm, pixels_in_scanline - 1); 
+	
+	//encode a pull to save an instruction
+	pio_sm_exec(gg_capture_pio, gg_capture_getdata_sm, pio_encode_pull(false, true));
+
+	//enable the state machines
+	pio_enable_sm_mask_in_sync(gg_capture_pio, 0b1111);
+}
+
+void config_pios() 
+{
 	
 	pio_clear_instruction_memory(pio0);
 	pio_clear_instruction_memory(pio1);
@@ -637,43 +697,9 @@ void config_pios() {
 	pio_sm_init(lcd_send_clk_pio, lcd_send_clk_sm, lcd_send_clk, &lcd_send_clk_config);
 	pio_sm_set_enabled(lcd_send_clk_pio, lcd_send_clk_sm, true);
 
-	
 
-	//
-	//gg video capture pio programs
-	//
-	uint8_t detect_hblank = pio_add_program(gg_capture_pio, &detect_hblank_program);
-	pio_sm_config detect_hblank_config = detect_hblank_program_get_default_config(detect_hblank);
-	sm_config_set_clkdiv(&detect_hblank_config, 1);
-	
 
-	uint8_t get_data = pio_add_program(gg_capture_pio, &get_data_program);
-	pio_sm_config get_data_config = get_data_program_get_default_config(get_data);
-
-	//clock divider set to a multiple of the gg "sub-pixel" clock
-	sm_config_set_clkdiv(&get_data_config, (DVI_TIMING.bit_clk_khz / gg_clock_khz) / 2);
-
-	sm_config_set_in_pins(&get_data_config, gg_D1_pin);
-	sm_config_set_in_shift(&get_data_config, false, true, 12);	//autopush after 12 bits have been read i.e. one RGB444 pixel	
-
-	pio_sm_init(gg_capture_pio, gg_capture_hblank_sm, detect_hblank, &detect_hblank_config);
-	pio_sm_init(gg_capture_pio, gg_capture_getdata_sm, get_data, &get_data_config);
-
-	//push the number of lines per frame to capture
-	pio_sm_put_blocking(gg_capture_pio, gg_capture_hblank_sm, scanlines_in_active_area - 1);
-	
-	//encode a pull to save an instruction
-	pio_sm_exec(gg_capture_pio, gg_capture_hblank_sm, pio_encode_pull(false, true));
-
-	
-	//push the number of pixels per line to capture
-	pio_sm_put_blocking(gg_capture_pio, gg_capture_getdata_sm, pixels_in_scanline - 1); 
-	
-	//encode a pull to save an instruction
-	pio_sm_exec(gg_capture_pio, gg_capture_getdata_sm, pio_encode_pull(false, true));
-
-	//enable the state machines
-	pio_enable_sm_mask_in_sync(gg_capture_pio, 0b1111);
+	config_pios_capture();
 	
 }
 
@@ -1059,7 +1085,7 @@ const uint16_t font_color = 0xDDD;
 const uint16_t overlay_color_base = 0x066F;
 const uint8_t overlay_item_count = 4;
 const uint8_t overlay_height = (font_size + 4) * overlay_item_count ;
-const uint16_t overlay_ypos = gg_pixel_height + v_lines_to_skip - overlay_height;
+const uint16_t overlay_ypos = gg_pixel_height + gg_v_lines_to_skip - overlay_height;
 const uint16_t overlay_xpos = gg_pixel_x_offset + (pixels_in_scanline - gg_pixel_width) * 0.5;
 
 //simple and slow character drawing
@@ -1266,8 +1292,16 @@ void fill_framebuffer_with_test_pattern() {
 	}
 
 	//draws an outline around the rendered portion, in theory
-	draw_rectangle_empty(framebuffer, gg_pixel_x_offset + 45, v_lines_to_skip, gg_pixel_width, gg_pixel_height, 0xFFF);
-	draw_rectangle_empty(framebuffer2, gg_pixel_x_offset + 45, v_lines_to_skip, gg_pixel_width, gg_pixel_height, 0xFFF);
+	if(gg_now)
+	{
+		draw_rectangle_empty(framebuffer, gg_pixel_x_offset + 45, gg_v_lines_to_skip, gg_pixel_width, gg_pixel_height, 0xFFF);
+		draw_rectangle_empty(framebuffer2, gg_pixel_x_offset + 45, gg_v_lines_to_skip, gg_pixel_width, gg_pixel_height, 0xFFF);
+	}
+	else
+	{
+		draw_rectangle_empty(framebuffer, sms_pixel_x_offset, sms_v_lines_to_skip, sms_pixel_width, sms_pixel_height, 0xFFF);
+		draw_rectangle_empty(framebuffer2, sms_pixel_x_offset, sms_v_lines_to_skip, sms_pixel_width, sms_pixel_height, 0xFFF);
+	}
 
 }
 
@@ -1436,8 +1470,8 @@ void core0_main()
 				}
 
 				
-				/*if(!is_gg) update_lcd_gg();
-				else update_lcd_sms();*/
+				//if(gg_now) update_lcd_gg(framebuffer_to_use);
+				//else update_lcd_sms(framebuffer_to_use);
 				update_lcd_gg(framebuffer_to_use);
 
 				last_frame_time = last_frame_start;
@@ -1502,7 +1536,8 @@ void __not_in_flash_func(core1_main)()
 	dvi_register_irqs_this_core(&dvi0, DVI_DMA_IRQ);
 
 	dvi_start(&dvi0);
-	dvi_scanbuf_main_12bpp_noqueue(&dvi0, framebuffer, framebuffer2, dma_chan_fb1_write, dma_chan_fb2_write);
+	dvi_scanbuf_main_12bpp_noqueue_gg(&dvi0, framebuffer, framebuffer2, dma_chan_fb1_write, dma_chan_fb2_write);
+	//dvi_scanbuf_main_12bpp_noqueue_sms(&dvi0, framebuffer, framebuffer2, dma_chan_fb1_write, dma_chan_fb2_write);
 
 	__builtin_unreachable();
 }

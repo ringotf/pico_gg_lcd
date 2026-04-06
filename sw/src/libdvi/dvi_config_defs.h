@@ -16,8 +16,16 @@
 
 // How many times to output the same TMDS buffer before recyling it onto the
 // free queue. Pixels are repeated vertically if this is >1.
+#ifndef DVI_VERTICAL_REPEAT_GG
+#define DVI_VERTICAL_REPEAT_GG 3
+#endif
+
+#ifndef DVI_VERTICAL_REPEAT_SMS
+#define DVI_VERTICAL_REPEAT_SMS 2
+#endif
+
 #ifndef DVI_VERTICAL_REPEAT
-#define DVI_VERTICAL_REPEAT 3 //2
+#define DVI_VERTICAL_REPEAT DVI_VERTICAL_REPEAT_GG
 #endif
 
 // Number of TMDS buffers to allocate (malloc()) in DVI init. You can set this
