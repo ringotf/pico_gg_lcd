@@ -19,7 +19,8 @@
 
 #include "../build/gg_capture.pio.h"
 #include "../build/sms_capture.pio.h"
-#include "../build/lcd_send_spi.pio.h"
+#include "../build/lcd_send_spi_2x.pio.h"
+#include "../build/lcd_send_spi_4x.pio.h"
 #include "font8x8_basic.h"
 
 #include "libdvi/dvi.h"
@@ -54,22 +55,42 @@ uint32_t dma_chan_fb2_reset;
 #define gg_capture_hblank_sm 0 
 #define gg_capture_getdata_sm 1 
 
+/*
+//some lcd configs for gg
+#define lcd_pio_hscale_gg 4
+#define lcd_hscale_factor_gg 1 / lcd_pio_hscale_gg
 
-//some lcd configs
-#define lcd_pio_hscale 4
-#define lcd_hscale_factor 1 / lcd_pio_hscale
-
-#define lcd_target_width 640
-#define lcd_send_width 160 //lcd_target_width * lcd_hscale_factor
+#define lcd_target_width_gg 640
+#define lcd_send_width_gg 160 //lcd_target_width * lcd_hscale_factor
 
 //add extra pixels to the h porch
-#define lcd_hblank_sync_len 2 * lcd_hscale_factor // 2
-#define lcd_hblank_front_len 44 * lcd_hscale_factor  //24
-#define lcd_hblank_back_len 42 * lcd_hscale_factor  //12
-#define lcd_hblank_len lcd_hblank_front_len + lcd_send_width + lcd_hblank_back_len //this is sync plus both porches plus active display area
+#define lcd_hblank_sync_len_gg 2 * lcd_hscale_factor_gg // 2
+#define lcd_hblank_front_len_gg 44 * lcd_hscale_factor_gg  //24
+#define lcd_hblank_back_len_gg 42 * lcd_hscale_factor_gg  //12
+#define lcd_hblank_len_gg lcd_hblank_front_len_gg + lcd_send_width_gg + lcd_hblank_back_len_gg //this is sync plus both porches plus active display area
 
-#define lcd_active_lines 160 // 160 * 3x scale = 480 lcd lines
-#define lcd_vscale_factor 3
+#define lcd_active_lines_gg 160 // 160 * 3x scale = 480 lcd lines
+#define lcd_vscale_factor_gg 3
+*/
+
+
+//some lcd configs for sms
+#define lcd_pio_hscale_sms 2
+#define lcd_hscale_factor_sms 1 / lcd_pio_hscale_sms
+
+#define lcd_target_width_sms 640
+#define lcd_send_width_sms 320 //lcd_target_width * lcd_hscale_factor
+
+//add extra pixels to the h porch
+#define lcd_hblank_sync_len_sms 2 * lcd_hscale_factor_sms // 2
+#define lcd_hblank_front_len_sms 44 * lcd_hscale_factor_sms  //24
+#define lcd_hblank_back_len_sms 42 * lcd_hscale_factor_sms  //12
+#define lcd_hblank_len_sms lcd_hblank_front_len_sms + lcd_send_width_sms + lcd_hblank_back_len_sms //this is sync plus both porches plus active display area
+
+#define lcd_active_lines_sms 240 // 160 * 3x scale = 480 lcd lines
+#define lcd_vscale_factor_sms 2
+
+
 
 #define lcd_vblank_sync_lines 2 
 #define lcd_vblank_front_lines 16 //22 
@@ -142,9 +163,9 @@ uint8_t pwm_backlight_slice;
 //
 //button states
 //
-uint32_t is_gg;
-uint32_t gg_now;
-uint32_t last_gg;
+bool is_gg = true;
+bool gg_now = true;
+bool last_gg = true;
 
 bool gg_start_now;
 bool gg_btn1_now;
@@ -209,6 +230,14 @@ static inline __attribute__ ((always_inline)) void send_4blank_lcd_pixel()
 	pio_sm_put(lcd_send_pio, lcd_send_sm, 0);
 
 }
+static inline __attribute__ ((always_inline)) void send_2blank_lcd_pixel()
+{
+	while(!pio_sm_is_tx_fifo_empty(lcd_send_pio, lcd_send_sm)) ;
+
+	pio_sm_put(lcd_send_pio, lcd_send_sm, 0);
+	pio_sm_put(lcd_send_pio, lcd_send_sm, 0);
+
+}
 
 volatile uint32_t for_nop_count = 0;
 
@@ -242,7 +271,7 @@ static inline __attribute__ ((always_inline)) uint32_t unpack(uint32_t rgb_value
 
 
 uint16_t * framebuffer_to_use;
-
+/*
 __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint16_t * curr_framebuffer) {	
 
 	//uint16_t spi_buffer[4] = {0x800, 0x800, 0x800, 0x800};  
@@ -251,7 +280,7 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 	//base points to the bottom right of the original image
 	uint32_t base = pixels_in_scanline + 48 - 52 + FRAME_SIZE_PIXELS - pixels_in_scanline * 51;
 
-	static uint16_t line_diff = lcd_active_lines - gg_pixel_height;
+	static uint16_t line_diff = lcd_active_lines_gg - gg_pixel_height;
 	uint16_t header_count = line_diff * 0.5;
 	uint16_t footer_count = line_diff - header_count;
 
@@ -269,11 +298,11 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 
 	for(blank_lines = 0; blank_lines < lcd_vblank_sync_lines; blank_lines ++) {
 		
-		for(blank_pixels = 0; blank_pixels < lcd_hblank_sync_len; blank_pixels +=4) {
+		for(blank_pixels = 0; blank_pixels < lcd_hblank_sync_len_gg; blank_pixels +=4) {
 			send_4blank_lcd_pixel();
 		}
 
-		for(blank_pixels = 0; blank_pixels < lcd_hblank_len; blank_pixels +=4) {
+		for(blank_pixels = 0; blank_pixels < lcd_hblank_len_gg; blank_pixels +=4) {
 			send_4blank_lcd_pixel();
 		}
 	}
@@ -282,11 +311,11 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 	//start vsync back porch
 	for(blank_lines = 0; blank_lines < lcd_vblank_back_lines; blank_lines ++) {
 		
-		for(blank_pixels = 0; blank_pixels < lcd_hblank_sync_len; blank_pixels +=4) {
+		for(blank_pixels = 0; blank_pixels < lcd_hblank_sync_len_gg; blank_pixels +=4) {
 			send_4blank_lcd_pixel();
 		}
 
-		for(blank_pixels = 0; blank_pixels < lcd_hblank_len; blank_pixels +=4) {
+		for(blank_pixels = 0; blank_pixels < lcd_hblank_len_gg; blank_pixels +=4) {
 			send_4blank_lcd_pixel();
 		}
 
@@ -301,13 +330,13 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 	//do some blank footer lines....
 	for (y = gg_pixel_height; y < gg_pixel_height + footer_count; y++)
 	{
-		for (w = 0; w < lcd_vscale_factor; w++)
+		for (w = 0; w < lcd_vscale_factor_gg; w++)
 		{
-			for(blank_pixels = 0; blank_pixels < lcd_hblank_sync_len; blank_pixels +=4) {
+			for(blank_pixels = 0; blank_pixels < lcd_hblank_sync_len_gg; blank_pixels +=4) {
 				send_4blank_lcd_pixel();
 			}
 
-			for(blank_pixels = 0; blank_pixels < lcd_hblank_back_len; blank_pixels +=4) {
+			for(blank_pixels = 0; blank_pixels < lcd_hblank_back_len_gg; blank_pixels +=4) {
 				send_4blank_lcd_pixel();
 			}
 
@@ -319,7 +348,7 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 
 			//blank line
 			//for (uint32_t x = y_base + lcd_send_width; x > y_base; x -=4)
-			for (x = 0 ; x < lcd_send_width; x +=4)
+			for (x = 0 ; x < lcd_send_width_gg; x +=4)
 			{
 				send_4blank_lcd_pixel();
 			}
@@ -328,7 +357,7 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 			lcd_den_set(0, false);
 			
 			//Send empty pixels during Hblank
-			for(blank_pixels = 0; blank_pixels < lcd_hblank_front_len; blank_pixels ++) {				
+			for(blank_pixels = 0; blank_pixels < lcd_hblank_front_len_gg; blank_pixels ++) {				
 				send_4blank_lcd_pixel();
 			}
 			
@@ -340,13 +369,13 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 	//start frame data - this reads from bottom line to top line so the frame is sent upside-down	
 	for (y = gg_pixel_height + gg_v_lines_to_skip; y > gg_v_lines_to_skip ; y--)	
 	{
-		for (w = 0; w < lcd_vscale_factor; w++)
+		for (w = 0; w < lcd_vscale_factor_gg; w++)
 		{
-			for(blank_pixels = 0; blank_pixels < lcd_hblank_sync_len; blank_pixels +=4) {
+			for(blank_pixels = 0; blank_pixels < lcd_hblank_sync_len_gg; blank_pixels +=4) {
 				send_4blank_lcd_pixel();
 			}
 
-			for(blank_pixels = 0; blank_pixels < lcd_hblank_back_len; blank_pixels +=4) {
+			for(blank_pixels = 0; blank_pixels < lcd_hblank_back_len_gg; blank_pixels +=4) {
 				send_4blank_lcd_pixel();
 			}
 
@@ -367,14 +396,8 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 			//uint32_t old_pix_value = unpack(curr_framebuffer[y_base] & 4095);
 			
 			//for (uint32_t x = y_base; x < y_base + lcd_send_width; x +=4)
-			for (x = y_base + lcd_send_width-1; x >= y_base; x -=4)
+			for (x = y_base + lcd_send_width_gg-1; x >= y_base; x -=4)
 			{
-
-				/*
-				uint32_t sub_pixel = (x * 133);
-				uint32_t pixIndex = y_base - (sub_pixel >> 8);
-				uint32_t pix_value = unpack(curr_framebuffer[pixIndex] & 4095);
-				*/
 
 				//sub_pixel is a 24.8 bit fixed point coordinate
 				
@@ -415,19 +438,14 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 				send_lcd_pixel(curr_framebuffer[x-1]);
 				send_lcd_pixel(curr_framebuffer[x-2]);
 				send_lcd_pixel(curr_framebuffer[x-3]);
-				
-				/*send_lcd_pixel(spi_buffer[0]);
-				send_lcd_pixel(spi_buffer[1]);
-				send_lcd_pixel(spi_buffer[2]);
-				send_lcd_pixel(spi_buffer[3]);*/
-	
+					
 			}
 
 			//Signal end of active scanline portion
 			lcd_den_set(0, false);
 			
 			//Send empty pixels during Hblank front porch
-			for(blank_pixels = 0; blank_pixels < lcd_hblank_front_len; blank_pixels +=4) {
+			for(blank_pixels = 0; blank_pixels < lcd_hblank_front_len_gg; blank_pixels +=4) {
 				send_4blank_lcd_pixel();
 			}			
 		}
@@ -438,13 +456,13 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 	//as the frame is output upside-down, the "header" goes at the bottom
 	for (y = 0; y < header_count ; y++)
 	{
-		for (w = 0; w < lcd_vscale_factor; w++)
+		for (w = 0; w < lcd_vscale_factor_gg; w++)
 		{
-			for(blank_pixels = 0; blank_pixels < lcd_hblank_sync_len; blank_pixels +=4) {	
+			for(blank_pixels = 0; blank_pixels < lcd_hblank_sync_len_gg; blank_pixels +=4) {	
 				send_4blank_lcd_pixel();
 			}
 
-			for(blank_pixels = 0; blank_pixels < lcd_hblank_back_len; blank_pixels +=4) {		
+			for(blank_pixels = 0; blank_pixels < lcd_hblank_back_len_gg; blank_pixels +=4) {		
 				send_4blank_lcd_pixel();
 			}
 			
@@ -457,7 +475,7 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 			
 			//for (uint32_t x = y_base; x < y_target; x +=4) {			
 			//for (uint32_t x = y_target; x > y_base; x -=4) {	
-			for (x = 0; x < lcd_send_width; x +=4) {
+			for (x = 0; x < lcd_send_width_gg; x +=4) {
 
 				while(!pio_sm_is_tx_fifo_empty(lcd_send_pio, lcd_send_sm)) ;
 				send_4blank_lcd_pixel();
@@ -467,7 +485,7 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 			lcd_den_set(0, false);
 			
 			//Send empty pixels during Hblank
-			for(blank_pixels = 0; blank_pixels < lcd_hblank_front_len; blank_pixels +=4) {				
+			for(blank_pixels = 0; blank_pixels < lcd_hblank_front_len_gg; blank_pixels +=4) {				
 				send_4blank_lcd_pixel();
 			}
 
@@ -487,13 +505,13 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 
 	//Send empty data for the entirety of vblank
 	 
-	for(blank_pixels = 0; blank_pixels < lcd_hblank_sync_len; blank_pixels +=4) {
+	for(blank_pixels = 0; blank_pixels < lcd_hblank_sync_len_gg; blank_pixels +=4) {
 		send_4blank_lcd_pixel();
 	}
 
 	for(blank_lines = 0; blank_lines < lcd_vblank_front_lines; blank_lines ++) {
 
-		for(blank_pixels = 0; blank_pixels < lcd_hblank_len; blank_pixels +=4) {
+		for(blank_pixels = 0; blank_pixels < lcd_hblank_len_gg; blank_pixels +=4) {
 			send_4blank_lcd_pixel();
 		}
 	}
@@ -502,6 +520,7 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_gg(uint1
 	//lcd_den_set(0, false);
 
 }
+*/
 
 /*
 //The only thing that changes for SMS mode are the scaling constants
@@ -577,18 +596,253 @@ __attribute__ ((long_call, section (".time_critical"))) void update_lcd_sms() {
 */
 
 
+__attribute__ ((long_call, section (".time_critical"))) void update_lcd_sms(uint16_t * curr_framebuffer) {	
+
+	//Because of the LCD's orientation, we actually need to scan the image out upside down and flipped
+	//base points to the bottom right of the original image
+
+	static uint16_t line_diff = lcd_active_lines_sms - sms_pixel_height;
+	uint16_t header_count = line_diff * 0.5;
+	uint16_t footer_count = line_diff - header_count;
+
+	uint16_t border_width = (lcd_send_width_sms - sms_pixel_width) * 0.5;
+
+	uint32_t y_base;
+	uint32_t y_base_offset = (sms_pixel_x_offset + (pixels_in_scanline - sms_pixel_width) * 0.5);
+	uint32_t y_target;
+
+	uint32_t blank_lines, blank_pixels, w, x, y;
+
+	//might not need to skip interrupt?
+	lcd_den_set(0, true);
+
+	//start vsync pulse
+
+	for(blank_lines = 0; blank_lines < lcd_vblank_sync_lines; blank_lines ++) {
+		
+		for(blank_pixels = 0; blank_pixels < lcd_hblank_sync_len_sms; blank_pixels +=4) {
+			send_4blank_lcd_pixel();
+		}
+
+		for(blank_pixels = 0; blank_pixels < lcd_hblank_len_sms; blank_pixels +=4) {
+			send_4blank_lcd_pixel();
+		}
+	}
+	//end vsync pulse
+
+	//start vsync back porch
+	for(blank_lines = 0; blank_lines < lcd_vblank_back_lines; blank_lines ++) {
+		
+		for(blank_pixels = 0; blank_pixels < lcd_hblank_sync_len_sms; blank_pixels +=4) {
+			send_4blank_lcd_pixel();
+		}
+
+		for(blank_pixels = 0; blank_pixels < lcd_hblank_len_sms; blank_pixels +=4) {
+			send_4blank_lcd_pixel();
+		}
+
+	}
+	//end vsync back porch
+
+
+
+	//footer goes at the top when the frame is upside-down
+
+	//frame footer
+	//do some blank footer lines....
+	for (y = sms_pixel_height; y < sms_pixel_height + footer_count; y++)
+	{
+		for (w = 0; w < lcd_vscale_factor_sms; w++)
+		{
+			for(blank_pixels = 0; blank_pixels < lcd_hblank_sync_len_sms; blank_pixels +=4) {
+				send_4blank_lcd_pixel();
+			}
+
+			for(blank_pixels = 0; blank_pixels < lcd_hblank_back_len_sms; blank_pixels +=4) {
+				send_4blank_lcd_pixel();
+			}
+
+			//y_base = y * pixels_in_scanline;			
+			//y_base += (pixels_in_scanline - gg_pixel_width) * 0.5;
+			//y_base += y_base_offset;
+
+			lcd_den_set(1, false);
+
+			//blank line
+			//for (uint32_t x = y_base + lcd_send_width; x > y_base; x -=4)
+			for (x = 0 ; x < lcd_send_width_sms; x +=4)
+			{
+				send_4blank_lcd_pixel();
+			}
+			
+			//Signal end of active scanline portion
+			lcd_den_set(0, false);
+			
+			//Send empty pixels during Hblank
+			for(blank_pixels = 0; blank_pixels < lcd_hblank_front_len_sms; blank_pixels ++) {				
+				send_4blank_lcd_pixel();
+			}
+			
+		}
+	}
+
+
+	//frame body
+	//start frame data - this reads from bottom line to top line so the frame is sent upside-down	
+	for (y = sms_pixel_height + sms_v_lines_to_skip; y >= sms_v_lines_to_skip ; y--)	
+	{
+		for (w = 0; w < lcd_vscale_factor_sms; w++)
+		{
+			for(blank_pixels = 0; blank_pixels < lcd_hblank_sync_len_sms; blank_pixels +=4) {
+				send_4blank_lcd_pixel();
+			}
+
+			for(blank_pixels = 0; blank_pixels < lcd_hblank_back_len_sms; blank_pixels +=4) {
+				send_4blank_lcd_pixel();
+			}
+
+			//Where in the framebuffer the current scanline starts
+			//uint32_t y_base = base - ((y * 310) >> 9) * pixels_in_scanline + 256;
+
+			y_base = (y) * pixels_in_scanline;			
+			y_base += y_base_offset;
+
+			//Tell LCD we're starting the active portion of the scanline
+			lcd_den_set(1, false);
+
+			///unpack transforms 0b0000rrrrggggbbbb word into 0bbbb000000gggg000000rrrr word
+			//Channel order is changed to bgr because that's what the LCD expects
+			//Channel bits are spread out so we can do SIMD-within-a-word
+			//The interpolator will do linear interpolation on all three channels at once, using a single 32-bit word
+			//uint32_t framebuffer_pix_value = curr_framebuffer[y_base] & 4095;
+			//uint32_t old_pix_value = unpack(curr_framebuffer[y_base] & 4095);
+			
+
+			for(x = 0; x < border_width; x +=2 )
+			{
+				send_2blank_lcd_pixel();
+			}
+
+			//for (uint32_t x = y_base; x < y_base + lcd_send_width; x +=4)
+			for (x = y_base + sms_pixel_width-1; x >= y_base; x -=2)
+			{
+
+				//By the time we get here, the PIO is probably gonna be done sending the last pixel anyways
+				while(!pio_sm_is_tx_fifo_empty(lcd_send_pio, lcd_send_sm)) ;
+
+				//This way, we only have to poll on the FIFO status once and then can just blast the three words at once
+				//Seems to be significantly faster than pio_sm_put_blocking on each word
+				//pio_sm_put(lcd_send_pio, lcd_send_sm, pix_value & 15);
+				//pix_value >>= 10;
+				//pio_sm_put(lcd_send_pio, lcd_send_sm, pix_value & 15);
+				//pix_value >>= 10;
+				//pio_sm_put(lcd_send_pio, lcd_send_sm, pix_value & 15);
+
+				send_lcd_pixel(curr_framebuffer[x]);
+				send_lcd_pixel(curr_framebuffer[x-1]);
+	
+			}
+			
+			for(x = 0; x < border_width; x +=2 )
+			{
+				send_2blank_lcd_pixel();
+			}
+
+			//Signal end of active scanline portion
+			lcd_den_set(0, false);
+			
+			//Send empty pixels during Hblank front porch
+			for(blank_pixels = 0; blank_pixels < lcd_hblank_front_len_sms; blank_pixels +=4) {
+				send_4blank_lcd_pixel();
+			}			
+		}
+
+	}
+
+	//frame "header"
+	//as the frame is output upside-down, the "header" goes at the bottom
+	for (y = 0; y < header_count ; y++)
+	{
+		for (w = 0; w < lcd_vscale_factor_sms; w++)
+		{
+			for(blank_pixels = 0; blank_pixels < lcd_hblank_sync_len_sms; blank_pixels +=4) {	
+				send_4blank_lcd_pixel();
+			}
+
+			for(blank_pixels = 0; blank_pixels < lcd_hblank_back_len_sms; blank_pixels +=4) {		
+				send_4blank_lcd_pixel();
+			}
+			
+			//repeat the bottom lines at the top
+			//y_base = (gg_pixel_height + y) * pixels_in_scanline;			
+			//y_base += y_base_offset;
+			//y_target = y_base + lcd_send_width;
+			
+			lcd_den_set(1, false);
+			
+			//for (uint32_t x = y_base; x < y_target; x +=4) {			
+			//for (uint32_t x = y_target; x > y_base; x -=4) {	
+			for (x = 0; x < lcd_send_width_sms; x +=4) {
+
+				while(!pio_sm_is_tx_fifo_empty(lcd_send_pio, lcd_send_sm)) ;
+				send_4blank_lcd_pixel();
+			}
+
+			//Signal end of active scanline portion
+			lcd_den_set(0, false);
+			
+			//Send empty pixels during Hblank
+			for(blank_pixels = 0; blank_pixels < lcd_hblank_front_len_sms; blank_pixels +=4) {				
+				send_4blank_lcd_pixel();
+			}
+
+		}
+	}
+
+
+	//Start of vblank
+	//lcd_den_set(1, false);
+
+	//end frame data
+
+	//start vsync front porch
+
+	//Start of vblank 
+	//lcd_den_set(0, false);
+
+	//Send empty data for the entirety of vblank
+	 
+	for(blank_pixels = 0; blank_pixels < lcd_hblank_sync_len_sms; blank_pixels +=4) {
+		send_4blank_lcd_pixel();
+	}
+
+	for(blank_lines = 0; blank_lines < lcd_vblank_front_lines; blank_lines ++) {
+
+		for(blank_pixels = 0; blank_pixels < lcd_hblank_len_sms; blank_pixels +=4) {
+			send_4blank_lcd_pixel();
+		}
+	}
+	//end vsync front porch
+	
+	//lcd_den_set(0, false);
+
+}
+
+
+
 void config_pios_capture()
 {
-
 	uint8_t detect_hblank;
 	pio_sm_config detect_hblank_config;
 	uint8_t get_data;
 	pio_sm_config get_data_config;
+
 	//
 	//gg video capture pio programs
 	//
-	//if(gg_now)
+	/*if(gg_now)
 	{
+		//separate pio programs for gg allows smaller frame buffer and less memory use overall
 		detect_hblank = pio_add_program(gg_capture_pio, &detect_hblank_gg_program);
 		detect_hblank_config = detect_hblank_gg_program_get_default_config(detect_hblank);
 		sm_config_set_clkdiv(&detect_hblank_config, 1);
@@ -596,7 +850,7 @@ void config_pios_capture()
 		get_data = pio_add_program(gg_capture_pio, &get_data_gg_program);
 		get_data_config = get_data_gg_program_get_default_config(get_data);
 	}
-	/*else
+	else*/
 	{
 		//
 		//sms video capture pio programs
@@ -607,7 +861,7 @@ void config_pios_capture()
 		
 		get_data = pio_add_program(gg_capture_pio, &get_data_sms_program);
 		get_data_config = get_data_sms_program_get_default_config(get_data);
-	}*/
+	}
 
 
 	//clock divider set to a multiple of the gg "sub-pixel" clock
@@ -638,9 +892,18 @@ void config_pios_capture()
 
 void config_pios() 
 {
+
+	//stop and reset pios
+	pio_set_sm_mask_enabled(gg_capture_pio, 0b1111, false);
+
+	pio_sm_clear_fifos(gg_capture_pio, gg_capture_hblank_sm);
+	pio_sm_clear_fifos(gg_capture_pio, gg_capture_getdata_sm);
+	pio_sm_clear_fifos(gg_capture_pio, lcd_send_sm);
+	pio_sm_clear_fifos(gg_capture_pio, lcd_send_clk_sm);
 	
-	pio_clear_instruction_memory(pio0);
+	//pio_clear_instruction_memory(pio0); //used by dvi output
 	pio_clear_instruction_memory(pio1);
+
 
 	//gg_capture_pio captures data from the GG's video bus
 	pio_sm_claim(gg_capture_pio, gg_capture_hblank_sm);
@@ -653,12 +916,29 @@ void config_pios()
 	//lcd_send_clk_pio clocks the lcd's clock...
 	pio_sm_claim(lcd_send_clk_pio, lcd_send_clk_sm);
 
-	
-	uint8_t lcd_send_spi = pio_add_program(lcd_send_pio, &lcd_send_spi_program);
-	pio_sm_config lcd_send_spi_config = lcd_send_spi_program_get_default_config(lcd_send_spi);
+	uint8_t lcd_send_spi;
+	pio_sm_config lcd_send_spi_config;
+	uint8_t lcd_send_clk;
+	pio_sm_config lcd_send_clk_config;
 
-	uint8_t lcd_send_clk = pio_add_program(lcd_send_pio, &lcd_send_clk_program);
-	pio_sm_config lcd_send_clk_config = lcd_send_clk_program_get_default_config(lcd_send_clk);
+	/*if(gg_now)
+	{
+		//4x video output horizontal scaling
+		lcd_send_spi = pio_add_program(lcd_send_pio, &lcd_send_spi_4x_program);
+		lcd_send_spi_config = lcd_send_spi_4x_program_get_default_config(lcd_send_spi);
+
+		lcd_send_clk = pio_add_program(lcd_send_pio, &lcd_send_clk_4x_program);
+		lcd_send_clk_config = lcd_send_clk_4x_program_get_default_config(lcd_send_clk);
+	}
+	else*/
+	{
+		//2x video output horizontal scaling
+		lcd_send_spi = pio_add_program(lcd_send_pio, &lcd_send_spi_2x_program);
+		lcd_send_spi_config = lcd_send_spi_2x_program_get_default_config(lcd_send_spi);
+
+		lcd_send_clk = pio_add_program(lcd_send_pio, &lcd_send_clk_2x_program);
+		lcd_send_clk_config = lcd_send_clk_2x_program_get_default_config(lcd_send_clk);
+	}
 
 	uint8_t lcd_send = lcd_send_spi;
 	pio_sm_config lcd_send_config = lcd_send_spi_config;
@@ -1384,7 +1664,7 @@ void read_in_spi()
 	gg_btn_up_released = gg_btn_up_changed && !gg_btn_up_now;
 
 	
-	gg_now = !(data & 80);
+	gg_now = (data & 80); //idk somehow this is wrong way around, it should need negating
 
 
 }
@@ -1425,21 +1705,21 @@ void core0_main()
 	//wait for a vblank to start with, should be good after this, right?
 	//while(dma_channel_is_busy(dma_chan_fb1_write) && dma_channel_is_busy(dma_chan_fb2_write)) ;
 
-	pio_interrupt_clear(gg_capture_pio, 0);
+	//pio_interrupt_clear(gg_capture_pio, 0);
 
 	bool buttonsCleared = false;
 	bool osdToggle = false;
 	float backlight_level = 0;
 
-	while(1) {
+	while(1) {		
 
-/*
+		/*if(last_gg != gg_now) 
+		{
+			config_pios();
+		}*/
+
 		last_gg = gg_now;
-		gg_now = !gpio_get(gg_SMS_pin);
 
-		if(last_gg == gg_now) is_gg = gg_now;
-
-*/
 
 		//Scanning a frame out into the LCD is faster than ~16ms
 		//So, we wait until the console starts sending out a new frame before we update the LCD again
@@ -1470,9 +1750,15 @@ void core0_main()
 				}
 
 				
-				//if(gg_now) update_lcd_gg(framebuffer_to_use);
-				//else update_lcd_sms(framebuffer_to_use);
-				update_lcd_gg(framebuffer_to_use);
+				//if(gg_now) 
+				//{
+				//	update_lcd_gg(framebuffer_to_use);
+				//}
+				//else 
+				//{
+					update_lcd_sms(framebuffer_to_use);
+				//}
+				//update_lcd_gg(framebuffer_to_use);
 
 				last_frame_time = last_frame_start;
 				last_frame_start = time_us_32();

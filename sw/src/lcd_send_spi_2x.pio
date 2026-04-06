@@ -1,7 +1,7 @@
 ;out pins are "spi" mosi for shift registers
 ;set pin is lcd clk
 ;sideset is "spi" latch and clk and shift registers
-.program lcd_send_spi
+.program lcd_send_spi_2x
 .side_set 2 opt 
 .wrap_target
 
@@ -35,17 +35,20 @@ buffer_target:
 ;this could be done in the main lcd_send to save a statemachine, using 2 sideset pins for the spi clk and latch
 ;but by doing separately we can clock the lcd whilst the next bits are being clocked through the shift registers 
 ;set pin is lcd clk
-.program lcd_send_clk
+.program lcd_send_clk_2x
 .wrap_target
 
-    set y, 3                    ;counter to repeat pixels 4 times total
+    ;set y, 1                    ;counter to repeat pixels 2 times total
 
     wait 1 irq 2                ;waiting for next pixel
 
 lcd_target:
     set pins 1 [2]              ;clock the lcd
-    set pins 0 [1]
+    set pins 0 [2]
+    
+    set pins 1 [2]              ;clock the lcd
+    set pins 0 [2]
 
-    jmp y-- lcd_target [1]
+    ;jmp y-- lcd_target [1]
 
 .wrap
