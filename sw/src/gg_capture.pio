@@ -15,8 +15,10 @@
 
 	wait 0 gpio dw_vsync		;wait for vblank
 
-	set y 31					;skip a bunch of lines after vblank before starting capture, ensures first line is read
+	set y 21					;skip a bunch of lines after vblank before starting capture, ensures first line is read
 skip_vblank_lines:
+	wait 1 gpio cl2_hsync
+	wait 0 gpio cl2_hsync
 	wait 1 gpio cl2_hsync
 	wait 0 gpio cl2_hsync
 	wait 1 gpio cl2_hsync

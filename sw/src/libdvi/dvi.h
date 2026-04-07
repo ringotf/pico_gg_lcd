@@ -71,6 +71,8 @@ struct dvi_inst {
 
     int audio_sample_pos;
     int audio_frame_count;
+
+	int vertical_repeat;
 };
 
 // Reports DVI status 1: active 0: inactive

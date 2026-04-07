@@ -44,9 +44,21 @@ pico_generate_pio_header(pico_gg_lcd ${CMAKE_CURRENT_LIST_DIR}/src/sms_capture.p
 pico_generate_pio_header(pico_gg_lcd ${CMAKE_CURRENT_LIST_DIR}/src/lcd_send_spi_2x.pio)
 pico_generate_pio_header(pico_gg_lcd ${CMAKE_CURRENT_LIST_DIR}/src/lcd_send_spi_4x.pio)
 
-target_link_libraries(pico_gg_lcd pico_stdlib pico_time 
-hardware_pio hardware_sync hardware_dma hardware_clocks pico_multicore 
-pico_time hardware_adc hardware_pwm hardware_interp libdvi hardware_spi )
+target_link_libraries(pico_gg_lcd 
+    pico_stdlib 
+    pico_time 
+    hardware_pio 
+    hardware_sync 
+    hardware_dma 
+    hardware_clocks 
+    pico_multicore 
+    pico_time 
+    hardware_adc 
+    hardware_pwm 
+#    hardware_interp 
+    libdvi 
+    hardware_spi 
+)
 
 pico_add_extra_outputs(pico_gg_lcd)
 
@@ -56,3 +68,10 @@ pico_enable_stdio_uart(pico_gg_lcd 1)
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_definitions(-DDEBUG)
 endif()
+
+target_link_options(pico_gg_lcd PRIVATE 
+    -ffunction-sections  
+    -fdata-sections 
+    -Wl,--gc-sections 
+    -Wl,--strip-all
+    -Wl,--print-memory-usage )

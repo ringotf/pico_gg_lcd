@@ -38,6 +38,7 @@ void dvi_init(struct dvi_inst *inst, uint spinlock_tmds_queue, uint spinlock_col
     inst->dvi_started = false;
     inst->timing_state.v_ctr  = 0;
     inst->dvi_frame_count = 0;
+    inst->vertical_repeat = DVI_VERTICAL_REPEAT_DEFAULT;
 
     dvi_audio_init(inst);
     dvi_timing_state_init(&inst->timing_state);
@@ -287,7 +288,7 @@ void __dvi_func(dvi_scanbuf_main_12bpp_noqueue_gg)(struct dvi_inst *inst, uint16
     uint16_t h_pixels = inst->timing->h_active_pixels / DVI_SYMBOLS_PER_WORD;
 
     //DVI_VERTICAL_REPEAT set to 3 so triple line scaling!!!
-    uint16_t v_lines = inst->timing->v_active_lines / DVI_VERTICAL_REPEAT; 
+    uint16_t v_lines = inst->timing->v_active_lines / inst->vertical_repeat; //DVI_VERTICAL_REPEAT; 
 
     uint16_t output_width = gg_pixel_width * 2;
 
@@ -352,6 +353,9 @@ void __dvi_func(dvi_scanbuf_main_12bpp_noqueue_gg)(struct dvi_inst *inst, uint16
 		++y;
 		if (y == v_lines) 
         {
+            //not in gg mode anymore, return so we can switch to sms
+            if(!last_gg) return;
+
 			y = 0;
             scanbuf_pointer = y_base_offset;
 			frame_tail = false;
@@ -375,8 +379,8 @@ void __dvi_func(dvi_scanbuf_main_12bpp_noqueue_sms)(struct dvi_inst *inst, uint1
     
     uint16_t h_pixels = inst->timing->h_active_pixels / DVI_SYMBOLS_PER_WORD;
 
-    //DVI_VERTICAL_REPEAT set to 3 so triple line scaling!!!
-    uint16_t v_lines = inst->timing->v_active_lines / DVI_VERTICAL_REPEAT; 
+    //DVI_VERTICAL_REPEAT should be 2
+    uint16_t v_lines = inst->timing->v_active_lines / inst->vertical_repeat; //DVI_VERTICAL_REPEAT; 
 
     uint16_t output_width = sms_pixel_width; // * 2;
 
@@ -434,6 +438,9 @@ void __dvi_func(dvi_scanbuf_main_12bpp_noqueue_sms)(struct dvi_inst *inst, uint1
 		++y;
 		if (y == v_lines) 
         {
+            //not in sms mode anymore, return so we can switch to gg
+            if(last_gg) return;
+
 			y = 0;
             scanbuf_pointer = y_base_offset;
 			frame_tail = false;
@@ -489,14 +496,14 @@ static void __dvi_func(dvi_dma_irq_handler)(struct dvi_inst *inst) {
                 is_blank_line = true;
             } else {
                 if (queue_try_peek_u32(&inst->q_tmds_valid, &tmdsbuf)) {
-                    if (inst->timing_state.v_ctr % DVI_VERTICAL_REPEAT == DVI_VERTICAL_REPEAT - 1) {
+                    if (inst->timing_state.v_ctr % inst->vertical_repeat == inst->vertical_repeat - 1) {
                         queue_remove_blocking_u32(&inst->q_tmds_valid, &tmdsbuf);
                         inst->tmds_buf_release[0] = tmdsbuf;
                     }
                 } else {
                     // No valid scanline was ready (generates solid red scanline)
                     tmdsbuf = NULL;
-                    if (inst->timing_state.v_ctr % DVI_VERTICAL_REPEAT == DVI_VERTICAL_REPEAT - 1) {
+                    if (inst->timing_state.v_ctr % inst->vertical_repeat == inst->vertical_repeat - 1) {
                         ++inst->late_scanline_ctr;
                     }
                 }
@@ -515,8 +522,8 @@ static void __dvi_func(dvi_dma_irq_handler)(struct dvi_inst *inst) {
                 dma_list_selected = &inst->dma_list_error;
             }
 
-            if (inst->scanline_callback && inst->timing_state.v_ctr % DVI_VERTICAL_REPEAT == DVI_VERTICAL_REPEAT - 1) {
-                inst->scanline_callback(inst->timing_state.v_ctr / DVI_VERTICAL_REPEAT);
+            if (inst->scanline_callback && inst->timing_state.v_ctr % inst->vertical_repeat == inst->vertical_repeat - 1) {
+                inst->scanline_callback(inst->timing_state.v_ctr / inst->vertical_repeat);
             }
         }
         break;
