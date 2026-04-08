@@ -8,17 +8,15 @@
 ;The timings involved in capturing data from the GG are quite finicky
 ;Modify these programs with caution, especially get_data
 
-.program detect_hblank_gg
+.program detect_hblank_sms
 .wrap_target
 	
 	mov x, osr 					;OSR contains the number of scanlines_in_active_area to capture per frame
 
 	wait 0 gpio dw_vsync		;wait for vblank
 
-	set y 21					;skip a bunch of lines after vblank before starting capture, ensures first line is read
+	set y 26					;skip a bunch of lines after vblank before starting capture, ensures first line is read
 skip_vblank_lines:
-	wait 1 gpio cl2_hsync
-	wait 0 gpio cl2_hsync
 	wait 1 gpio cl2_hsync
 	wait 0 gpio cl2_hsync
 	wait 1 gpio cl2_hsync
@@ -26,7 +24,7 @@ skip_vblank_lines:
 	jmp y-- skip_vblank_lines
 
 loop_scanline:
-	wait 1 gpio cl2_hsync [29] 		;wait for hsync, delay for some cycles to skip some left-edge pixels
+	wait 1 gpio cl2_hsync [29] 		;wait for hsync, delay for some cycles to skip some left-edge pixels??
 
 	irq set 1					;flag to start capturing data
 	;irq set 0					;flag cpu frame started
@@ -40,10 +38,14 @@ loop_scanline:
 ;the pio clock divider for this state machine is set as a multiple of the gg clock
 ;so we can use delay cycles to match the gg pixel timing
 ;currently 4 cycles per clock, so 3 post-instruction delay cycles
-.program get_data_gg
+.program get_data_sms
 .wrap_target
 	mov x, osr					;OSR -> Amount of pixels_in_scanline to capture
-	wait 1 irq 1 [6] 			;wait for hysnc to be signalled, delay for a cycle or six
+	wait 1 irq 1 [29] 			;wait for hysnc to be signalled, delay for some cycles to skip some pixels
+	
+	set y 26 [24]
+skip_pixels:	
+	jmp y-- skip_pixels	[15]
 
 capture_pixels:
 
