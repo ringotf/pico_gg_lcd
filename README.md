@@ -13,40 +13,77 @@ The firmware supports both Game Gear and Master System mode, but no adjustable s
 > The PCB design is likely to see major changes. The current build includes unneccessary placeholder components to be removed. The [WL355608-Dev](tree/WL355608_dev) branch will be updated with Beta changes first.
 
 
-## Features
+## "Working" Features
 
 - 640x480 "HD" 3.5inch LCD WL-355608
-- HDMI video output with stereo audio
+- HDMI video output with stereo audio using [ikjordan PicoDVI branch](https://github.com/ikjordan/picodvi)
 - LED Brightness control with Brightness Wheel
 - On-Screen menu. For menu items. And other things.
 - GG Mode at 4x horizontal 3x vertical scaling
 - SMS mode at 2x scaling
-- Installation Ribbon
+- [Installation Ribbon](#installation-ribbon)
 - 3d printable screen holder
-- Other features, like, such as, and also...
 
-Brief Demo Video:
-<iframe width="560" height="315" src="https://www.youtube.com/embed/du8Fr7flVrw?si=1fq6aEuf4cwyFnQY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+### Demo Video Link:
+
+[<img src="pics/yt_demo_thumb.png" width="400">](https://www.youtube.com/watch?v=du8Fr7flVrw)
+
+### PCB (Alpha Prototype 4)
 
 <img src="pics/proto4-a.png" width="400" alt="PCB Front"> <img src="pics/proto4-b.png" width="400" alt="PCB Back">
 
-## Issues/Upcoming Changes
+## Issues/Upcoming Changes/ToDo
 
 - The LCD connector ribbon is likely to be rotated 180 degrees, will make soldering easier for both LCD and HDMI connectors.
 - The op-amps used for audio capture will probably be changed for a dual-op-amp instead of two singles.
 - Audio has lots of interference, could be from the LCD mod, could be from the GG.
-- Remove placeholder components.
-- Corrected LED backlight dimming circuit - currently uses 2 GPIO pins.
-- The GG Clock pin is no longer needed, and can be replaced with...
+- The XC6206 3.3v regulator was used to try and eliminate noise from the Pico's onboard regulator interferring with ADC, but might be unneccessary now.
+- Remove placeholder components in the audio circuit.
+- Corrected LED backlight dimming circuit - currently uses 2 GPIO pins, plus a bodge as shown below.
+- The GG Clock pin is no longer needed.
 - HDMI Hot-Plug-Detect implemented with the spare Pico GPIO pin.
 - Installation Ribbon needs updating to remove the GG Clock pin. 
 - Memory. Firmware currently uses 2 framebuffers to help prevent tearing, but with all the other features the Pico is starting to stretch its 264KB RAM... rotating the LCD connector so the LCD is mounted up-right might help allow a single framebuffer and recover some memory for other features.
+- The shift registers probably have more performance in them, might be able to work with 2 instead of 3 - might not be worth finding out?
+
 
 ### RP2040 vs RP2350B
 
-Instead of using serial->parallel shift registers to implement LCD RGB444 input, we could use the extra pins of the Pico2 48-GPIO RP2350B. These are more expensive even after excluding the cost of the 3x 74HC595 shift registers needed for the RP2040, but would simplify the PCB a lot... It was fun to make the project work on an RP2040!
+Instead of using serial->parallel shift registers to implement the LCD RGB444 input, we could use the extra pins of the Pico2 48-GPIO RP2350B. These are more expensive even after excluding the cost of the 3x 74HC595 shift registers needed for the RP2040, but would simplify the PCB a lot... It was fun to make the project work on an RP2040!
 
 Plus the extra ram of the RP2350 (520KB vs 264KB) will help allow other features to be added to the firmware.
+
+
+## How It Works
+
+The Game Gear outputs serial RGB444, which is captured using PIO programs and stored in a 16-Bit framebuffer. 
+- GG video capture uses 7 GPIO pins: 4 data + 3 control. (*6 without GG Clock now, but anyway)
+- PicoDVI output uses 8 GPIO pins.
+- LED Backlight brightness control uses 2 GPIO pins.
+- LCD requires 3 control signals, Reset, Clock and Data-Enable.
+
+This is 20 pins for capture, HDMI output and LCD control, leaving **10** pins from the 30 GPIO Ultimate Pico.
+
+The LCD expects parallel RGB for 640x480 60Hz. For RGB444 the lcd needs **12** input lines.
+
+To feed the LCD with 12 data inputs, we can use serial-to-parallel shift registers to read data from the Pico serially over a few pins, and send to the LCD over 12 parallel pins.
+
+Although the shift registers have their own timing limits, by using a combination of multiple registers and reusing the same data (scale the image horizontally by clocking the LCD up to 4 times) we can reduce the load on the individual register.
+
+The outputs from the shift registers are interleaved to the LCD to avoid requiring any bit-shifting from the frame buffer.
+
+So the Pico outputs 160 pixels of 12 bit data, with 4 bits per shift register clock to 3 shift registers, and then clocks the LCD 4x for an effective 640 pixels.
+Using 7 GPIO pins: 3 MOSI, 1 shift register Latch, 1 shift register clock.
+
+Which leaves a few GPIO pins for audio capture!
+
+### Shift Register Diagram
+
+Hopefully this diagram helps visually explain how the shift registers are wired in:
+
+<img src="pics/everythings connected.png" width="800" alt="Yes"> 
+
+
 
 ## Build Pics
 
@@ -75,7 +112,6 @@ Plus the extra ram of the RP2350 (520KB vs 264KB) will help allow other features
 <img src="pics/proto4-15.png" width="600" alt="Completed Build">
 
 
-
 ## Installation Ribbon
 
 There is an FPC Installation Ribbon project for easy soldering to the game gear main board. This is designed for the arms to be folded out to reach the various solder points.
@@ -98,6 +134,7 @@ Full details in the above files and KiCad project, but here's some of the highli
 
 | Component | Description | Quantity |  Example Link(s) | 
 | --- | --- | --- | --- |
+| Pico GG LCD PCB | Printed Circuit Board | x1 |  |
 | WL-355608 | 640x480 3.5" LCD<br />(Also sold as "RG35XX Replacement Screen") | x1 | https://www.aliexpress.com/item/1005005669918579.html <br /> https://www.aliexpress.com/item/1005007035513918.html |
 | 30-GPIO Ultimate Pico | Purple RP2040 | x1 | https://www.aliexpress.com/item/1005005594351599.html <br /> https://www.aliexpress.com/item/1005007057526637.html |
 | 54-Pin FPC Connector | LCD Ribbon Connector - Flip/Drawer "Bottom" | x1 | https://www.aliexpress.com/item/1005006818638048.html <br /> https://www.aliexpress.com/item/1005008569249941.html |
@@ -148,13 +185,10 @@ The Micro-HDMI female connector is ideal for the minimising the size of the hole
 
 
 
-#
-#
-#
-
-Original project readme for reference:
-
-## Pico GG LCD
+# <br/><br/><br/>
+### Original project readme for reference. This branch builds upon the fundamentals below:
+<br/><br/>
+# Pico GG LCD
 
 ![install_image](board.png)
 
