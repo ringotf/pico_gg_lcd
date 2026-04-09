@@ -10,7 +10,7 @@ Alpha. Main features have been proof-of-concepted, and a working prototype built
 The firmware supports both Game Gear and Master System mode, but no adjustable scaling options yet.
 
 > [!NOTE]
-> The PCB design is likely to see major changes. The current build includes unneccessary placeholder components to be removed. The [WL355608-Dev](tree/WL355608_dev) branch will be updated with Beta changes first.
+> **The PCB design is likely to see major changes.** The current build includes unneccessary placeholder components to be removed, amongst other things. The [WL355608-Dev](tree/WL355608_dev) branch will be updated with Beta changes first.
 
 
 ## "Working" Features
@@ -19,7 +19,7 @@ The firmware supports both Game Gear and Master System mode, but no adjustable s
 - HDMI video output with stereo audio using [ikjordan PicoDVI branch](https://github.com/ikjordan/picodvi)
 - LED Brightness control with Brightness Wheel
 - On-Screen menu. For menu items. And other things.
-- GG Mode at 4x horizontal 3x vertical scaling
+- GG Mode at 4x horizontal, 3x vertical scaling
 - SMS mode at 2x scaling
 - [Installation Ribbon](#installation-ribbon)
 - 3d printable screen holder
@@ -79,7 +79,7 @@ Although the shift registers have their own timing limits, by using a combinatio
 The outputs from the shift registers are interleaved to the LCD to avoid requiring any bit-shifting from the frame buffer.
 
 So the Pico outputs 160 pixels of 12 bit data, with 4 bits per shift register clock to 3 shift registers, and then clocks the LCD 4x for an effective 640 pixels.
-Using 7 GPIO pins: 3 MOSI, 1 shift register Latch, 1 shift register clock.
+Using 5 GPIO pins: 3 MOSI, 1 shift register Latch, 1 shift register clock.
 
 Which leaves a few GPIO pins for audio capture!
 
