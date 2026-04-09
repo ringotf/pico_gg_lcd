@@ -4,7 +4,7 @@ Work-in-progress update to Trirosmos' original RP2040 Game Gear mod.
 
 More details on the [SMSPower Forum Thread](https://www.smspower.org/forums/20164-OpenSourceGameGearScreenReplacementPicoGGLCD)
 
-## Status
+## Project Status
 
 Alpha. Main features have been proof-of-concepted, and a working prototype built based on the WL355608 branch (with minimal bodge-fixes). 
 The firmware supports both Game Gear and Master System mode, but no adjustable scaling options yet.
@@ -24,9 +24,15 @@ The firmware supports both Game Gear and Master System mode, but no adjustable s
 - [Installation Ribbon](#installation-ribbon)
 - 3d printable screen holder
 
-### Demo Video Link:
+### Demo Video Link (Quiet/NoAudio):
 
 [<img src="pics/yt_demo_thumb.png" width="400">](https://www.youtube.com/watch?v=du8Fr7flVrw)
+
+### Another with better audio:
+
+[<img src="pics/yt_demo_thumb2.png" width="400">](https://www.youtube.com/watch?v=f37Q6rag2ZQ)
+
+
 
 ### PCB (Alpha Prototype 4)
 
@@ -85,15 +91,15 @@ Hopefully this diagram helps visually explain how the shift registers are wired 
 
 
 
-## Build Pics
+## Build Pics (Including backlight bodge)
 
 <img src="pics/proto4-d.png" width="400" alt="PCB Front"> 
 <img src="pics/proto4-e.png" width="400" alt="PCB Back"> 
 <img src="pics/proto4-f.png" width="400" alt="PCB Bodge">
 
-### Assembled PCB
+### Assembled PCB Test
 
-<img src="pics/proto4-4.png" width="400" alt="Assembled PCB">
+<img src="pics/proto4-4.png" width="400" alt="Assembled PCB Test">
 
 ### Main Board Installed
 
@@ -141,13 +147,13 @@ Full details in the above files and KiCad project, but here's some of the highli
 | 24-Pin FPC Connector | Data Connector - Flip/Drawer "Bottom" | x1 | https://www.aliexpress.com/item/1005006818638048.html <br /> https://www.aliexpress.com/item/1005008569249941.html |
 | XC6206P332MR-G | 3.3v Regulator | x1 | https://www.aliexpress.com/item/33025330295.html |
 | TPS61040DBVR | 20v Regulator | x1 | https://www.aliexpress.com/item/1005007852981529.html |
-| [74HC595D](docs/sn74hc595.pdf) | Serial->Parallel Shift Register | x3 | https://www.aliexpress.com/item/1005009410525894.html |
+| [74HC595D](docs/sn74hc595.pdf) | Serial->Parallel Shift Registers | x3 | https://www.aliexpress.com/item/1005009410525894.html |
 | [74HC165D](docs/sn74hc165.pdf) | Parallel->Serial Shift Register | x1 | https://www.aliexpress.com/item/1005009410525894.html |
 | [SN74LVC4245APWR](docs/sn74lvc4245a.pdf) | Level-Shifting Transceiver | x1 | https://www.aliexpress.com/item/1005009206069625.html <br /> https://www.aliexpress.com/item/1005011552818805.html |
 | [LMV321IDBVR](docs/lmv321.pdf) | Single Op-Amp | x2 | https://www.aliexpress.com/item/1005006127706764.html |
 | HDMI Connector |  | x1 Optional | https://www.aliexpress.com/item/1005001412266648.html |
-| DIY HDMI Cable | (See note below) | x1 Optional | https://www.aliexpress.com/item/1005004318851140.html <br /> https://www.aliexpress.com/item/1005006437300837.html |
-| 20pin 0.5mm FFC | Cable for HDMI connectors | x1 Optional | https://www.aliexpress.com/item/1005007561337665.html |
+| DIY HDMI Connector | (See note below) | x2 Optional | https://www.aliexpress.com/item/1005004318851140.html <br /> https://www.aliexpress.com/item/1005006437300837.html |
+| 20pin 0.5mm FFC | Flat cable for HDMI connectors<br />(Cheap but unshielded) | x1 Optional | https://www.aliexpress.com/item/1005007561337665.html |
 
 Plus inductor, ferrite bead, diodes, capacitors, resistors, resistor network/arrays.
 
