@@ -141,17 +141,15 @@ Full details in the above files and KiCad project, but here's some of the highli
 | 24-Pin FPC Connector | Data Connector - Flip/Drawer "Bottom" | x1 | https://www.aliexpress.com/item/1005006818638048.html <br /> https://www.aliexpress.com/item/1005008569249941.html |
 | XC6206P332MR-G | 3.3v Regulator | x1 | https://www.aliexpress.com/item/33025330295.html |
 | TPS61040DBVR | 20v Regulator | x1 | https://www.aliexpress.com/item/1005007852981529.html |
-| 74HC595D | Serial-Parallel Shift Register | x3 | https://www.aliexpress.com/item/1005009410525894.html |
-| 74HC165D | Parallel-Serial Shift Register | x1 | https://www.aliexpress.com/item/1005009410525894.html |
-| SN74LVC4245APWR | Level-Shifting Transceiver | x1 | https://www.aliexpress.com/item/1005009206069625.html <br /> https://www.aliexpress.com/item/1005011552818805.html |
-| LMV321IDBVR | Single Op-Amp | x2 | https://www.aliexpress.com/item/1005006127706764.html |
+| [74HC595D](docs/sn74hc595.pdf) | Serial->Parallel Shift Register | x3 | https://www.aliexpress.com/item/1005009410525894.html |
+| [74HC165D](docs/sn74hc165.pdf) | Parallel->Serial Shift Register | x1 | https://www.aliexpress.com/item/1005009410525894.html |
+| [SN74LVC4245APWR](docs/sn74lvc4245a.pdf) | Level-Shifting Transceiver | x1 | https://www.aliexpress.com/item/1005009206069625.html <br /> https://www.aliexpress.com/item/1005011552818805.html |
+| [LMV321IDBVR](docs/lmv321.pdf) | Single Op-Amp | x2 | https://www.aliexpress.com/item/1005006127706764.html |
 | HDMI Connector |  | x1 Optional | https://www.aliexpress.com/item/1005001412266648.html |
 | DIY HDMI Cable | (See note below) | x1 Optional | https://www.aliexpress.com/item/1005004318851140.html <br /> https://www.aliexpress.com/item/1005006437300837.html |
 | 20pin 0.5mm FFC | Cable for HDMI connectors | x1 Optional | https://www.aliexpress.com/item/1005007561337665.html |
 
-
 Plus inductor, ferrite bead, diodes, capacitors, resistors, resistor network/arrays.
-
 
 ### DIY HDMI Cable Note
 
